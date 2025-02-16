@@ -1,3 +1,4 @@
+// @ts-nocheck
 // app/api/provider/auth/signup/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";

@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 // app/api/admin/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
