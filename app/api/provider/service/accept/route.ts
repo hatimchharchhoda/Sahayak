@@ -1,14 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function POST(req: NextRequest) {
   try {
-    const { id } = await req.json();
+    const { id, bookingId } = await req.json();
     const updatedBooking = await prisma.booking.update({
-      where: { id: context.params.id },
+      where: { id: bookingId },
       data: { status: "ACCEPTED", providerId: id },
     });
 

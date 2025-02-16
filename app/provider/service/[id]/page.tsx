@@ -87,8 +87,9 @@ export default function ServiceDetailPage() {
 
   const handleAccept = async () => {
     try {
-      await axios.post(`/api/provider/service/${id}/accept`, {
+      await axios.post(`/api/provider/service/accept`, {
         id: userFromContext?.id,
+        bookingId: id,
       });
       toast.success("Service accepted successfully");
       router.push("/provider");
@@ -100,12 +101,10 @@ export default function ServiceDetailPage() {
 
   const handleUpdatePrice = async () => {
     try {
-      const response = await axios.post(
-        `/api/provider/service/${id}/update-price`,
-        {
-          basePrice: parseFloat(newPrice),
-        }
-      );
+      const response = await axios.post(`/api/provider/service/update-price`, {
+        basePrice: parseFloat(newPrice),
+        bookingId: id,
+      });
       if (response.status !== 200) return null;
       setServiceDetails((prev) =>
         prev
@@ -125,7 +124,9 @@ export default function ServiceDetailPage() {
 
   const handleCompleteService = async () => {
     try {
-      await axios.post(`/api/provider/service/${id}/complete`);
+      await axios.post(`/api/provider/service/complete`, {
+        bookingId: id,
+      });
       setServiceDetails((prev) =>
         prev
           ? {

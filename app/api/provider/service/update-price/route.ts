@@ -2,15 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 // The function receives params as a separate argument
-export async function POST(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function POST(req: NextRequest) {
   try {
-    const { basePrice } = await req.json();
+    const { basePrice, bookingId } = await req.json();
 
     const updatedBooking = await prisma.booking.update({
-      where: { id: context.params.id }, // Use params.id directly
+      where: { id: bookingId }, // Use params.id directly
       data: { basePrice },
     });
 
