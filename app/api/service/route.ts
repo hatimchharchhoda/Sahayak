@@ -5,7 +5,6 @@ export const POST = async (req: NextRequest) => {
   try {
     const { categoryName } = await req.json();
     // Fetch services along with their category names
-    console.log(categoryName);
 
     const isCategoryExist = await prisma.serviceCategory.findFirst({
       where: { name: categoryName },
@@ -19,8 +18,6 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    console.log(isCategoryExist);
-    console.log(isCategoryExist.id);
     const services = await prisma.service.findMany({
       where: {
         categoryId: isCategoryExist.id,
@@ -43,7 +40,7 @@ export const POST = async (req: NextRequest) => {
       categoryId: service.categoryId,
       categoryName: service.ServiceCategory?.name || "Unknown", // Include category name
     }));
-    console.log(formattedServices);
+
     return NextResponse.json(formattedServices);
   } catch (error) {
     console.error("Error fetching services:", error);

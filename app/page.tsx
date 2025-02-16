@@ -39,7 +39,6 @@ const HomePage = () => {
       try {
         // Simulating API call with mock data
         const response = await axios.get("/api/categories");
-        console.log(response);
 
         setCategories(response.data);
       } catch (error) {

@@ -123,7 +123,7 @@ const ProviderAuthPage = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
-  console.log(categories);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex justify-center items-center">
       {/* Benefits Section */}

@@ -18,8 +18,7 @@ interface Service {
 
 const ServiceListPage = () => {
   const { categoryName } = useParams();
-  console.log(categoryName);
-  console.log(categoryName);
+
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 

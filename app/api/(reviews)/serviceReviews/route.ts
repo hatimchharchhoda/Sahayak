@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const { id } = await req.json();
-    console.log(id, "review Id");
+
     const review = await prisma.rating.findFirst({
       where: {
         serviceId: id,
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-    console.log(review, "REVIEWS");
+
     return NextResponse.json({ review });
   } catch (error) {
     console.error("Error fetching review:", error);

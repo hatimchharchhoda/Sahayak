@@ -15,8 +15,6 @@ export default function ProviderReviews() {
   const [providerId, setProviderId] = useState<string | null>(null);
   const params = useParams();
 
-  console.log(params);
-
   useEffect(() => {
     if (params?.providerId) {
       setProviderId(params.providerId as string);

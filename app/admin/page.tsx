@@ -53,7 +53,7 @@ const AdminDashboard = () => {
   const handleAdminLogout = async () => {
     try {
       const response = await axios.get("/api/admin/auth/logout");
-      console.log(response);
+
       if (response.status === 200) {
         router.push("/auth");
       }

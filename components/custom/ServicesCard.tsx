@@ -20,8 +20,6 @@ interface ServicesCardProps {
 }
 
 const ServicesCard: React.FC<ServicesCardProps> = ({ category }) => {
-  console.log(category);
-
   const categoryIcons: Record<string, JSX.Element> = {
     cleaning: <Home className="w-6 h-6" />,
     repair: <Wrench className="w-6 h-6" />,

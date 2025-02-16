@@ -49,7 +49,7 @@ export default function ServiceDetailPage() {
     const fetchServiceDetails = async () => {
       try {
         const response = await axios.post(`/api/provider/service`, { id });
-        console.log(response);
+
         setServiceDetails(response.data);
         setNewPrice(response.data.basePrice?.toString() || "");
       } catch (error) {
@@ -67,8 +67,7 @@ export default function ServiceDetailPage() {
     const fetchReview = async () => {
       if (serviceDetails?.status === "COMPLETED") {
         setReviewLoading(true);
-        console.log(serviceDetails);
-        console.log(id);
+
         try {
           const response = await axios.post(`/api/serviceReviews`, {
             id: serviceDetails.serviceId,

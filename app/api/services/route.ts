@@ -77,7 +77,7 @@ export const GET = async (req: NextRequest) => {
       categoryId: service.categoryId,
       categoryName: service.ServiceCategory?.name || "Unknown", // Include category name
     }));
-    // console.log(formattedServices);
+
     return NextResponse.json(formattedServices);
   } catch (error: any) {
     console.error("Error fetching services:", error.message);

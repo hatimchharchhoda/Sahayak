@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
   try {
     const { id } = await req.json();
-    console.log(id, "completed services");
 
     // Fetch completed services for the provider
     const completedServices = await prisma.booking.findMany({
@@ -22,8 +21,6 @@ export async function POST(req: Request) {
         },
       },
     });
-
-    console.log({ length: completedServices.length, completedServices });
 
     // Handle case when no completed services are found
     if (completedServices.length === 0) {

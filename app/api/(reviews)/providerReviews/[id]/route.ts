@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const { providerId } = await req.json();
-    console.log(providerId, "providerId");
+
     if (!providerId)
       return NextResponse.json({ error: "Invalid provider" }, { status: 500 });
     const reviews = await prisma.rating.findMany({
@@ -29,8 +29,6 @@ export async function POST(req: Request) {
         },
       },
     });
-
-    console.log(reviews);
 
     return NextResponse.json({ reviews });
   } catch (error) {

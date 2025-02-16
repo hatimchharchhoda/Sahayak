@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
 
-    let user: DecodedToken = {
+    const user: DecodedToken = {
       userId: decoded.userId,
       name: decoded.name,
       email: decoded.email,
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     const fetchedUser = await prisma.user.findUnique({
       where: { id: user.userId },
     });
-    console.log(fetchedUser);
+
     return NextResponse.json({ user: fetchedUser }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ user: null }, { status: 401 });

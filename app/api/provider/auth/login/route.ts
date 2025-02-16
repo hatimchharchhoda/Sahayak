@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-    console.log({ email, password });
+
     // Find provider
     const provider = await prisma.serviceProvider.findUnique({
       where: { email },

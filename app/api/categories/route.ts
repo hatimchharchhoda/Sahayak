@@ -5,13 +5,12 @@ import { NextResponse } from "next/server";
 // GET all categories
 export async function GET() {
   try {
-    console.log("first");
     const categories = await prisma.serviceCategory.findMany({
       include: {
         services: true,
       },
     });
-    console.log(categories);
+
     return NextResponse.json(categories);
   } catch (error) {
     console.error("Error fetching categories:", error);

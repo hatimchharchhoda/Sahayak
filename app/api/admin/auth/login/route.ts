@@ -9,8 +9,6 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    console.log({ email, password });
-
     // Find admin user
     const admin = await prisma.admin.findFirst({
       where: {
@@ -18,7 +16,6 @@ export async function POST(req: NextRequest) {
         role: "ADMIN",
       },
     });
-    console.log(admin, "ADMINS");
 
     if (!admin) {
       return NextResponse.json(
@@ -26,7 +23,7 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
-    console.log(password);
+
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, admin.password);
 
