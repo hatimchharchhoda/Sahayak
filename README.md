@@ -1,37 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sahayak - Home Services Booking Platform
 
-## Getting Started
+Sahayak is a home services booking platform built using **Next.js** and **MongoDB**, allowing users to find and book home services, providers to manage their jobs, and admins to oversee the platform.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### User Features
+- Secure authentication (Login/Signup)
+- Search and book home services (Cleaning, Plumbing, etc.)
+- Track service status (Pending, Accepted, Completed)
+- View booked services and assigned providers
+- Leave reviews for completed services
+
+### Provider Features
+- View and accept available service requests
+- Manage accepted and completed services
+- Track earnings and generate PDF invoices
+- Receive and respond to user reviews
+
+### Admin Features
+- Manage users, service providers, and bookings
+- View platform analytics (Total users, providers, earnings)
+- Monitor service requests and status
+- Moderate user reviews
+
+---
+
+## Tech Stack
+
+- **Frontend:** Next.js (React + SSR)
+- **Backend:** Next.js API Routes
+- **Database:** MongoDB (Mongoose ORM)
+- **Authentication:** NextAuth.js
+- **UI Framework:** Tailwind CSS
+- **State Management:** React Context API
+- **PDF Generation:** jsPDF
+
+---
+
+## Installation & Setup
+
+### 1. Clone the Repository
+```sh
+git clone https://github.com/your-username/sahayak.git
+cd sahayak
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```sh
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Set Up Environment Variables
+Create a `.env.local` file in the root directory and add:
+```env
+MONGODB_URI=your-mongodb-connection-string
+NEXTAUTH_SECRET=your-secret-key
+NEXTAUTH_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the Project
+```sh
+npm run dev
+```
+The app will be live at `http://localhost:3000`.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Folder Structure
+```
+/sahayak
+│── /pages
+│   ├── index.js       # Homepage
+│   ├── /api          # API Routes
+│── /components       # Reusable Components
+│── /models           # Mongoose Models
+│── /utils            # Utility Functions
+│── .env.local        # Environment Variables
+│── package.json      # Dependencies
+│── README.md         # Documentation
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Future Enhancements
+- **Live Tracking** of service providers
+- **Chat & Video Consultation** between users and providers
+- **Subscription Plans** for premium users
+- **AI-Based Service Recommendations**
+- **Enhanced Review System with Ratings & Feedback Analytics**
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Sayahak
+Contributions are welcome! Fork the repo, create a branch, and submit a pull request.
+
+---
+
+## License
+
+This project is licensed under the **MIT License**.
+
