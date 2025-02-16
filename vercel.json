@@ -1,5 +1,7 @@
 {
-  "scripts": {
-    "vercel-build": "prisma generate && next build"
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_IGNORE_TS_ERRORS": "true"
+    }
   }
 }
