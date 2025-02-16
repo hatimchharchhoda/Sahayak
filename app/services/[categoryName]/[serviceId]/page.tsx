@@ -20,7 +20,9 @@ import {
   Star,
   Calendar as CalendarIcon,
   IndianRupee,
+  Loader2,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface Service {
   name: string;
@@ -31,6 +33,7 @@ interface Service {
 
 const ServiceDetailsPage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
+  const [isloading, setisloading] = useState(false);
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -76,10 +79,14 @@ const ServiceDetailsPage: React.FC = () => {
     };
 
     try {
+      setisloading(true);
       const response = await axios.post("/api/bookService", bookingData);
       console.log(response);
+      toast.success("Servies Booked");
     } catch (error) {
       console.log(error);
+    } finally {
+      setisloading(false);
     }
 
     // console.log(bookingData);
@@ -254,13 +261,23 @@ const ServiceDetailsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <Button
-                  onClick={handleBookService}
-                  className="w-full bg-blue-600 text-white hover:bg-blue-700"
-                  disabled={!selectedDate || !selectedTime}
-                >
-                  Book Now <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                {isloading ? (
+                  <Button
+                    onClick={handleBookService}
+                    className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                    disabled={!selectedDate || !selectedTime}
+                  >
+                    <Loader2 className="animate-spin" /> Loading
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleBookService}
+                    className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                    disabled={!selectedDate || !selectedTime}
+                  >
+                    Book Now <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>

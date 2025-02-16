@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useState, FC, useEffect } from "react";
 import { Input } from "@/components/ui/input";

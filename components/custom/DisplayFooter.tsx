@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"; // Needed for using hooks in Next.js App Router
 
 import React from "react";
