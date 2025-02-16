@@ -180,9 +180,10 @@ const HomePage = () => {
                 Discover Our Services
               </h2>
               <p className="text-base md:text-xl text-gray-600 leading-relaxed">
-                From home repairs to beauty services, we've got you covered with
-                our network of verified professionals.
+                From home repairs to beauty services, we&apos;ve got you covered
+                with our network of verified professionals.
               </p>
+
               <Link href="/services">
                 <Button className="mt-5 group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 md:px-8 py-4 md:py-6 rounded-full text-base md:text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                   Explore Services
@@ -325,7 +326,7 @@ const HomePage = () => {
                   </div>
 
                   <p className="text-gray-600 text-base md:text-lg mb-4 md:mb-6 leading-relaxed">
-                    "{testimonial.review}"
+                    &quot;{testimonial.review}&quot;
                   </p>
 
                   <div className="flex items-center">

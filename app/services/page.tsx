@@ -1,16 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  ArrowRight,
-  Home,
-  Paintbrush,
-  Scissors,
-  Wifi,
-  Wrench,
-  Loader2,
-} from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ServicesCard from "@/components/custom/ServicesCard";
@@ -19,15 +8,6 @@ import Loading from "@/components/custom/loading";
 const ServicesPage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const categoryIcons = {
-    cleaning: <Home className="w-8 h-8" />,
-    repair: <Wrench className="w-8 h-8" />,
-    painting: <Paintbrush className="w-8 h-8" />,
-    plumbing: <Wrench className="w-8 h-8" />,
-    electrical: <Wifi className="w-8 h-8" />,
-    beauty: <Scissors className="w-8 h-8" />,
-  };
 
   useEffect(() => {
     const fetchCategories = async () => {

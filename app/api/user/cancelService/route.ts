@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: "Service cancelled successfully" });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json(
       { message: "Failed to cancel service" },
       { status: 500 }

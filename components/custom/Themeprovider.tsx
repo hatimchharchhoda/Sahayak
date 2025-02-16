@@ -1,30 +1,3 @@
-// types.ts
-type Service = {
-  id: string;
-  type: string;
-  name: string;
-  price: number;
-  description?: string;
-};
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-};
-
-type Provider = {
-  id: string;
-  name: string;
-  email: string;
-  specialization: string;
-  status: "active" | "inactive";
-};
-
-// ThemeProvider.tsx
-("use client");
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "light" | "dark";

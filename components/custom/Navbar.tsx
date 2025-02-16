@@ -3,11 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Menu, X, User, LogOut, User2 } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/context/userContext";
 
 interface User {
   name: string;

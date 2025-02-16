@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
     const decoded = jwt.verify(token, JWT_SECRET);
     return NextResponse.json({ user: decoded }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ user: null }, { status: 401 });
   }
 }

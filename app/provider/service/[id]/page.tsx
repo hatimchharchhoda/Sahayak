@@ -198,7 +198,7 @@ export default function ServiceDetailPage() {
             </div>
             {review.review && (
               <p className="text-gray-700 bg-white/50 p-4 rounded-lg">
-                "{review.review}"
+                &quot;{review.review}&quot;
               </p>
             )}
           </div>

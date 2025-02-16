@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Edit, UserPlus } from "lucide-react";
+import { Search, Edit } from "lucide-react";
 import EditUserDiaload from "./EditUserDiaload";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

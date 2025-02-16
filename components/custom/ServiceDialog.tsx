@@ -48,6 +48,7 @@ const ServiceDialog = ({ isOpen, onClose }: ServiceDialogProps) => {
       const response = await axios.get("/api/categories");
       setCategories(response.data);
     } catch (error: any) {
+      console.log(error);
       setError("Failed to load categories");
     }
   };

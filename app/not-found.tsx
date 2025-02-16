@@ -14,7 +14,8 @@ export default function NotFound() {
         </h1>
       </div>
       <p className="text-xl text-center text-gray-600 dark:text-gray-300 mb-8 max-w-md">
-        Oops! It seems the service you're looking for is currently unavailable.
+        Oops! It seems the service you&apos;re looking for is currently
+        unavailable.
       </p>
       <Link
         href="/"

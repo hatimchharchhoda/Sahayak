@@ -3,8 +3,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   Calendar,
-  Clock,
-  DollarSign,
   User,
   MapPin,
   Phone,
@@ -227,7 +225,7 @@ const ServiceBookingCard = ({
   const handleCancelService = async () => {
     setIsCancelling(true);
     try {
-      const response = await axios.post("/api/user/cancelService", {
+      await axios.post("/api/user/cancelService", {
         serviceId: booking.id,
       });
 
@@ -377,7 +375,7 @@ const ServiceBookingCard = ({
               <>
                 <div className="text-center text-sm text-green-600 flex items-center justify-center mb-2">
                   <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>You've reviewed this service</span>
+                  <span>You&apos;ve reviewed this service</span>
                 </div>
                 <Button
                   onClick={() => setIsReviewOpen(true)}

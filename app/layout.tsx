@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import Navbar from "@/components/custom/Navbar";
+
 import DisplayNavbar from "@/components/custom/DisplayNavbar";
-import Footer from "@/components/custom/Footer";
+
 import { UserProvider } from "@/context/userContext";
 import DisplayFooter from "@/components/custom/DisplayFooter";
 

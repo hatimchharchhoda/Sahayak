@@ -2,15 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Users,
-  Grid,
-  UserCog,
-  LayoutDashboard,
-  LogOut,
-  UserIcon,
-} from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Users, Grid, UserCog, LogOut, UserIcon } from "lucide-react";
 import ServicesContent from "@/components/custom/ServiceContent";
 import UsersContent from "@/components/custom/UserContent";
 import ProvidersContent from "@/components/custom/ProviderContent";
@@ -37,7 +30,7 @@ const AdminDashboard = () => {
     role: "",
     userId: "",
   });
-
+  console.log({ isAddServiceOpen, isEditServiceOpen, selectedService });
   const getMe = async () => {
     try {
       const response = await axios.get("/api/admin/auth/getMe");
