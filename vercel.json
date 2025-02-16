@@ -1,7 +1,8 @@
 {
   "build": {
     "env": {
-      "NEXT_PUBLIC_IGNORE_TS_ERRORS": "true"
-    }
+      "NEXT_PRIVATE_TURBOPACK": "1"
+    },
+    "commands": ["prisma generate", "next build"]
   }
 }
