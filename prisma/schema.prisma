@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Prisma schema for Service Booking Platform
+
+// 1. User Model
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role     @default(USER)
+  email     String   @unique
+  name      String
+  password  String
+  phone     String
+  address   String
+  bookings  Booking[]
+  ratings   Rating[]
+}
+
+// 2. Service Provider Model
+model ServiceProvider {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  role           Role      @default(PROVIDER)
+  email          String    @unique
+  name           String
+  password       String
+  phone          String
+  specialization String
+  services       ServiceProviderService[]
+  ratings        Rating[]
+  bookings       Booking[]  // Add this line to create the reverse relation
+
+  @@index([role], name: "provider_role_idx")
+}
+
+// 3. Admin Model
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role     @default(ADMIN)
+  email     String   @unique
+  password  String
+}
+
+// Enum for Roles
+enum Role {
+  USER
+  PROVIDER
+  ADMIN
+}
+
+// 4. Service Category Model
+model ServiceCategory {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  services  Service[]
+  bookings Booking[] // Add this line to create the reverse relation
+}
+
+// 5. Service Model
+model Service {
+  id                String                  @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  description       String
+  basePrice         Float                   // Base price for the service
+  categoryId        String                  @db.ObjectId
+  providers         ServiceProviderService[]
+  bookings          Booking[]
+  ratings           Rating[]
+  ServiceCategory   ServiceCategory         @relation(fields: [categoryId], references: [id])
+}
+
+// 6. ServiceProviderService Model (Many-to-Many relation between Service and ServiceProvider)
+model ServiceProviderService {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  serviceId       String            @db.ObjectId
+  providerId      String            @db.ObjectId
+  customPrice     Float?            // Providers can set custom prices for services
+  Service         Service           @relation(fields: [serviceId], references: [id])
+  ServiceProvider ServiceProvider   @relation(fields: [providerId], references: [id])
+}
+
+model Booking {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String    @db.ObjectId
+  serviceId         String    @db.ObjectId
+  providerId        String?   @db.ObjectId
+  serviceCategoryId String    @db.ObjectId   // Changed field name to singular
+
+  date        DateTime
+  status      BookingStatus  @default(PENDING)
+  basePrice   Float?
+  rating      Rating?
+  
+  User        User           @relation(fields: [userId], references: [id])
+  Service     Service?        @relation(fields: [serviceId], references: [id])
+  ServiceProvider ServiceProvider? @relation(fields: [providerId], references: [id])
+  ServiceCategory ServiceCategory  @relation(fields: [serviceCategoryId], references: [id])  // One-to-One relation
+}
+
+
+// Updated BookingStatus Enum
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+// 8. Rating Model
+model Rating {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId     String    @unique @db.ObjectId
+  userId        String    @db.ObjectId
+  providerId    String    @db.ObjectId
+  serviceId     String    @db.ObjectId
+  stars         Int       // 1 to 5
+  review        String?
+  Booking       Booking   @relation(fields: [bookingId], references: [id])
+  User          User      @relation(fields: [userId], references: [id])
+  ServiceProvider ServiceProvider @relation(fields: [providerId], references: [id])
+  Service       Service   @relation(fields: [serviceId], references: [id])
+}
