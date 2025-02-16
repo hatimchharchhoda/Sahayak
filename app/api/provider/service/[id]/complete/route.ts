@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const updatedBooking = await prisma.booking.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: { status: "COMPLETED" },
     });
 
