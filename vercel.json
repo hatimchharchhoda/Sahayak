@@ -1,8 +1,5 @@
 {
-  "build": {
-    "env": {
-      "NEXT_PRIVATE_TURBOPACK": "1"
-    },
-    "commands": ["prisma generate", "next build"]
+  "scripts": {
+    "vercel-build": "prisma generate && next build"
   }
 }
