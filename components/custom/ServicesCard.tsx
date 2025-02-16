@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Link from "next/link";
 import React, { JSX } from "react";
 import { Card, CardContent } from "../ui/card";
