@@ -26,6 +26,8 @@ model User {
   address   String
   bookings  Booking[]
   ratings   Rating[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 // 2. Service Provider Model
@@ -131,4 +133,15 @@ model Rating {
   User          User      @relation(fields: [userId], references: [id])
   ServiceProvider ServiceProvider @relation(fields: [providerId], references: [id])
   Service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+model Message {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  senderId   String   @db.ObjectId
+  receiverId String   @db.ObjectId
+  content    String
+  timestamp  DateTime @default(now())
+
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
 }

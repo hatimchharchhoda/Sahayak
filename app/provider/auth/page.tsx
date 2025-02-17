@@ -130,8 +130,8 @@ const ProviderAuthPage = () => {
       {/* Benefits Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6">
-            <h1 className="text-4xl font-bold text-gray-900">
+          <div className="space-y-6 md:block hidden">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent">
               Join Our Professional Service Provider Network
             </h1>
             <p className="text-lg text-gray-600">
@@ -179,6 +179,15 @@ const ProviderAuthPage = () => {
           </div>
 
           <div>
+            <div className="md:hidden mb-4">
+              <h1 className="text-2xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent">
+                Join Our Professional Service Provider Network
+              </h1>
+              <p className="text-base text-muted-foreground">
+                Become a part of the leading home services platform and grow
+                your business
+              </p>
+            </div>
             <Card className="w-full max-w-md mx-auto">
               <CardHeader>
                 <CardTitle className="text-2xl text-center">

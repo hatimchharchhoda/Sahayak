@@ -21,6 +21,7 @@ import type React from "react"; // Import React
 import axios from "axios";
 import OurServices from "@/components/custom/OurServices";
 import { Category } from "@/lib/types";
+import ChatbotInterface from "@/components/custom/ChatBotInterface";
 
 interface SearchResult {
   id: string;
@@ -349,6 +350,8 @@ const HomePage = () => {
               </Card>
             ))}
           </motion.div>
+
+          <ChatbotInterface />
         </div>
       </section>
     </div>

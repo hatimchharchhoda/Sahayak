@@ -66,9 +66,9 @@ const AuthPage = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
           {/* Left side - Benefits */}
-          <div className="space-y-8">
+          <div className="space-y-8 hidden md:block">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent mb-4">
                 {isLogin ? "Welcome Back!" : "Join Our Community"}
               </h1>
               <p className="text-lg text-gray-600">
@@ -121,6 +121,17 @@ const AuthPage = () => {
 
           {/* Right side - Auth Form */}
           <div>
+            <div className="block md:hidden text-center mb-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent mb-4">
+                {isLogin ? "Welcome Back!" : "Join Our Community"}
+              </h1>
+              <p className="text-base text-muted-foreground">
+                {isLogin
+                  ? "Access your personalized dashboard and manage your services"
+                  : "Create an account to discover and book amazing services"}
+              </p>
+            </div>
+
             <Card className="w-full max-w-md mx-auto backdrop-blur-sm bg-white/90">
               <CardHeader>
                 <CardTitle className="text-2xl text-center">

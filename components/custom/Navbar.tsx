@@ -59,8 +59,8 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed w-full top-0 z-50 transition-all duration-300 mb-10 ${
-        scrolled ? "bg-white shadow-md" : "bg-transparent"
+      className={`fixed w-full top-0 z-40 transition-all duration-300 mb-10 ${
+        scrolled ? "bg-white shadow-md" : "md:bg-transparent bg-white"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4">
@@ -140,16 +140,22 @@ const Navbar = () => {
             className="md:hidden pb-4"
           >
             <div className="flex flex-col space-y-4 pt-2 pb-3">
-              {["Home", "Services", "About", "Contact"].map((item) => (
-                <Link
-                  key={item}
-                  href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                  className="text-gray-700 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
-                  onClick={toggleMenu}
-                >
-                  {item}
-                </Link>
-              ))}
+              {["Home", "Services", "About", "Booked Services"].map((item) => {
+                const formattedHref =
+                  item === "Home"
+                    ? "/"
+                    : `/${item.toLowerCase().replace(/\s+/g, "-")}`;
+                return (
+                  <Link
+                    key={item}
+                    href={formattedHref}
+                    className="text-gray-700 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
+                    onClick={toggleMenu}
+                  >
+                    {item}
+                  </Link>
+                );
+              })}
               {user ? (
                 <div>
                   <Button
