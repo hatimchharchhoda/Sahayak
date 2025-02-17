@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     // Find provider
     const provider = await prisma.serviceProvider.findUnique({
-      where: { email },
+      where: { email: email.toLowerCase() },
     });
 
     if (!provider) {

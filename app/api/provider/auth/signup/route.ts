@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     // Check if provider already exists
     const existingProvider = await prisma.serviceProvider.findUnique({
-      where: { email },
+      where: { email: email.toLowerCase() },
     });
 
     if (existingProvider) {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     // Create new provider
     const provider = await prisma.serviceProvider.create({
       data: {
-        email,
+        email: email.toLowerCase(),
         password: hashedPassword,
         name,
         phone,
