@@ -1,0 +1,118 @@
+[
+  {
+    "district": "Ahmedabad",
+    "cities": ["Ahmedabad", "Sanand", "Dholka", "Viramgam", "Dhandhuka"]
+  },
+  {
+    "district": "Surat",
+    "cities": ["Surat", "Bardoli", "Choryasi", "Olpad", "Mandvi"]
+  },
+  {
+    "district": "Vadodara",
+    "cities": ["Vadodara", "Padra", "Savli", "Karjan", "Dabhoi"]
+  },
+  {
+    "district": "Rajkot",
+    "cities": ["Rajkot", "Jasdan", "Gondal", "Jetpur", "Upleta"]
+  },
+  {
+    "district": "Bhavnagar",
+    "cities": ["Bhavnagar", "Sihor", "Ghogha", "Mahuva", "Talaja"]
+  },
+  {
+    "district": "Junagadh",
+    "cities": ["Junagadh", "Manavadar", "Keshod", "Bantwa", "Malia"]
+  },
+  {
+    "district": "Jamnagar",
+    "cities": ["Jamnagar", "Khambhaliya", "Kalavad", "Dwarka", "Lalpur"]
+  },
+  {
+    "district": "Kutch",
+    "cities": ["Bhuj", "Gandhidham", "Anjar", "Mundra", "Mandvi"]
+  },
+  {
+    "district": "Gandhinagar",
+    "cities": ["Gandhinagar", "Kalol", "Dehgam", "Mansa"]
+  },
+  {
+    "district": "Mehsana",
+    "cities": ["Mehsana", "Visnagar", "Kadi", "Unjha", "Vijapur"]
+  },
+  {
+    "district": "Banaskantha",
+    "cities": ["Palanpur", "Deesa", "Dhanera", "Tharad", "Danta"]
+  },
+  {
+    "district": "Patan",
+    "cities": ["Patan", "Siddhpur", "Harij", "Radhanpur", "Chanasma"]
+  },
+  {
+    "district": "Sabarkantha",
+    "cities": ["Himmatnagar", "Idar", "Talod", "Prantij", "Modasa"]
+  },
+  {
+    "district": "Aravalli",
+    "cities": ["Modasa", "Bayad", "Dhansura", "Meghraj", "Malpur"]
+  },
+  {
+    "district": "Dahod",
+    "cities": ["Dahod", "Limkheda", "Jhalod", "Devgadh Baria"]
+  },
+  {
+    "district": "Panchmahal",
+    "cities": ["Godhra", "Halol", "Lunawada", "Kalol", "Morva Hadaf"]
+  },
+  {
+    "district": "Chhota Udaipur",
+    "cities": ["Chhota Udaipur", "Bodeli", "Jetpur Pavi", "Kavant"]
+  },
+  {
+    "district": "Narmada",
+    "cities": ["Rajpipla", "Dediapada", "Sagbara", "Tilakwada"]
+  },
+  {
+    "district": "Bharuch",
+    "cities": ["Bharuch", "Ankleshwar", "Jambusar", "Amod", "Hansot"]
+  },
+  {
+    "district": "Narmada",
+    "cities": ["Rajpipla", "Dediapada", "Sagbara"]
+  },
+  {
+    "district": "Tapi",
+    "cities": ["Vyara", "Songadh", "Nizar", "Uchchhal"]
+  },
+  {
+    "district": "Valsad",
+    "cities": ["Valsad", "Vapi", "Dharampur", "Pardi", "Umargam"]
+  },
+  {
+    "district": "Navsari",
+    "cities": ["Navsari", "Chikhli", "Jalalpore", "Gandevi", "Bilimora"]
+  },
+  {
+    "district": "Amreli",
+    "cities": ["Amreli", "Savarkundla", "Bagasara", "Lathi", "Rajula"]
+  },
+  {
+    "district": "Botad",
+    "cities": ["Botad", "Gadhada", "Barvala", "Ranpur"]
+  },
+  {
+    "district": "Devbhoomi Dwarka",
+    "cities": ["Dwarka", "Kalyanpur", "Khambhaliya", "Bhanvad"]
+  },
+  {
+    "district": "Gir Somnath",
+    "cities": ["Veraval", "Kodinar", "Una", "Sutrapada"]
+  },
+  {
+    "district": "Morbi",
+    "cities": ["Morbi", "Tankara", "Wankaner", "Halvad", "Maliya"]
+  },
+  {
+    "district": "Surendranagar",
+    "cities": ["Surendranagar", "Wadhwan", "Dhrangadhra", "Limbdi", "Sayla"]
+  }
+]

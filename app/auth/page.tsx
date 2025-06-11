@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -22,6 +22,13 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -29,6 +36,10 @@ const AuthPage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+  const [district, setDistrict] = useState();
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [cities, setCities] = useState();
+  const [selectedCity, setSelectedCity] = useState("");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -39,9 +50,16 @@ const AuthPage = () => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
+    // 👇 Add district and city to data before sending
+    const payload = {
+      ...data,
+      district: selectedDistrict,
+      city: selectedCity,
+    };
+
     try {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
-      const response = await axios.post(endpoint, data, {
+      const response = await axios.post(endpoint, payload, {
         withCredentials: true,
       });
 
@@ -60,6 +78,45 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
+
+  const handleDistrictChange = (value: string) => {
+    setSelectedDistrict(value);
+    console.log("Selected district:", value);
+  };
+
+  const handleCityChange = (value: string) => {
+    setSelectedCity(value);
+    console.log("Selected city:", value);
+  };
+
+  async function getDistrict() {
+    try {
+      const response = await axios.get("/api/getDistrict");
+      console.log(response);
+      setDistrict(response.data.allDistrict);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getCities() {
+    try {
+      const response = await axios.post("/api/getCity", {
+        district: selectedDistrict,
+      });
+      console.log(response);
+      setCities(response.data.cities);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getDistrict();
+  }, []);
+
+  useEffect(() => {
+    getCities();
+  }, [selectedDistrict]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex justify-center items-center p-4">
@@ -168,6 +225,48 @@ const AuthPage = () => {
                           placeholder="+91 9999999999"
                           className="w-full bg-white"
                         />
+                      </div>
+
+                      <div className="flex justify-between">
+                        <div className="space-y-2">
+                          <Label htmlFor="district">District</Label>
+                          <Select onValueChange={handleDistrictChange}>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="District" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {district &&
+                                district.length > 0 &&
+                                district.map((d, index) => (
+                                  <SelectItem value={d} key={index}>
+                                    {d}
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="district">City</Label>
+                          <Select onValueChange={handleCityChange}>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="City" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {cities && cities.length > 0 ? (
+                                cities.map((d, index) => (
+                                  <SelectItem value={d} key={index}>
+                                    {d}
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <SelectItem value="null">
+                                  Please Select District First
+                                </SelectItem>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
 
                       <div className="space-y-2">

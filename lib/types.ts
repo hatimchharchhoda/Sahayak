@@ -68,23 +68,6 @@ export interface BookedServicesListProps {
   bookedServices: BookedService[];
 }
 
-export interface ServiceDetails {
-  id: string;
-  userId: string;
-  serviceId: string;
-  providerId: string | null;
-  serviceCategoryId: string;
-  date: string;
-  status: string;
-  basePrice: number | null;
-  User: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-  };
-}
-
 export interface Category {
   name: string;
   id: string;

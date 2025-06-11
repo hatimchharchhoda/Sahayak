@@ -9,8 +9,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, name, phone, address } = await req.json();
-
+    const { email, password, name, phone, address, city, district } =
+      await req.json();
+    console.log({ email, password, name, phone, address, city, district });
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
@@ -33,6 +34,8 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
         name,
         phone,
+        city,
+        district,
         address,
         role: "USER",
       },
@@ -45,7 +48,14 @@ export async function POST(req: NextRequest) {
       );
 
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role, name: user.name },
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        city: user.city,
+        district: user.district,
+      },
       JWT_SECRET,
       { expiresIn: "7d" }
     );

@@ -87,6 +87,7 @@ const ServiceDetailsPage: React.FC = () => {
       toast.success("Servies Booked");
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error);
     } finally {
       setisloading(false);
     }

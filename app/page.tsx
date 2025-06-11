@@ -351,7 +351,7 @@ const HomePage = () => {
             ))}
           </motion.div>
 
-          <ChatbotInterface />
+          {/* <ChatbotInterface /> */}
         </div>
       </section>
     </div>

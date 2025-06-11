@@ -1,11 +1,12 @@
 // @ts-nocheck
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -17,10 +18,13 @@ import {
   IndianRupee,
   Loader2,
   Star,
+  CalendarDays,
+  List,
 } from "lucide-react";
 
 import type { User as UserType } from "@/lib/types";
 import BookedServicesList from "@/components/custom/BookedServicesList";
+import ProviderServicesCalendar from "@/components/custom/ProviderServicesCalendar";
 import { useUser } from "@/context/userContext";
 import IncomeAnalysisChart from "@/components/custom/IncomeAnalysisChart";
 import Loading from "@/components/custom/loading";
@@ -28,20 +32,33 @@ import Loading from "@/components/custom/loading";
 function ProviderDashboard() {
   const [user, setUser] = useState<UserType | null>(null);
   const [availableServices, setAvailableServices] = useState<[]>([]);
-  const [acceptedServices, setAcceptedServices] = useState<[]>([]);
-  const [completedServices, setCompletedServices] = useState<[]>([]);
+  const [allServices, setAllServices] = useState<[]>([]);
   const [userLoading, setUserLoading] = useState(true);
-
   const [availableServicesLoading, setAvailableServicesLoading] =
     useState(false);
-  const [acceptedServicesLoading, setAcceptedServicesLoading] = useState(false);
-  const [completedServicesLoading, setCompletedServicesLoading] =
-    useState(false);
+  const [allServicesLoading, setAllServicesLoading] = useState(false);
   const router = useRouter();
-  const [mergedServices, setMergedServices] = useState<[]>([]);
 
   // Context
   const { setUserFromContext } = useUser();
+
+  // Separate services using useMemo
+  const acceptedServices = useMemo(
+    () => allServices?.filter((service) => service.status === "ACCEPTED") || [],
+    [allServices]
+  );
+
+  const completedServices = useMemo(
+    () =>
+      allServices?.filter((service) => service.status === "COMPLETED") || [],
+    [allServices]
+  );
+
+  // Combine all services for calendar view
+  const allCombinedServices = useMemo(
+    () => [...availableServices, ...allServices],
+    [availableServices, allServices]
+  );
 
   const checkUserSession = async () => {
     setUserLoading(true);
@@ -62,10 +79,6 @@ function ProviderDashboard() {
     }
   };
 
-  useEffect(() => {
-    checkUserSession();
-  }, [router]);
-
   const fetchAvailableServices = async () => {
     if (user?.specialization) {
       setAvailableServicesLoading(true);
@@ -83,45 +96,32 @@ function ProviderDashboard() {
     }
   };
 
-  const fetchAcceptedServices = async () => {
+  const fetchAllServices = async () => {
     if (user?.id) {
-      setAcceptedServicesLoading(true);
+      setAllServicesLoading(true);
       try {
-        const response = await axios.post("/api/providerAcceptedServices", {
+        console.log("first");
+        const response = await axios.post("/api/providerAllServices", {
           id: user.id,
         });
-        setAcceptedServices(response.data.acceptedServices || []);
+        setAllServices(response?.data?.allServices || []);
       } catch (error) {
-        console.error("Error fetching accepted services:", error);
-        toast.error("Failed to fetch accepted services");
+        console.error("Error fetching all services:", error);
+        toast.error("Failed to fetch all services");
       } finally {
-        setAcceptedServicesLoading(false);
-      }
-    }
-  };
-
-  const fetchCompletedServices = async () => {
-    if (user?.id) {
-      setCompletedServicesLoading(true);
-      try {
-        const response = await axios.post("/api/providerCompletedServices", {
-          id: user.id,
-        });
-        setCompletedServices(response?.data?.completedServices || []);
-      } catch (error) {
-        console.error("Error fetching completed services:", error);
-        toast.error("Failed to fetch completed services");
-      } finally {
-        setCompletedServicesLoading(false);
+        setAllServicesLoading(false);
       }
     }
   };
 
   useEffect(() => {
+    checkUserSession();
+  }, [router]);
+
+  useEffect(() => {
     if (user) {
       fetchAvailableServices();
-      fetchAcceptedServices();
-      fetchCompletedServices();
+      fetchAllServices();
     }
   }, [user]);
 
@@ -140,20 +140,12 @@ function ProviderDashboard() {
     }
   };
 
-  useEffect(() => {
-    setMergedServices([
-      ...availableServices,
-      ...acceptedServices,
-      ...completedServices,
-    ]);
-  }, [availableServices, acceptedServices, completedServices]);
+  const handleCalendarEventClick = (service) => {
+    // Navigate to service details or show more info
+    router.push(`/provider/service/${service.id}`);
+  };
 
-  if (
-    userLoading ||
-    availableServicesLoading ||
-    completedServicesLoading ||
-    acceptedServicesLoading
-  ) {
+  if (userLoading) {
     return <Loading />;
   }
 
@@ -167,6 +159,7 @@ function ProviderDashboard() {
         >
           <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
             <CardContent className="p-6">
+              {/* Header */}
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                 <div>
                   <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
@@ -189,6 +182,8 @@ function ProviderDashboard() {
                   </Button>
                 </div>
               </div>
+
+              {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
                   icon={<Clock className="h-8 w-8 text-yellow-500" />}
@@ -202,14 +197,14 @@ function ProviderDashboard() {
                   title="Accepted Services"
                   value={acceptedServices.length.toString()}
                   color="bg-blue-100"
-                  loading={acceptedServicesLoading}
+                  loading={allServicesLoading}
                 />
                 <StatCard
                   icon={<CheckCircle className="h-8 w-8 text-green-500" />}
                   title="Completed Services"
                   value={completedServices?.length?.toString() || "0"}
                   color="bg-green-100"
-                  loading={completedServicesLoading}
+                  loading={allServicesLoading}
                 />
                 <StatCard
                   icon={<IndianRupee className="h-8 w-8 text-green-500" />}
@@ -221,10 +216,12 @@ function ProviderDashboard() {
                     )
                     .toFixed(2)}`}
                   color="bg-green-100"
-                  loading={completedServicesLoading}
+                  loading={allServicesLoading}
                 />
               </div>
-              {completedServicesLoading ? (
+
+              {/* Income Chart */}
+              {allServicesLoading ? (
                 <div className="mb-8">
                   <Skeleton className="h-64 w-full" />
                 </div>
@@ -236,19 +233,96 @@ function ProviderDashboard() {
                   />
                 </div>
               )}
-              <div className="relative">
-                {(availableServicesLoading ||
-                  acceptedServicesLoading ||
-                  completedServicesLoading) && (
-                  <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-                    <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                    <p className="text-gray-700 font-medium">
-                      Loading services...
-                    </p>
+
+              {/* Tabs for Calendar and List View */}
+              <Tabs defaultValue="calendar" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger
+                    value="calendar"
+                    className="flex items-center gap-2"
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    Calendar View
+                  </TabsTrigger>
+                  <TabsTrigger value="list" className="flex items-center gap-2">
+                    <List className="h-4 w-4" />
+                    List View
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Calendar View */}
+                <TabsContent value="calendar">
+                  {availableServicesLoading || allServicesLoading ? (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
+                      <p className="text-gray-700 font-medium">
+                        Loading calendar...
+                      </p>
+                    </div>
+                  ) : (
+                    <ProviderServicesCalendar
+                      services={allCombinedServices}
+                      onEventClick={handleCalendarEventClick}
+                    />
+                  )}
+                </TabsContent>
+
+                {/* List View */}
+                <TabsContent value="list">
+                  <div className="space-y-8">
+                    {/* Available Services */}
+                    <div className="relative">
+                      {availableServicesLoading && (
+                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
+                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
+                          <p className="text-gray-700 font-medium">
+                            Loading available services...
+                          </p>
+                        </div>
+                      )}
+                      <BookedServicesList
+                        services={availableServices}
+                        title="Available Services"
+                        emptyMessage="No available services at the moment."
+                      />
+                    </div>
+
+                    {/* Accepted Services */}
+                    <div className="relative">
+                      {allServicesLoading && (
+                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
+                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
+                          <p className="text-gray-700 font-medium">
+                            Loading accepted services...
+                          </p>
+                        </div>
+                      )}
+                      <BookedServicesList
+                        services={acceptedServices}
+                        title="Accepted Services"
+                        emptyMessage="No accepted services at the moment."
+                      />
+                    </div>
+
+                    {/* Completed Services */}
+                    <div className="relative">
+                      {allServicesLoading && (
+                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
+                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
+                          <p className="text-gray-700 font-medium">
+                            Loading completed services...
+                          </p>
+                        </div>
+                      )}
+                      <BookedServicesList
+                        services={completedServices}
+                        title="Completed Services"
+                        emptyMessage="No completed services yet."
+                      />
+                    </div>
                   </div>
-                )}
-                <BookedServicesList bookedServices={mergedServices} />
-              </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </motion.div>
