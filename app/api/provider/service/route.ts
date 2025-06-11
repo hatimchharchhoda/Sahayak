@@ -21,6 +21,12 @@ export async function POST(req: NextRequest) {
             ServiceCategory: true,
           },
         },
+        rating: true,
+        rating: {
+          include: {
+            User: true,
+          },
+        },
       },
     });
 

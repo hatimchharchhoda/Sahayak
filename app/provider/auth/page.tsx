@@ -46,7 +46,12 @@ const ProviderAuthPage = () => {
     password: "",
     phone: "",
     specialization: "",
+    district: "",
+    city: "",
   });
+
+  const [districts, setDistricts] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +81,6 @@ const ProviderAuthPage = () => {
         ? "/api/provider/auth/login"
         : "/api/provider/auth/signup";
 
-      // Only include email and password for login
       const submitData = isLogin
         ? {
             email: formData.email,
@@ -84,28 +88,31 @@ const ProviderAuthPage = () => {
           }
         : formData;
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(submitData),
+      console.log(formData);
+
+      const response = await axios.post(endpoint, submitData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Something went wrong");
-      }
+      console.log(response);
 
       if (isLogin) {
-        localStorage.setItem("provider_token", result.token);
+        localStorage.setItem("provider_token", response.data.token);
         setSuccess("Login successful!");
         router.push("/provider");
       } else {
-        setSuccess("Account created successfully! Please login to continue.");
+        setSuccess("Account created successfully!");
         router.push("/provider");
       }
     } catch (err: any) {
-      setError(err.message);
+      console.log(err);
+      if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -121,9 +128,38 @@ const ProviderAuthPage = () => {
     }
   };
 
+  async function getDistrict() {
+    try {
+      const response = await axios.get("/api/getDistrict");
+      console.log(response);
+      setDistricts(response.data.allDistrict);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getCities() {
+    console.log("second");
+    try {
+      const response = await axios.post("/api/getCity", {
+        district: formData.district,
+      });
+      console.log(response);
+      setCities(response.data.cities);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchCategories();
+    getDistrict();
   }, []);
+
+  useEffect(() => {
+    getCities();
+    console.log("first");
+  }, [formData.district]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex justify-center items-center">
@@ -247,6 +283,59 @@ const ProviderAuthPage = () => {
                                 {category.name}
                               </SelectItem>
                             ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="district">District</Label>
+                        <Select
+                          value={formData.district}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              district: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select District" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {districts &&
+                              districts.length > 0 &&
+                              districts.map((d, i) => (
+                                <SelectItem key={i} value={d}>
+                                  {d}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="city">City</Label>
+                        <Select
+                          value={formData.city}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({ ...prev, city: value }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {cities && cities.length > 0 ? (
+                              cities.map((c, i) => (
+                                <SelectItem key={i} value={c}>
+                                  {c}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="null">
+                                Please select district first
+                              </SelectItem>
+                            )}
                           </SelectContent>
                         </Select>
                       </div>

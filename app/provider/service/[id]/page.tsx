@@ -22,8 +22,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useUser } from "@/context/userContext";
 import { Input } from "@/components/ui/input";
-import { Review, ServiceDetails } from "@/lib/types";
 import Loading from "@/components/custom/loading";
+import ReviewSection from "@/components/custom/ReviewSection";
 
 const statusColors = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -32,16 +32,62 @@ const statusColors = {
   CANCELLED: "bg-red-100 text-red-800",
 };
 
+export interface ServiceCategory {
+  id: string;
+  name: string;
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  categoryId: string;
+  ServiceCategory?: ServiceCategory;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city?: string;
+  district?: string;
+  role?: string;
+}
+
+export interface Rating {
+  id: string;
+  bookingId: string;
+  providerId: string;
+  userId: string;
+  serviceId: string;
+  stars: number;
+  review: string;
+  User: User;
+}
+
+export interface Booking {
+  id: string;
+  providerId: string;
+  userId: string;
+  serviceId: string;
+  serviceCategoryId?: string;
+  date: string;
+  basePrice: number;
+  status: string;
+  Service?: Service;
+  User?: User;
+  rating?: Rating;
+}
+
 export default function ServiceDetailPage() {
   const { id } = useParams();
-  const [serviceDetails, setServiceDetails] = useState<ServiceDetails | null>(
-    null
-  );
+  const [serviceDetails, setServiceDetails] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");
-  const [review, setReview] = useState<Review | null>(null);
-  const [reviewLoading, setReviewLoading] = useState(false);
   const router = useRouter();
 
   const { userFromContext } = useUser();
@@ -50,7 +96,6 @@ export default function ServiceDetailPage() {
     const fetchServiceDetails = async () => {
       try {
         const response = await axios.post(`/api/provider/service`, { id });
-
         setServiceDetails(response.data);
         setNewPrice(response.data.basePrice?.toString() || "");
       } catch (error) {
@@ -64,28 +109,6 @@ export default function ServiceDetailPage() {
     fetchServiceDetails();
   }, [id]);
 
-  useEffect(() => {
-    const fetchReview = async () => {
-      if (serviceDetails?.status === "COMPLETED") {
-        setReviewLoading(true);
-
-        try {
-          const response = await axios.post(`/api/serviceReviews`, {
-            id: serviceDetails.serviceId,
-          });
-          setReview(response.data.review);
-        } catch (error) {
-          console.error("Error fetching review:", error);
-          toast.error("Failed to load review");
-        } finally {
-          setReviewLoading(false);
-        }
-      }
-    };
-
-    fetchReview();
-  }, [id, serviceDetails?.status]);
-
   const handleAccept = async () => {
     try {
       await axios.post(`/api/provider/service/accept`, {
@@ -93,7 +116,10 @@ export default function ServiceDetailPage() {
         bookingId: id,
       });
       toast.success("Service accepted successfully");
-      router.push("/provider");
+      // Update local state instead of redirecting
+      setServiceDetails((prev) =>
+        prev ? { ...prev, status: "ACCEPTED" } : null
+      );
     } catch (error) {
       console.error("Error accepting service:", error);
       toast.error("Failed to accept service");
@@ -106,14 +132,10 @@ export default function ServiceDetailPage() {
         basePrice: parseFloat(newPrice),
         bookingId: id,
       });
-      if (response.status !== 200) return null;
+      if (response.status !== 200) return;
+
       setServiceDetails((prev) =>
-        prev
-          ? {
-              ...prev,
-              basePrice: parseFloat(newPrice),
-            }
-          : null
+        prev ? { ...prev, basePrice: parseFloat(newPrice) } : null
       );
       setIsEditing(false);
       toast.success("Price updated successfully");
@@ -129,84 +151,13 @@ export default function ServiceDetailPage() {
         bookingId: id,
       });
       setServiceDetails((prev) =>
-        prev
-          ? {
-              ...prev,
-              status: "COMPLETED",
-            }
-          : null
+        prev ? { ...prev, status: "COMPLETED" } : null
       );
       toast.success("Service marked as completed");
-      router.push("/provider");
     } catch (error) {
       console.error("Error completing service:", error);
       toast.error("Failed to complete service");
     }
-  };
-
-  const ReviewSection = () => {
-    if (!serviceDetails?.status === "COMPLETED") return null;
-
-    if (reviewLoading) {
-      return (
-        <Card className="bg-yellow-50 mt-6">
-          <CardContent className="p-6">
-            <div className="animate-pulse">
-              <div className="h-4 bg-yellow-200 rounded w-1/4 mb-4"></div>
-              <div className="h-4 bg-yellow-200 rounded w-3/4"></div>
-            </div>
-          </CardContent>
-        </Card>
-      );
-    }
-
-    if (!review) {
-      return (
-        <Card className="bg-yellow-50 mt-6">
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-2 text-gray-800">Review</h2>
-            <p className="text-gray-600">No review available yet.</p>
-          </CardContent>
-        </Card>
-      );
-    }
-
-    return (
-      <Card className="bg-yellow-50 mt-6">
-        <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Client Review
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <UserIcon className="w-6 h-6 text-yellow-600" />
-                <span className="font-medium text-gray-700">
-                  {review.User.name}
-                </span>
-              </div>
-              <div className="flex items-center">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star
-                    key={index}
-                    className={`h-5 w-5 ${
-                      index < review.stars
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-            {review.review && (
-              <p className="text-gray-700 bg-white/50 p-4 rounded-lg">
-                &quot;{review.review}&quot;
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    );
   };
 
   if (loading) {
@@ -247,6 +198,30 @@ export default function ServiceDetailPage() {
               </div>
 
               <div className="grid gap-6">
+                {/* Service Information */}
+                {serviceDetails.Service && (
+                  <Card className="bg-indigo-50">
+                    <CardContent className="p-6">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+                        Service Information
+                      </h2>
+                      <div className="space-y-2">
+                        <p className="text-lg font-semibold text-gray-900">
+                          {serviceDetails.Service.name}
+                        </p>
+                        <p className="text-gray-600">
+                          {serviceDetails.Service.description}
+                        </p>
+                        {serviceDetails.Service.ServiceCategory && (
+                          <Badge variant="outline" className="mt-2">
+                            {serviceDetails.Service.ServiceCategory.name}
+                          </Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Card className="bg-blue-50">
                     <CardContent className="flex items-center p-4">
@@ -284,7 +259,7 @@ export default function ServiceDetailPage() {
                         <div>
                           <p className="text-sm text-gray-600">Name</p>
                           <p className="text-lg font-semibold">
-                            {serviceDetails.User.name}
+                            {serviceDetails.User?.name}
                           </p>
                         </div>
                       </div>
@@ -293,7 +268,7 @@ export default function ServiceDetailPage() {
                         <div>
                           <p className="text-sm text-gray-600">Address</p>
                           <p className="text-lg font-semibold">
-                            {serviceDetails.User.address}
+                            {serviceDetails.User?.address}
                           </p>
                         </div>
                       </div>
@@ -302,7 +277,7 @@ export default function ServiceDetailPage() {
                         <div>
                           <p className="text-sm text-gray-600">Phone</p>
                           <p className="text-lg font-semibold">
-                            {serviceDetails.User.phone}
+                            {serviceDetails.User?.phone}
                           </p>
                         </div>
                       </div>
@@ -324,12 +299,19 @@ export default function ServiceDetailPage() {
                                 value={newPrice}
                                 onChange={(e) => setNewPrice(e.target.value)}
                                 className="w-32"
+                                min="0"
+                                step="0.01"
                               />
                               <Button onClick={handleUpdatePrice} size="sm">
                                 Save
                               </Button>
                               <Button
-                                onClick={() => setIsEditing(false)}
+                                onClick={() => {
+                                  setIsEditing(false);
+                                  setNewPrice(
+                                    serviceDetails.basePrice?.toString() || ""
+                                  );
+                                }}
                                 variant="outline"
                                 size="sm"
                               >
@@ -359,6 +341,7 @@ export default function ServiceDetailPage() {
                               onClick={() => setIsEditing(true)}
                               variant="outline"
                               className="gap-2"
+                              disabled={isEditing}
                             >
                               <Edit className="w-4 h-4" />
                               Edit Price
@@ -377,7 +360,8 @@ export default function ServiceDetailPage() {
                   </CardContent>
                 </Card>
               </div>
-              <ReviewSection />
+
+              <ReviewSection serviceDetails={serviceDetails} />
             </CardContent>
           </Card>
         </motion.div>

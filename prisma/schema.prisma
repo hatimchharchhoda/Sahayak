@@ -24,6 +24,8 @@ model User {
   password  String
   phone     String
   address   String
+  city      String   
+  district      String   
   bookings  Booking[]
   ratings   Rating[]
   sentMessages     Message[] @relation("SentMessages")
@@ -38,12 +40,13 @@ model ServiceProvider {
   name           String
   password       String
   phone          String
+  address        String?   
+  city           String   
+  district           String    
   specialization String
   services       ServiceProviderService[]
   ratings        Rating[]
-  bookings       Booking[]  // Add this line to create the reverse relation
-
-  @@index([role], name: "provider_role_idx")
+  bookings       Booking[]
 }
 
 // 3. Admin Model
@@ -144,4 +147,10 @@ model Message {
 
   sender     User     @relation("SentMessages", fields: [senderId], references: [id])
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model GujaratCity {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  district String
+  cities   String[] // Array of city names
 }

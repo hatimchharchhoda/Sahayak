@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-"use client"; // Needed for using hooks in Next.js App Router
+"use client";
 
 import React from "react";
 import { usePathname } from "next/navigation";
@@ -10,22 +8,18 @@ import Footer from "./Footer";
 const DisplayFooter = () => {
   const pathname = usePathname();
 
-  // Check if the current path starts with '/provider'
-  const isProviderRoute = pathname.startsWith("/provider");
+  // Hide footer if path starts with /auth or /provider/auth
+  if (pathname.startsWith("/auth") || pathname.startsWith("/provider/auth")) {
+    return null;
+  }
 
-  return (
-    <div>
-      {isProviderRoute ? (
-        <>
-          <ProviderFooter />
-        </>
-      ) : (
-        <>
-          <Footer />
-        </>
-      )}
-    </div>
-  );
+  // Show ProviderFooter for /provider routes
+  if (pathname.startsWith("/provider")) {
+    return <ProviderFooter />;
+  }
+
+  // Show default Footer for all other routes
+  return <Footer />;
 };
 
 export default DisplayFooter;
