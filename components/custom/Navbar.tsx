@@ -8,6 +8,7 @@ import { Menu, X, User, LogOut } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useAuthUser } from "@/hooks/useAuth";
 
 interface User {
   name: string;
@@ -16,10 +17,7 @@ interface User {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User>({
-    name: "",
-    email: "",
-  });
+  const { user, setUser } = useAuthUser();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -27,18 +25,7 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const getMe = async () => {
-    try {
-      const response = await axios.get("/api/auth/getMe");
-      setUser(response.data.user);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    getMe();
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

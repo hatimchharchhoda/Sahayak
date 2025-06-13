@@ -3,6 +3,7 @@
 "use client";
 
 import { useUser } from "@/context/userContext";
+import { useAuthUser } from "@/hooks/useAuth";
 import { useSocket } from "@/hooks/useSocket";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -16,25 +17,13 @@ const ChatService = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [user, setUser] = useState();
-  const { setUserFromContext } = useUser();
+  const { user } = useAuthUser();
+
   const socket = useSocket();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      console.log("User from localStorage:", parsedUser);
-      setUser(parsedUser);
-      setUserFromContext(parsedUser);
-    } else {
-      console.log("No user found in localStorage");
-    }
-  }, []);
 
   // Fetch messages when receiver changes - FIXED: Added receiverId dependency
   useEffect(() => {

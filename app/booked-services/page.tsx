@@ -5,15 +5,11 @@ import React, { useEffect, useState } from "react";
 import { User, MapPin, Phone, Mail, Search } from "lucide-react";
 import Loading from "@/components/custom/loading";
 import ServiceBookingCard from "@/components/custom/ServiceBookingCard";
+import { useAuthUser } from "@/hooks/useAuth";
 
 const Page = () => {
-  const [user, setUser] = useState({
-    id: "",
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
+  const { user } = useAuthUser();
+  console.log(user);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,13 +30,6 @@ const Page = () => {
       }
     }
   };
-
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user") || "null");
-    if (userData) {
-      setUser(userData);
-    }
-  }, []);
 
   useEffect(() => {
     fetchUserServices();

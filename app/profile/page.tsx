@@ -5,22 +5,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { User, Mail, Phone, MapPin, Edit2, Save, X } from "lucide-react";
+import { useAuthUser } from "@/hooks/useAuth";
 
 const UserProfile = () => {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
+  const { user } = useAuthUser();
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user") || "null");
-    if (userData) {
-      setUser(userData);
-    }
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

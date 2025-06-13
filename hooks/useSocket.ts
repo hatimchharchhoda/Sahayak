@@ -1,11 +1,12 @@
-import { useUser } from "@/context/userContext";
+// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { useAuthUser } from "./useAuth";
 
 export const useSocket = (): Socket | null => {
   const socketRef = useRef<Socket | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const { userFromContext: user } = useUser();
+  const { user } = useAuthUser();
 
   useEffect(() => {
     if (!user || !user.id) return;

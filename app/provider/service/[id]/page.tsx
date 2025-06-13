@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import Loading from "@/components/custom/loading";
 import ReviewSection from "@/components/custom/ReviewSection";
 import Link from "next/link";
+import { useAuthUser } from "@/hooks/useAuth";
 
 const statusColors = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -92,12 +93,10 @@ export interface Booking {
 export default function ServiceDetailPage() {
   const { id } = useParams();
   const [serviceDetails, setServiceDetails] = useState<Booking | null>(null);
-  const { userFromContext, setUserFromContext } = useUser();
+  const { user } = useAuthUser();
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");
-  const router = useRouter();
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchServiceDetails = async () => {
@@ -116,23 +115,10 @@ export default function ServiceDetailPage() {
     fetchServiceDetails();
   }, [id]);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        setUserFromContext(parsedUser);
-      } catch (error) {
-        console.error("Failed to parse user from localStorage:", error);
-      }
-    }
-  }, []);
-
   const handleAccept = async () => {
     try {
       await axios.post(`/api/provider/service/accept`, {
-        id: userFromContext?.id,
+        id: user?.id,
         bookingId: id,
       });
       toast.success("Service accepted successfully");
@@ -191,7 +177,7 @@ export default function ServiceDetailPage() {
     );
   }
 
-  console.log(serviceDetails);
+  // console.log(serviceDetails);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
