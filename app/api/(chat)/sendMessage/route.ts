@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     // Send message using Axios to your backend socket API
     const response = await axios.post(
-      "http://localhost:3001/api/send-message",
+      "https://sahayak-socket.onrender.com/api/send-message",
       {
         receiverId,
         content,
