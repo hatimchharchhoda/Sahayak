@@ -69,7 +69,6 @@ export interface Rating {
   review: string;
   User: User;
 }
-
 export interface Booking {
   id: string;
   providerId: string;
@@ -79,6 +78,12 @@ export interface Booking {
   date: string;
   basePrice: number;
   status: string;
+  isPaid?: boolean;
+  orderId?: string;
+  paymentId?: string;
+  paymentSignature?: string;
+  paymentVerifiedAt?: string;
+
   Service?: Service;
   User?: User;
   rating?: Rating;
@@ -186,7 +191,7 @@ export default function ServiceDetailPage() {
     );
   }
 
-  console.log(`/chat/${serviceDetails.userId}`);
+  console.log(serviceDetails);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -344,9 +349,23 @@ export default function ServiceDetailPage() {
                               </Button>
                             </div>
                           ) : (
-                            <p className="text-2xl font-bold text-gray-800">
-                              ₹{serviceDetails.basePrice?.toFixed(2) || "N/A"}
-                            </p>
+                            <div className="flex flex-col">
+                              <div className="flex items-center gap-3 mb-1">
+                                <p className="text-2xl font-bold text-gray-800">
+                                  ₹
+                                  {serviceDetails.basePrice?.toFixed(2) ||
+                                    "N/A"}
+                                </p>
+                                {serviceDetails.isPaid && (
+                                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-full border border-green-200 shadow-sm">
+                                    <CheckCircle className="h-4 w-4" />
+                                    <span className="text-sm font-semibold">
+                                      Payment Successful
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           )}
                         </div>
                       </div>

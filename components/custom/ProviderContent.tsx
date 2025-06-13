@@ -40,7 +40,8 @@ const ProvidersContent: FC = () => {
   const fetchAllProviders = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/admin/getAllProvider");
+      const response = await axios.get("/api/provider/getAll");
+      console.log(response);
       setProviders(response.data);
       setError("");
     } catch (error) {

@@ -210,8 +210,10 @@ function ProviderDashboard() {
                   icon={<IndianRupee className="h-8 w-8 text-green-500" />}
                   title="Total Earnings"
                   value={`₹${completedServices
-                    ?.reduce(
-                      (sum, service: any) => sum + (service.basePrice || 0),
+                    ?.filter((service: any) => service.isPaid) // ✅ Only paid services
+                    .reduce(
+                      (sum: number, service: any) =>
+                        sum + (service.basePrice || 0),
                       0
                     )
                     .toFixed(2)}`}

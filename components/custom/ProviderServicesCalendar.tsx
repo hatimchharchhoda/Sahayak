@@ -15,14 +15,16 @@ import { CalendarIcon, Clock, IndianRupee, User } from "lucide-react";
 const statusColors = {
   PENDING: "#f59e0b", // yellow
   ACCEPTED: "#10b981", // green
-  COMPLETED: "#3b82f6", // blue
+  COMPLETED_PAID: "#3b82f6", // blue (paid)
+  COMPLETED_UNPAID: "#a855f7", // purple (unpaid)
   CANCELLED: "#ef4444", // red
 };
 
 const statusDisplayNames = {
   PENDING: "Available",
   ACCEPTED: "Accepted",
-  COMPLETED: "Completed",
+  COMPLETED_PAID: "Completed (Paid)",
+  COMPLETED_UNPAID: "Completed (Unpaid)",
   CANCELLED: "Cancelled",
 };
 
@@ -52,6 +54,10 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
           minute: "2-digit",
           hour12: true,
         },
+        // 👇 Add this
+        eventDidMount: (info) => {
+          info.el.style.cursor = "pointer";
+        },
       });
 
       calendarInstance.render();
@@ -72,21 +78,30 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
   }, [services, calendar]);
 
   const formatServicesForCalendar = (services) => {
-    return services.map((service) => ({
-      id: service.id,
-      title: service.Service?.name || "Service",
-      start: service.date,
-      backgroundColor: statusColors[service.status] || "#6b7280",
-      borderColor: statusColors[service.status] || "#6b7280",
-      textColor: "#ffffff",
-      extendedProps: {
-        service: service,
-        status: service.status,
-        basePrice: service.basePrice,
-        description: service.Service?.description,
-        userId: service.userId,
-      },
-    }));
+    return services.map((service) => {
+      let statusKey = service.status;
+
+      if (service.status === "COMPLETED") {
+        statusKey = service.isPaid ? "COMPLETED_PAID" : "COMPLETED_UNPAID";
+      }
+
+      return {
+        id: service.id,
+        title: service.Service?.name || "Service",
+        start: service.date,
+        backgroundColor: statusColors[statusKey] || "#6b7280",
+        borderColor: statusColors[statusKey] || "#6b7280",
+        textColor: "#ffffff",
+        extendedProps: {
+          service,
+          status: statusKey,
+          basePrice: service.basePrice,
+          description: service.Service?.description,
+          userId: service.userId,
+          isPaid: service.isPaid,
+        },
+      };
+    });
   };
 
   const handleEventClick = (info) => {

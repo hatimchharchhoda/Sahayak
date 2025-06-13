@@ -19,6 +19,7 @@ import { toast } from "react-hot-toast";
 interface CompletedService {
   basePrice: number;
   date: string;
+  isPaid: boolean;
   Service: {
     name: string;
   };
@@ -38,19 +39,22 @@ const IncomeAnalysisChart = ({
       [key: string]: { total: number; services: CompletedService[] };
     } = {};
 
-    completedServices?.forEach((service) => {
-      const date = new Date(service.date);
-      const monthYear = date.toLocaleString("default", {
-        month: "short",
-        year: "numeric",
-      });
+    completedServices
+      ?.filter((service) => service.isPaid) // ✅ Only paid services
+      .forEach((service) => {
+        const date = new Date(service.date);
+        const monthYear = date.toLocaleString("default", {
+          month: "short",
+          year: "numeric",
+        });
 
-      if (!monthlyIncome[monthYear]) {
-        monthlyIncome[monthYear] = { total: 0, services: [] };
-      }
-      monthlyIncome[monthYear].total += service.basePrice;
-      monthlyIncome[monthYear].services.push(service);
-    });
+        if (!monthlyIncome[monthYear]) {
+          monthlyIncome[monthYear] = { total: 0, services: [] };
+        }
+
+        monthlyIncome[monthYear].total += service.basePrice;
+        monthlyIncome[monthYear].services.push(service);
+      });
 
     return Object.entries(monthlyIncome)
       .map(([month, data]) => ({

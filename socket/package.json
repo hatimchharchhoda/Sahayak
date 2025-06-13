@@ -5,9 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "echo 'No build step needed for backend'"
   },
   "dependencies": {
     "cors": "^2.8.5",

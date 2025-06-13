@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import ConfirmDialog from "./ConfirmDialog";
 import ReviewDialog from "./ReviewDialog";
 import Link from "next/link";
+import Payment from "./Payment";
 
 const getStatusColor = (status: any) => {
   switch (status) {
@@ -46,14 +47,12 @@ const getStatusIcon = (status: any) => {
 };
 
 const ServiceBookingCard = ({
-  user,
   booking,
   onCancelSuccess,
   onReviewSuccess,
 }: any) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [existingReview, setExistingReview] = useState(null);
@@ -257,6 +256,17 @@ const ServiceBookingCard = ({
                   <span>Edit Review</span>
                 </Button>
               </>
+            )}
+
+            {booking.isPaid && (
+              <div className="text-center text-sm text-green-600 flex items-center justify-center mb-2">
+                <CheckCircle className="h-4 w-4 mr-1" />
+                <span>Payment Successful</span>
+              </div>
+            )}
+
+            {booking.status === "COMPLETED" && !booking.isPaid && (
+              <Payment amount={booking.basePrice} bookingId={booking.id} />
             )}
           </div>
         </div>

@@ -38,7 +38,7 @@ const UsersContent = () => {
   const fetchAllUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/admin/getAllUser");
+      const response = await axios.get("/api/admin/user");
       setUsers(response.data);
       setError("");
     } catch (error) {
@@ -98,7 +98,6 @@ const UsersContent = () => {
                   <TableHead>Phone</TableHead>
                   <TableHead>Address</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -117,18 +116,6 @@ const UsersContent = () => {
                       <TableCell>{user.address}</TableCell>
                       <TableCell>
                         <Badge variant="outline">{user.role}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setIsEditUserOpen(true);
-                          }}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
                       </TableCell>
                     </TableRow>
                   ))

@@ -84,7 +84,6 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
                 <TableHead>Service Category</TableHead>
                 <TableHead>Service Name</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -100,13 +99,6 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
                       </div>
                     </TableCell>
                     <TableCell className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEditService(service)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
                       <Button
                         variant="outline"
                         size="sm"

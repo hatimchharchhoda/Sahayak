@@ -100,18 +100,27 @@ model Booking {
   userId            String    @db.ObjectId
   serviceId         String    @db.ObjectId
   providerId        String?   @db.ObjectId
-  serviceCategoryId String    @db.ObjectId   // Changed field name to singular
+  serviceCategoryId String    @db.ObjectId
 
-  date        DateTime
-  status      BookingStatus  @default(PENDING)
-  basePrice   Float?
-  rating      Rating?
-  
-  User        User           @relation(fields: [userId], references: [id])
-  Service     Service?        @relation(fields: [serviceId], references: [id])
-  ServiceProvider ServiceProvider? @relation(fields: [providerId], references: [id])
-  ServiceCategory ServiceCategory  @relation(fields: [serviceCategoryId], references: [id])  // One-to-One relation
+  date              DateTime
+  status            BookingStatus  @default(PENDING)
+  basePrice         Float?
+  rating            Rating?
+
+  // Payment fields
+  isPaid            Boolean   @default(false)    // ✅ True if payment verified
+  paymentId         String?                    // Razorpay payment_id
+  orderId           String?                    // Razorpay order_id
+  paymentSignature  String?                    // Razorpay signature
+  paymentVerifiedAt DateTime?                 // Optional: when verified
+
+  // Relations
+  User              User           @relation(fields: [userId], references: [id])
+  Service           Service?       @relation(fields: [serviceId], references: [id])
+  ServiceProvider   ServiceProvider? @relation(fields: [providerId], references: [id])
+  ServiceCategory   ServiceCategory  @relation(fields: [serviceCategoryId], references: [id])
 }
+
 
 
 // Updated BookingStatus Enum
