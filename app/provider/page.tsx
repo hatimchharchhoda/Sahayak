@@ -68,6 +68,7 @@ function ProviderDashboard() {
         const data = await response.json();
         setUser(data.user);
         setUserFromContext(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
       } else {
         router.push("/auth");
       }
@@ -182,7 +183,6 @@ function ProviderDashboard() {
                   </Button>
                 </div>
               </div>
-
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
@@ -303,7 +303,6 @@ function ProviderDashboard() {
                         emptyMessage="No accepted services at the moment."
                       />
                     </div>
-
                     {/* Completed Services */}
                     <div className="relative">
                       {allServicesLoading && (

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ const BookedServicesList = ({ services, title, emptyMessage }) => {
       <h2 className="text-2xl font-semibold text-gray-800">
         {title} ({services.length})
       </h2>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
           <Link href={`/provider/service/${service.id}`} key={service.id}>

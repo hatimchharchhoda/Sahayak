@@ -22,6 +22,8 @@ import axios from "axios";
 import OurServices from "@/components/custom/OurServices";
 import { Category } from "@/lib/types";
 import ChatbotInterface from "@/components/custom/ChatBotInterface";
+import { useUser } from "@/context/userContext";
+import { useRouter } from "next/navigation";
 
 interface SearchResult {
   id: string;

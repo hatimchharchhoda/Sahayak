@@ -17,6 +17,7 @@ import {
   CheckCircle,
   Edit,
   Star,
+  MessageCircle,
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -24,6 +25,7 @@ import { useUser } from "@/context/userContext";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/custom/loading";
 import ReviewSection from "@/components/custom/ReviewSection";
+import Link from "next/link";
 
 const statusColors = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -85,12 +87,12 @@ export interface Booking {
 export default function ServiceDetailPage() {
   const { id } = useParams();
   const [serviceDetails, setServiceDetails] = useState<Booking | null>(null);
+  const { userFromContext, setUserFromContext } = useUser();
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");
   const router = useRouter();
-
-  const { userFromContext } = useUser();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchServiceDetails = async () => {
@@ -109,6 +111,19 @@ export default function ServiceDetailPage() {
     fetchServiceDetails();
   }, [id]);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setUserFromContext(parsedUser);
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+      }
+    }
+  }, []);
+
   const handleAccept = async () => {
     try {
       await axios.post(`/api/provider/service/accept`, {
@@ -116,7 +131,6 @@ export default function ServiceDetailPage() {
         bookingId: id,
       });
       toast.success("Service accepted successfully");
-      // Update local state instead of redirecting
       setServiceDetails((prev) =>
         prev ? { ...prev, status: "ACCEPTED" } : null
       );
@@ -171,6 +185,8 @@ export default function ServiceDetailPage() {
       </div>
     );
   }
+
+  console.log(`/chat/${serviceDetails.userId}`);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -246,6 +262,11 @@ export default function ServiceDetailPage() {
                       </div>
                     </CardContent>
                   </Card>
+                </div>
+
+                {/* Chat Button - Navigates to separate chat page */}
+                <div className="flex justify-center">
+                  <Link href={`/chat/${serviceDetails.userId}`}>Chat</Link>
                 </div>
 
                 <Card className="bg-green-50">
