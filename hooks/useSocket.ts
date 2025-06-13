@@ -9,7 +9,7 @@ export const useSocket = (): Socket | null => {
 
   useEffect(() => {
     if (!user || !user.id) return;
-    const s = io("http://localhost:3001", {
+    const s = io("https://sahayak-socket.onrender.com", {
       withCredentials: true,
       auth: {
         userId: user.id,
