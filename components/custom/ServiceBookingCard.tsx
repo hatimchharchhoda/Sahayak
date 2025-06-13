@@ -10,6 +10,7 @@ import {
   Star,
   User,
   XCircle,
+  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -180,9 +181,18 @@ const ServiceBookingCard = ({
 
           {booking.ServiceProvider && (
             <div className="mt-6 border-t pt-4">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                Service Provider
-              </h4>
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="text-sm font-semibold text-gray-900">
+                  Service Provider
+                </h4>
+                {/* Chat Button - Positioned in Service Provider header */}
+                <Link href={`/chat/${booking.ServiceProvider.id}`}>
+                  <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Chat
+                  </Button>
+                </Link>
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex items-center space-x-2">
                   <User className="h-4 w-4 text-gray-400" />
@@ -205,10 +215,6 @@ const ServiceBookingCard = ({
               </div>
             </div>
           )}
-
-          <Link href={`/chat/${booking.ServiceProvider.id}`}>
-            <Button>Chat</Button>
-          </Link>
 
           <div className="mt-6 pt-4 border-t flex flex-col space-y-3">
             {canCancel && (

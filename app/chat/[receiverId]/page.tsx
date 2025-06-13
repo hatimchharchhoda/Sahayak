@@ -116,20 +116,7 @@ const ChatService = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b px-4 py-3 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Chat with {receiverId}</h1>
-          <button
-            onClick={() => window.history.back()}
-            className="text-gray-500 hover:text-gray-700 px-3 py-1 rounded"
-          >
-            ← Back
-          </button>
-        </div>
-      </div>
-
+    <div className="flex mt-20 flex-col h-screen bg-gray-50">
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4">
         <div className="max-w-2xl mx-auto">

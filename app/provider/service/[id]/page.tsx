@@ -264,16 +264,20 @@ export default function ServiceDetailPage() {
                   </Card>
                 </div>
 
-                {/* Chat Button - Navigates to separate chat page */}
-                <div className="flex justify-center">
-                  <Link href={`/chat/${serviceDetails.userId}`}>Chat</Link>
-                </div>
-
                 <Card className="bg-green-50">
                   <CardContent className="p-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                      Client Information
-                    </h2>
+                    <div className="flex justify-between items-start mb-4">
+                      <h2 className="text-xl font-semibold text-gray-800">
+                        Client Information
+                      </h2>
+                      {/* Chat Button - Positioned in Client Information header */}
+                      <Link href={`/chat/${serviceDetails.userId}`}>
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Chat with Client
+                        </Button>
+                      </Link>
+                    </div>
                     <div className="space-y-4">
                       <div className="flex items-center">
                         <UserIcon className="w-6 h-6 mr-3 text-green-600" />
