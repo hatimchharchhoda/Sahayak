@@ -8,12 +8,14 @@ import { User, Mail, Phone, MapPin, Edit2, Save, X } from "lucide-react";
 import { useAuth } from "@/context/userContext";
 
 const UserProfile = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+
+  const [editUser, setEditUser] = useState({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    setEditUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
