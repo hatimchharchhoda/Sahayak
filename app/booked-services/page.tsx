@@ -5,11 +5,11 @@ import React, { useEffect, useState } from "react";
 import { User, MapPin, Phone, Mail, Search } from "lucide-react";
 import Loading from "@/components/custom/loading";
 import ServiceBookingCard from "@/components/custom/ServiceBookingCard";
-import { useAuthUser } from "@/hooks/useAuth";
+import { useAuth } from "@/context/userContext";
 
 const Page = () => {
-  const { user } = useAuthUser();
-  console.log(user);
+  const { user } = useAuth();
+
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");

@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
     const receiverSocketId = getReceiverSocketId(receiverId); // Call the function
 
     if (!receiverSocketId) {
-      return res.status(404).json({ error: "Receiver is not connected" });
+      console.log("User is not Online");
     }
 
     console.log(newMessage);

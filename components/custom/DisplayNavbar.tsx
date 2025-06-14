@@ -6,11 +6,12 @@ import Navbar from "./Navbar";
 import { usePathname } from "next/navigation";
 import { useCheckUserSession } from "@/hooks/useCheckUserSession";
 import { useSocket } from "@/hooks/useSocket";
-import { useAuthUser } from "@/hooks/useAuth";
+import { useAuth } from "@/context/userContext";
 
 const DisplayNavbar = () => {
   const pathname = usePathname();
-  useAuthUser();
+  useAuth();
+  useSocket();
   // useCheckUserSession(); // Let this handle condition internally if needed
 
   // Determine visibility

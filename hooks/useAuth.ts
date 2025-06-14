@@ -14,7 +14,6 @@ interface IUser {
 
 export const useAuthUser = () => {
   const pathname = usePathname();
-  console.log(pathname);
 
   if (pathname === "/auth" || pathname === "/provider/auth") return;
   const [user, setUser] = useState<IUser>({
@@ -31,7 +30,7 @@ export const useAuthUser = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get("/api/getMe");
-        console.log(res);
+
         setUser(res.data);
       } catch (err) {
         console.error("Error fetching user", err);

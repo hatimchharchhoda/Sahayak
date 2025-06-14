@@ -2,8 +2,7 @@
 
 "use client";
 
-import { useUser } from "@/context/userContext";
-import { useAuthUser } from "@/hooks/useAuth";
+import { useAuth } from "@/context/userContext";
 import { useSocket } from "@/hooks/useSocket";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -17,7 +16,7 @@ const ChatService = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { user } = useAuthUser();
+  const { user } = useAuth();
 
   const socket = useSocket();
 
@@ -59,7 +58,7 @@ const ChatService = () => {
 
   useEffect(() => {
     if (!socket || !user?.id || !receiverId) return;
-    console.log("first");
+
     const handleMessage = (messageData: any) => {
       console.log("New message received:", messageData);
 
@@ -72,7 +71,7 @@ const ChatService = () => {
       socket.off("message", handleMessage);
     };
   }, [socket, user?.id, receiverId]);
-  console.log(messages);
+
   const sendMessage = async () => {
     if (!user || !user.id || !input.trim() || !receiverId) return;
 

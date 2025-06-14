@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { User, Mail, Phone, MapPin, Edit2, Save, X } from "lucide-react";
-import { useAuthUser } from "@/hooks/useAuth";
+import { useAuth } from "@/context/userContext";
 
 const UserProfile = () => {
-  const { user } = useAuthUser();
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

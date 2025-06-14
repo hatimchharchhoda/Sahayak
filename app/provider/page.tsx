@@ -25,22 +25,22 @@ import {
 import type { User as UserType } from "@/lib/types";
 import BookedServicesList from "@/components/custom/BookedServicesList";
 import ProviderServicesCalendar from "@/components/custom/ProviderServicesCalendar";
-import { useUser } from "@/context/userContext";
+
 import IncomeAnalysisChart from "@/components/custom/IncomeAnalysisChart";
 import Loading from "@/components/custom/loading";
+import { useAuth } from "@/context/userContext";
 
 function ProviderDashboard() {
-  const [user, setUser] = useState<UserType | null>(null);
+  const { user, setUser, isLoading } = useAuth();
   const [availableServices, setAvailableServices] = useState<[]>([]);
   const [allServices, setAllServices] = useState<[]>([]);
-  const [userLoading, setUserLoading] = useState(true);
+
   const [availableServicesLoading, setAvailableServicesLoading] =
     useState(false);
   const [allServicesLoading, setAllServicesLoading] = useState(false);
   const router = useRouter();
 
   // Context
-  const { setUserFromContext } = useUser();
 
   // Separate services using useMemo
   const acceptedServices = useMemo(
@@ -59,26 +59,6 @@ function ProviderDashboard() {
     () => [...availableServices, ...allServices],
     [availableServices, allServices]
   );
-
-  const checkUserSession = async () => {
-    setUserLoading(true);
-    try {
-      const response = await fetch("/api/provider/auth/me");
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setUserFromContext(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
-      } else {
-        router.push("/auth");
-      }
-    } catch (error) {
-      console.error("Error checking user session:", error);
-      router.push("/auth");
-    } finally {
-      setUserLoading(false);
-    }
-  };
 
   const fetchAvailableServices = async () => {
     if (user?.specialization) {
@@ -116,10 +96,6 @@ function ProviderDashboard() {
   };
 
   useEffect(() => {
-    checkUserSession();
-  }, [router]);
-
-  useEffect(() => {
     if (user) {
       fetchAvailableServices();
       fetchAllServices();
@@ -146,7 +122,7 @@ function ProviderDashboard() {
     router.push(`/provider/service/${service.id}`);
   };
 
-  if (userLoading) {
+  if (isLoading) {
     return <Loading />;
   }
 

@@ -1,34 +1,75 @@
-// @ts-nocheck
 "use client";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import axios from "axios";
+import { usePathname } from "next/navigation";
 
-import { User } from "@/lib/types";
-import React, { createContext, useContext, useState, ReactNode } from "react";
-
-// Define the context type
-interface UserContextType {
-  userFromContext: User | null;
-  setUserFromContext: (user: User) => void;
+interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  city: string;
+  phone: string;
+  address?: string;
 }
 
-// Create the context with default values
-const UserContext = createContext<UserContextType | undefined>(undefined);
+interface AuthContextType {
+  user: IUser;
+  setUser: (user: IUser) => void;
+  isLoading: boolean;
+}
 
-// Provider component to wrap the app
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [userFromContext, setUserFromContext] = useState<User | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
+  const [user, setUser] = useState<IUser>({
+    city: "",
+    id: "",
+    email: "",
+    name: "",
+    role: "",
+    phone: "",
+  });
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (pathname === "/auth" || pathname === "/provider/auth") {
+      setLoading(false);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/getMe");
+        setUser(res.data);
+      } catch (err) {
+        console.error("Error fetching user", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [pathname]);
 
   return (
-    <UserContext.Provider value={{ userFromContext, setUserFromContext }}>
+    <AuthContext.Provider value={{ user, setUser, isLoading }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-// Custom hook for accessing user context
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

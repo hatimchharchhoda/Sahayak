@@ -21,12 +21,11 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/userContext";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/custom/loading";
 import ReviewSection from "@/components/custom/ReviewSection";
 import Link from "next/link";
-import { useAuthUser } from "@/hooks/useAuth";
 
 const statusColors = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -93,7 +92,7 @@ export interface Booking {
 export default function ServiceDetailPage() {
   const { id } = useParams();
   const [serviceDetails, setServiceDetails] = useState<Booking | null>(null);
-  const { user } = useAuthUser();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");

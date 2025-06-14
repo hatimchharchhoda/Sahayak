@@ -8,7 +8,8 @@ import { Menu, X, User, LogOut } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useAuthUser } from "@/hooks/useAuth";
+
+import { useAuth } from "@/context/userContext";
 
 interface User {
   name: string;
@@ -17,7 +18,7 @@ interface User {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, setUser } = useAuthUser();
+  const { user, setUser } = useAuth();
 
   const [scrolled, setScrolled] = useState(false);
 
