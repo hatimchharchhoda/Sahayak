@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Users, Grid, UserCog, LogOut, UserIcon } from "lucide-react";
+import { Users, Grid, UserCog, LogOut, UserIcon, Ticket } from "lucide-react";
 import ServicesContent from "@/components/custom/ServiceContent";
 import UsersContent from "@/components/custom/UserContent";
 import ProvidersContent from "@/components/custom/ProviderContent";
@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import TicketsContent from "@/components/custom/TicketsContent";
 
 interface AdminData {
   email: string;
@@ -60,6 +61,7 @@ const AdminDashboard = () => {
     { icon: Grid, label: "Services", value: "services" },
     { icon: Users, label: "Users", value: "users" },
     { icon: UserCog, label: "Providers", value: "providers" },
+    { icon: Ticket, label: "Tickets", value: "tickets" },
   ];
 
   return (
@@ -134,6 +136,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="providers">
             <ProvidersContent />
+          </TabsContent>
+
+          <TabsContent value="tickets">
+            <TicketsContent />
           </TabsContent>
         </Tabs>
       </div>

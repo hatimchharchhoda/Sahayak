@@ -30,6 +30,8 @@ model User {
   ratings   Rating[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  
+  supportTickets Ticket[] // 👈 Add this to complete the relation
 }
 
 // 2. Service Provider Model
@@ -119,6 +121,8 @@ model Booking {
   Service           Service?       @relation(fields: [serviceId], references: [id])
   ServiceProvider   ServiceProvider? @relation(fields: [providerId], references: [id])
   ServiceCategory   ServiceCategory  @relation(fields: [serviceCategoryId], references: [id])
+
+    supportTickets Ticket[] 
 }
 
 
@@ -162,4 +166,26 @@ model GujaratCity {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   district String
   cities   String[] // Array of city names
+}
+
+model Ticket {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  bookingId String?  @db.ObjectId
+
+  imageUrl  String
+  subject   String
+  message   String
+  status    TicketStatus @default(OPEN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+}
+
+enum TicketStatus {
+  OPEN
+  PENDING
+  RESOLVED
 }
