@@ -59,7 +59,7 @@ const Payment = ({ amount, bookingId }: IPaymentProps) => {
         <IndianRupee className="h-5 w-5" />
         <span>Make a Payment</span>
       </Button>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />;
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </div>
   );
 };

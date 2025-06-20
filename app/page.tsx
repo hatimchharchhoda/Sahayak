@@ -21,6 +21,7 @@ import type React from "react"; // Import React
 import axios from "axios";
 import OurServices from "@/components/custom/OurServices";
 import { Category } from "@/lib/types";
+import BookAPerticularProvider from "@/components/custom/BookAPerticularProvider";
 
 interface SearchResult {
   id: string;
@@ -225,134 +226,7 @@ const HomePage = () => {
 
       <OurServices categories={categories} loading={loading} />
 
-      <section className="py-16 md:py-24 px-4 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="grid md:grid-cols-3 gap-6 md:gap-8"
-          >
-            {[
-              {
-                title: "Verified Experts",
-                icon: Shield,
-                description:
-                  "All our service providers are thoroughly vetted and certified.",
-              },
-              {
-                title: "Quick Service",
-                icon: Clock,
-                description:
-                  "Get connected with professionals within minutes of your request.",
-              },
-              {
-                title: "Best Prices",
-                icon: PiggyBank,
-                description:
-                  "Competitive pricing with transparent quotes upfront.",
-              },
-            ].map((feature, index) => (
-              <Card
-                key={index}
-                className="hover:shadow-xl transition-all duration-300 transform hover:scale-105 rounded-xl overflow-hidden border-0 bg-gradient-to-br from-white to-gray-50"
-              >
-                <CardContent className="p-6 md:p-8">
-                  <div className="h-12 md:h-14 w-12 md:w-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mb-4 md:mb-6">
-                    <feature.icon className="w-6 md:w-7 h-6 md:h-7 text-blue-600" />
-                  </div>
-                  <h3 className="font-bold text-xl md:text-2xl mb-2 md:mb-4 text-gray-900">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 text-base md:text-lg">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 md:py-24 px-4 md:px-8 lg:px-16 bg-gradient-to-br from-blue-50/50 to-indigo-50/50">
-        <div className="container mx-auto max-w-6xl">
-          <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600"
-          >
-            Customer Reviews
-          </motion.h2>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8"
-          >
-            {[
-              {
-                name: "John Doe",
-                role: "Home Owner",
-                review:
-                  "Excellent service! The provider was professional and completed the job perfectly.",
-              },
-              {
-                name: "Sarah Smith",
-                role: "Business Owner",
-                review:
-                  "Fast, reliable, and extremely professional. Couldn't be happier with the service.",
-              },
-              {
-                name: "Mike Johnson",
-                role: "Regular Customer",
-                review:
-                  "Outstanding experience from start to finish. Will definitely use again!",
-              },
-            ].map((testimonial, i) => (
-              <Card
-                key={i}
-                className="bg-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 rounded-xl overflow-hidden border-0"
-              >
-                <CardContent className="p-6 md:p-8">
-                  <div className="flex mb-4 md:mb-6">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className="w-5 h-5 md:w-6 md:h-6 text-yellow-400 fill-current"
-                      />
-                    ))}
-                  </div>
-
-                  <p className="text-gray-600 text-base md:text-lg mb-4 md:mb-6 leading-relaxed">
-                    &quot;{testimonial.review}&quot;
-                  </p>
-
-                  <div className="flex items-center">
-                    <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mr-3 md:mr-4">
-                      <span className="text-blue-600 font-bold text-lg">
-                        {testimonial.name[0]}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-bold text-base md:text-lg">
-                        {testimonial.name}
-                      </p>
-                      <p className="text-gray-500 text-sm md:text-base">
-                        {testimonial.role}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </motion.div>
-
-          {/* <ChatbotInterface /> */}
-        </div>
-      </section>
+      <BookAPerticularProvider />
     </div>
   );
 };

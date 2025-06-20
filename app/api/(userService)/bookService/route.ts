@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
   try {
     // 1. Extract user token from cookies
     const userToken = req.cookies.get("userToken")?.value;
-    console.log(userToken);
     if (!userToken) {
       return NextResponse.json(
         { error: "No authentication token" },
@@ -18,7 +17,6 @@ export async function POST(req: NextRequest) {
 
     // 2. Decode token
     const payload = await verifyAuth(userToken);
-    console.log(payload);
     if (!payload || !payload.userId || !payload.city) {
       return NextResponse.json(
         { error: "Invalid authentication token" },
@@ -26,9 +24,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { serviceId, date, basePrice } = await req.json();
+    // 3. Get request body
+    const { serviceId, date, basePrice, providerId } = await req.json();
 
-    // 3. Check if service exists
+    // 4. Check if service exists
     const service = await prisma.service.findUnique({
       where: { id: serviceId },
     });
@@ -40,7 +39,75 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Find providers offering this service in user's city
+    // 5. Common function to check for time conflicts
+    const hasTimeConflict = (providerBookings, newBookingDate) => {
+      const newDate = new Date(newBookingDate);
+      const twoHoursInMs = 2 * 60 * 60 * 1000;
+
+      return providerBookings.some((booking) => {
+        const bookingDate = new Date(booking.date);
+        const timeDifference = Math.abs(
+          newDate.getTime() - bookingDate.getTime()
+        );
+        return timeDifference <= twoHoursInMs;
+      });
+    };
+
+    // If providerId is passed, directly book for that provider
+    if (providerId) {
+      const provider = await prisma.serviceProvider.findUnique({
+        where: { id: providerId },
+        include: {
+          bookings: {
+            where: {
+              status: {
+                in: ["PENDING", "ACCEPTED", "CONFIRMED"],
+              },
+            },
+          },
+        },
+      });
+
+      if (!provider) {
+        return NextResponse.json(
+          { error: "Specified provider does not exist" },
+          { status: 404 }
+        );
+      }
+
+      if (hasTimeConflict(provider.bookings, date)) {
+        return NextResponse.json(
+          { error: "Selected provider is not available at the chosen time." },
+          { status: 409 }
+        );
+      }
+
+      // Book directly
+      const booking = await prisma.booking.create({
+        data: {
+          userId: payload.userId,
+          providerId: provider.id,
+          serviceId: service.id,
+          serviceCategoryId: service.categoryId,
+          date: new Date(date),
+          basePrice,
+          status: "PENDING",
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        booking,
+        assignedProvider: {
+          id: provider.id,
+          name: provider.name,
+        },
+      });
+    }
+
+    // 🔁 If no providerId passed → Auto assign flow
+
+    // 6. Get providers offering this service in user's city
     const providerLinks = await prisma.serviceProviderService.findMany({
       where: {
         serviceId: serviceId,
@@ -55,7 +122,7 @@ export async function POST(req: NextRequest) {
             bookings: {
               where: {
                 status: {
-                  in: ["PENDING", "ACCEPTED", "CONFIRMED"], // Only check non-cancelled/completed bookings
+                  in: ["PENDING", "ACCEPTED", "CONFIRMED"],
                 },
               },
             },
@@ -63,8 +130,6 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-
-    console.log({ providerLinks });
 
     const allProviders = providerLinks?.map((link) => link.ServiceProvider);
 
@@ -75,26 +140,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Helper function to check time conflicts
-    const hasTimeConflict = (providerBookings, newBookingDate) => {
-      const newDate = new Date(newBookingDate);
-      const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
-
-      return providerBookings.some((booking) => {
-        const bookingDate = new Date(booking.date);
-        const timeDifference = Math.abs(
-          newDate.getTime() - bookingDate.getTime()
-        );
-        return timeDifference <= twoHoursInMs;
-      });
-    };
-
-    // 6. Filter out providers with time conflicts
+    // 7. Filter providers with time conflicts
     const availableProviders = allProviders.filter((provider) => {
       return !hasTimeConflict(provider.bookings, date);
     });
-
-    console.log({ availableProviders });
 
     if (availableProviders.length === 0) {
       return NextResponse.json(
@@ -106,7 +155,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 7. Process provider ratings and assign the best one
+    // 8. Assign provider based on ratings
     const providersWithRatings = availableProviders.map((provider) => {
       const ratings = provider.ratings;
       const totalStars = ratings.reduce((sum, r) => sum + r.stars, 0);
@@ -119,7 +168,6 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    // Filter out providers with no ratings
     const ratedProviders = providersWithRatings.filter(
       (p) => p.averageStars !== null
     );
@@ -127,20 +175,16 @@ export async function POST(req: NextRequest) {
     let assignedProvider;
 
     if (ratedProviders.length > 0) {
-      // Sort by average stars descending and pick the top one
       ratedProviders.sort((a, b) => b.averageStars - a.averageStars);
       assignedProvider = ratedProviders[0];
     } else {
-      // No ratings, pick randomly
       assignedProvider =
         providersWithRatings[
           Math.floor(Math.random() * providersWithRatings.length)
         ];
     }
 
-    console.log("Assigned provider:", assignedProvider);
-
-    // 8. Create booking
+    // 9. Create booking
     const booking = await prisma.booking.create({
       data: {
         userId: payload.userId,
@@ -149,7 +193,7 @@ export async function POST(req: NextRequest) {
         serviceCategoryId: service.categoryId,
         date: new Date(date),
         basePrice,
-        status: "ACCEPTED", // Since we found an available provider
+        status: "ACCEPTED",
       },
     });
 

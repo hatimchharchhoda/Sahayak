@@ -58,28 +58,24 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            {[
-              "Home",
-              "Services",
-              "About",
-              "Booked Services",
-              "Raise Ticket",
-            ].map((item) => {
-              const formattedHref =
-                item === "Home"
-                  ? "/"
-                  : `/${item.toLowerCase().replace(/\s+/g, "-")}`;
+            {["Home", "Services", "Booked Services", "Raise Ticket"].map(
+              (item) => {
+                const formattedHref =
+                  item === "Home"
+                    ? "/"
+                    : `/${item.toLowerCase().replace(/\s+/g, "-")}`;
 
-              return (
-                <Link
-                  key={item}
-                  href={formattedHref}
-                  className="text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  {item}
-                </Link>
-              );
-            })}
+                return (
+                  <Link
+                    key={item}
+                    href={formattedHref}
+                    className="text-gray-700 hover:text-blue-600 transition-colors"
+                  >
+                    {item}
+                  </Link>
+                );
+              }
+            )}
           </div>
 
           {user ? (

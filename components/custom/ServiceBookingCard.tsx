@@ -184,13 +184,16 @@ const ServiceBookingCard = ({
                 <h4 className="text-sm font-semibold text-gray-900">
                   Service Provider
                 </h4>
-                {/* Chat Button - Positioned in Service Provider header */}
-                <Link href={`/chat/${booking.ServiceProvider.id}`}>
-                  <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2">
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    Chat
-                  </Button>
-                </Link>
+                {booking.status !== "PENDING" && (
+                  <Link href={`/chat/${booking.ServiceProvider.id}`}>
+                    {/* Chat Button - Positioned in Service Provider header */}
+
+                    <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2">
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Chat
+                    </Button>
+                  </Link>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex items-center space-x-2">
