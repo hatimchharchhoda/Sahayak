@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { IndianRupee } from "lucide-react";
+import { IndianRupee, Loader2 } from "lucide-react";
 import axios from "axios";
 import Script from "next/script";
 import toast from "react-hot-toast";
@@ -11,11 +11,13 @@ interface IPaymentProps {
 }
 
 const Payment = ({ amount, bookingId }: IPaymentProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   async function handlePayment() {
     if (typeof window === "undefined" || !(window as any).Razorpay) {
       toast.error("Razorpay SDK not loaded yet. Please try again in a moment.");
       return;
     }
+    setLoading(true);
     console.log({ bookingId });
     try {
       const response = await axios.post("/api/razorpay/create-payment", {
@@ -47,18 +49,32 @@ const Payment = ({ amount, bookingId }: IPaymentProps) => {
       rzp.open();
     } catch (error) {
       console.error("Payment Error:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <div>
-      <Button
-        onClick={handlePayment}
-        className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
-      >
-        <IndianRupee className="h-5 w-5" />
-        <span>Make a Payment</span>
-      </Button>
+      {loading ? (
+        <Button
+          disabled={loading}
+          onClick={handlePayment}
+          className="w-full px-4 py-2 cursor-progress bg-green-500 hover:bg-green-600/100 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+        >
+          <Loader2 className="animate-spin" /> <span>Loading</span>
+        </Button>
+      ) : (
+        <Button
+          disabled={loading}
+          onClick={handlePayment}
+          className="w-full px-4 py-2 bg-green-500 hover:bg-green-600/100 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+        >
+          <IndianRupee className="h-5 w-5" />
+          <span>Make a Payment</span>
+        </Button>
+      )}
+
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </div>
   );

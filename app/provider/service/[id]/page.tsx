@@ -96,7 +96,7 @@ export default function ServiceDetailPage() {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");
-
+  console.log(serviceDetails);
   useEffect(() => {
     const fetchServiceDetails = async () => {
       try {
@@ -261,12 +261,14 @@ export default function ServiceDetailPage() {
                         Client Information
                       </h2>
                       {/* Chat Button - Positioned in Client Information header */}
-                      <Link href={`/chat/${serviceDetails.userId}`}>
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
-                          <MessageCircle className="w-4 h-4 mr-2" />
-                          Chat with Client
-                        </Button>
-                      </Link>
+                      {serviceDetails.status !== "PENDING" && (
+                        <Link href={`/chat/${serviceDetails.userId}`}>
+                          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+                            <MessageCircle className="w-4 h-4 mr-2" />
+                            Chat with Client
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                     <div className="space-y-4">
                       <div className="flex items-center">

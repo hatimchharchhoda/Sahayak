@@ -18,6 +18,7 @@ const DisplayNavbar = () => {
   const shouldHideNavbar =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/provider") ||
+    pathname.startsWith("/chat") ||
     pathname.startsWith("/auth");
 
   return <>{!shouldHideNavbar && <Navbar />}</>;

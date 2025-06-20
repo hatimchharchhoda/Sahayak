@@ -12,7 +12,6 @@ export default function Loading() {
       </div>
       <div className="relative">
         <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-        <Loader2 className="w-8 h-8 text-indigo-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
       </div>
       <div className="mt-12 flex justify-center space-x-8">
         <IconPulse icon="🧹" delay="delay-100" />

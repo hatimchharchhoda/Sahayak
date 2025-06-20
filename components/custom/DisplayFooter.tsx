@@ -11,6 +11,7 @@ const DisplayFooter = () => {
   if (
     pathname.startsWith("/auth") ||
     pathname.startsWith("/provider/auth") ||
+    pathname.startsWith("/chat") ||
     pathname.startsWith("/admin")
   ) {
     return null;

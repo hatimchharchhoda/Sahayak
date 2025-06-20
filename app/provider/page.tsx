@@ -163,7 +163,7 @@ function ProviderDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
                   icon={<Clock className="h-8 w-8 text-yellow-500" />}
-                  title="Pending Services"
+                  title="Available Services"
                   value={availableServices.length.toString()}
                   color="bg-yellow-100"
                   loading={availableServicesLoading}
