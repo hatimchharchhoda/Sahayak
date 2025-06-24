@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const { id, email, name, phone, address } = data;
-
+    const { id, email, name, phone, address, district, city } = data;
+    console.log({ id, email, name, phone, address, district, city });
     if (!id) {
       return NextResponse.json(
         { error: "User ID is required" },
@@ -22,6 +22,8 @@ export async function POST(req: NextRequest) {
         name,
         phone,
         address,
+        city,
+        district,
       },
     });
 

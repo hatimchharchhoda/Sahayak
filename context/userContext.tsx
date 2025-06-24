@@ -17,6 +17,7 @@ interface IUser {
   city: string;
   phone: string;
   address?: string;
+  district: string;
 }
 
 interface AuthContextType {
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     name: "",
     role: "",
     phone: "",
+    district: "",
   });
   const [isLoading, setLoading] = useState(true);
 

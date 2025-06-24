@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const { district } = await req.json();
-
+    console.log({ district });
     const city = await prisma.gujaratCity.findMany({
       where: {
         district,
