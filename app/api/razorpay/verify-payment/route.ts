@@ -30,7 +30,9 @@ export async function POST(req: NextRequest) {
       });
 
       // Redirect to success page
-      return NextResponse.redirect("http://localhost:3000/payment-success");
+      return NextResponse.redirect(
+        "https://sahayak0.vercel.app/payment-success"
+      );
     } catch (error) {
       console.error("Error updating booking:", error);
       return NextResponse.json(
@@ -40,6 +42,6 @@ export async function POST(req: NextRequest) {
     }
   } else {
     // Redirect to failure page
-    return NextResponse.redirect("http://localhost:3000/payment-failure");
+    return NextResponse.redirect("https://sahayak0.vercel.app/payment-failure");
   }
 }
