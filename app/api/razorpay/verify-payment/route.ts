@@ -29,9 +29,9 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Redirect to success page
       return NextResponse.redirect(
-        "https://sahayak0.vercel.app/payment-success"
+        "https://sahayak0.vercel.app/payment-success",
+        303
       );
     } catch (error) {
       console.error("Error updating booking:", error);
@@ -41,7 +41,9 @@ export async function POST(req: NextRequest) {
       );
     }
   } else {
-    // Redirect to failure page
-    return NextResponse.redirect("https://sahayak0.vercel.app/payment-failure");
+    return NextResponse.redirect(
+      "https://sahayak0.vercel.app/payment-success",
+      303
+    );
   }
 }
