@@ -19,6 +19,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       bookingId: bookingId,
     },
   };
+  console.log("check create payment api");
 
   try {
     const order = await razorpay.orders.create(options);

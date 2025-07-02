@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyAuth } from "@/lib/auth";
+import axios from "axios";
 
 export async function POST(req: NextRequest) {
   try {
@@ -95,6 +96,29 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      const fullBooking = await prisma.booking.findMany({
+        where: {
+          id: booking.id,
+        },
+        include: {
+          Service: {
+            include: {
+              ServiceCategory: true,
+            },
+          },
+        },
+      });
+      console.log(fullBooking);
+
+      // 11. Send to socket API — external notification
+      try {
+        await axios.post("https://sahayak-socket.onrender.com/api/services", {
+          bookingArray: fullBooking,
+        });
+      } catch (error) {
+        console.error("Error sending booking to /api/services:", error.message);
+      }
+
       return NextResponse.json({
         success: true,
         booking,
@@ -104,7 +128,7 @@ export async function POST(req: NextRequest) {
         },
       });
     }
-
+    console.log("first");
     // 🔁 If no providerId passed → Auto assign flow
 
     // 6. Get providers offering this service in user's city
@@ -196,6 +220,30 @@ export async function POST(req: NextRequest) {
         status: "ACCEPTED",
       },
     });
+
+    // 10. Fetch full booking with nested Service & Category
+    const fullBooking = await prisma.booking.findMany({
+      where: {
+        id: booking.id,
+      },
+      include: {
+        Service: {
+          include: {
+            ServiceCategory: true,
+          },
+        },
+      },
+    });
+    console.log(fullBooking);
+
+    // 11. Send to socket API — external notification
+    try {
+      await axios.post("https://sahayak-socket.onrender.com/api/services", {
+        bookingArray: fullBooking,
+      });
+    } catch (error) {
+      console.error("Error sending booking to /api/services:", error.message);
+    }
 
     return NextResponse.json({
       success: true,

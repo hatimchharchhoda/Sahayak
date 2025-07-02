@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import Loading from "@/components/custom/loading";
 import ReviewSection from "@/components/custom/ReviewSection";
 import Link from "next/link";
+import { useSocket } from "@/hooks/useSocket";
 
 const statusColors = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -91,6 +92,7 @@ export interface Booking {
 
 export default function ServiceDetailPage() {
   const { id } = useParams();
+  const socket = useSocket();
   const [serviceDetails, setServiceDetails] = useState<Booking | null>(null);
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -163,6 +165,17 @@ export default function ServiceDetailPage() {
       toast.error("Failed to complete service");
     }
   };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleServices = ({ service }) => {
+      console.log(service);
+      setServiceDetails(service);
+    };
+
+    socket.on("payment", handleServices);
+  }, [socket]);
 
   if (loading) {
     return <Loading />;

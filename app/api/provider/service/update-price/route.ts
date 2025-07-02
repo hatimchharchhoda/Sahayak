@@ -1,18 +1,41 @@
 // @ts-nocheck
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import axios from "axios";
 
-// The function receives params as a separate argument
 export async function POST(req: NextRequest) {
   try {
     const { basePrice, bookingId } = await req.json();
 
-    const updatedBooking = await prisma.booking.update({
-      where: { id: bookingId }, // Use params.id directly
+    // 1. Update the booking
+    await prisma.booking.update({
+      where: { id: bookingId },
       data: { basePrice },
     });
 
-    return NextResponse.json(updatedBooking);
+    // 2. Fetch the updated booking with full related data
+    const fullBooking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        ServiceProvider: true,
+        User: true,
+        Service: true,
+      },
+    });
+
+    // 3. Send to internal API
+    try {
+      await axios.post(
+        "https://sahayak-socket.onrender.com/api/services/modify-service",
+        {
+          booking: fullBooking,
+        }
+      );
+    } catch (error) {
+      console.error("Error sending booking to /api/services:", error.message);
+    }
+
+    return NextResponse.json(fullBooking);
   } catch (error) {
     console.error("Error accepting service:", error);
     return NextResponse.json(

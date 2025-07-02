@@ -6,10 +6,11 @@ import { User, MapPin, Phone, Mail, Search } from "lucide-react";
 import Loading from "@/components/custom/loading";
 import ServiceBookingCard from "@/components/custom/ServiceBookingCard";
 import { useAuth } from "@/context/userContext";
+import { useSocket } from "@/hooks/useSocket";
 
 const Page = () => {
   const { user } = useAuth();
-
+  const socket = useSocket();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,6 +55,19 @@ const Page = () => {
       setFilteredServices(filtered);
     }
   }, [searchTerm, services]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    function handleModifyedService({ service }) {
+      console.log(service);
+      setServices((prev) =>
+        prev.map((s) => (s.id === service.id ? service : s))
+      );
+    }
+
+    socket.on("modify-service", handleModifyedService);
+  }, [socket]);
 
   if (loading) {
     return <Loading />;

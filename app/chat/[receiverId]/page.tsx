@@ -91,7 +91,7 @@ const ChatService = () => {
     socket.on("new-message", handleMessage);
 
     return () => {
-      socket.off("message", handleMessage);
+      socket.off("new-message", handleMessage);
     };
   }, [socket, user?.id, receiverId]);
 

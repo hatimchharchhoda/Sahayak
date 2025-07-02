@@ -29,9 +29,11 @@ import ProviderServicesCalendar from "@/components/custom/ProviderServicesCalend
 import IncomeAnalysisChart from "@/components/custom/IncomeAnalysisChart";
 import Loading from "@/components/custom/loading";
 import { useAuth } from "@/context/userContext";
+import { useSocket } from "@/hooks/useSocket";
 
 function ProviderDashboard() {
   const { user, setUser, isLoading } = useAuth();
+  const socket = useSocket();
   const [availableServices, setAvailableServices] = useState<[]>([]);
   const [allServices, setAllServices] = useState<[]>([]);
 
@@ -39,8 +41,6 @@ function ProviderDashboard() {
     useState(false);
   const [allServicesLoading, setAllServicesLoading] = useState(false);
   const router = useRouter();
-
-  // Context
 
   // Separate services using useMemo
   const acceptedServices = useMemo(
@@ -122,10 +122,39 @@ function ProviderDashboard() {
     router.push(`/provider/service/${service.id}`);
   };
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleServices = ({ service }) => {
+      console.log(service);
+
+      setAllServices((prev) =>
+        prev.map((s) => (s.id === service.id ? service : s))
+      );
+    };
+
+    const handleCancleService = ({ service }) => {
+      console.log(service);
+      setAllServices((prev) =>
+        prev.map((s) => (s.id === service.id ? service : s))
+      );
+    };
+
+    const handleNewService = ({ service }) => {
+      console.log(service);
+
+      setAllServices((prev) => [...prev, service]);
+    };
+
+    socket.on("payment", handleServices);
+    socket.on("new-booking", handleNewService);
+    socket.on("modify-service", handleCancleService);
+  }, [socket]);
+
   if (isLoading) {
     return <Loading />;
   }
-
+  console.log(allServices);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">

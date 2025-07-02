@@ -11,6 +11,7 @@ export const useSocket = (): Socket | null => {
   useEffect(() => {
     if (!user || !user.id) return;
     const s = io("https://sahayak-socket.onrender.com", {
+      // const s = io("http://localhost:3001", {
       withCredentials: true,
       auth: {
         userId: user.id,
@@ -19,7 +20,7 @@ export const useSocket = (): Socket | null => {
 
     socketRef.current = s;
     setSocket(s);
-
+    console.log(s);
     s.on("connect", () => {
       console.log("✅ Connected to socket server with ID:", s.id);
     });

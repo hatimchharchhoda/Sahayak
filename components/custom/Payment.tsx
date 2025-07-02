@@ -35,6 +35,7 @@ const Payment = ({ amount, bookingId }: IPaymentProps) => {
         description: "Test Transaction",
         order_id: order.id,
         callback_url: "https://sayahak.vercel.app/api/razorpay/verify-payment",
+        // callback_url: "http://localhost:3000/api/razorpay/verify-payment",
         prefill: {
           name: "Test User",
           email: "test@example.com",

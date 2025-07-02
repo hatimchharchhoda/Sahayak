@@ -4,6 +4,8 @@ import { createServer } from "http";
 import cors from "cors";
 
 import messageRoutes from "./routes/message.js";
+import paymentRoutes from "./routes/payment.js";
+import serviceRoutes from "./routes/service.js";
 
 const app = express();
 const server = createServer(app);
@@ -25,14 +27,16 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://sahayak0.vercel.app/",
-      "https://sahayak.vercel.app/",
+      "https://sahayak0.vercel.app",
+      "https://sahayak.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
   })
 );
 app.use("/api/send-message", messageRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/services", serviceRoutes);
 
 const users = {};
 
