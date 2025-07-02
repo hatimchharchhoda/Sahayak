@@ -49,6 +49,7 @@ const ChatService = () => {
         const response = await axios.post("/api/user/getUser", {
           userId: receiverId,
         });
+        console.log(response);
         setReceiver(response.data.user);
       } catch (error) {
         console.log(error);

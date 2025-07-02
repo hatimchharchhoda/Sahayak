@@ -62,9 +62,10 @@ const AuthPage = () => {
       const response = await axios.post(endpoint, payload, {
         withCredentials: true,
       });
-
+      console.log(response);
       if (isLogin) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         setSuccess("Login successful!");
         router.push("/");
       } else {

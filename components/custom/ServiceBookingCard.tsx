@@ -11,6 +11,7 @@ import {
   User,
   XCircle,
   MessageCircle,
+  Hash,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -38,11 +39,11 @@ const getStatusIcon = (status: any) => {
   switch (status) {
     case "COMPLETED":
     case "ACCEPTED":
-      return <CheckCircle className="h-5 w-5" />;
+      return <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />;
     case "CANCELLED":
-      return <XCircle className="h-5 w-5" />;
+      return <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />;
     default:
-      return <AlertCircle className="h-5 w-5" />;
+      return <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />;
   }
 };
 
@@ -146,90 +147,102 @@ const ServiceBookingCard = ({
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div className="p-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900">
+      <div className="bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <div className="p-4 sm:p-6">
+          {/* Header Section */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-0">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
                 {booking.Service?.name}
               </h3>
-              <p className="text-gray-500 mt-1">
+              <p className="text-sm sm:text-base text-gray-500 mt-1 line-clamp-2">
                 {booking.Service?.description}
               </p>
             </div>
             <div
-              className={`px-3 py-1 rounded-full flex items-center space-x-1 ${getStatusColor(
+              className={`px-2 sm:px-3 py-1 rounded-full flex items-center space-x-1 ${getStatusColor(
                 booking.status
-              )}`}
+              )} flex-shrink-0 self-start`}
             >
               {getStatusIcon(booking.status)}
-              <span className="text-sm font-medium">{booking.status}</span>
+              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
+                {booking.status}
+              </span>
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-4">
+          {/* Date and Price Grid - Responsive */}
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="flex items-center space-x-2 text-gray-600">
-              <Calendar className="h-5 w-5 text-blue-500" />
-              <span>{date}</span>
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base truncate">{date}</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
-              <IndianRupee className="h-5 w-5 text-green-500" />
-              <span>₹{booking.basePrice}</span>
+              <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">₹{booking.basePrice}</span>
             </div>
           </div>
 
+          {/* Service Provider Section */}
           {booking.ServiceProvider && (
-            <div className="mt-6 border-t pt-4">
-              <div className="flex justify-between items-center mb-3">
+            <div className="mt-4 sm:mt-6 border-t pt-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                 <h4 className="text-sm font-semibold text-gray-900">
                   Service Provider
                 </h4>
-                {booking.status !== "PENDING" && (
+                {booking.status !== "PENDING" && !booking.isPaid && (
                   <Link href={`/chat/${booking.ServiceProvider.id}`}>
-                    {/* Chat Button - Positioned in Service Provider header */}
-
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2">
+                    <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2 text-sm w-full sm:w-auto">
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Chat
                     </Button>
                   </Link>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-center space-x-2">
-                  <User className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">
+
+              {/* Provider Info Grid - Responsive */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="flex items-center space-x-2 min-w-0">
+                  <User className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">
                     {booking.ServiceProvider.name}
                   </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">
+                <div className="flex items-center space-x-2 min-w-0">
+                  <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">
                     {booking.ServiceProvider.phone}
                   </span>
                 </div>
-                <div className="flex items-center space-x-2 col-span-2">
-                  <Mail className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">
+                <div className="flex items-center space-x-2 min-w-0 sm:col-span-1">
+                  <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">
                     {booking.ServiceProvider.email}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 min-w-0">
+                  <Hash className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">
+                    ID: {booking.ServiceProvider.id}
                   </span>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="mt-6 pt-4 border-t flex flex-col space-y-3">
+          {/* Action Buttons Section */}
+          <div className="mt-4 sm:mt-6 pt-4 border-t flex flex-col space-y-3">
             {canCancel && (
               <Button
                 variant={"destructive"}
                 onClick={() => setIsConfirmOpen(true)}
                 disabled={isCancelling}
-                className="w-full px-4 py-2 disabled:bg-red-300 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="w-full px-4 py-2 sm:py-3 disabled:bg-red-300 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
               >
                 {isCancelling ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  <XCircle className="h-5 w-5" />
+                  <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                 )}
                 <span>{isCancelling ? "Cancelling..." : "Cancel Service"}</span>
               </Button>
@@ -238,9 +251,9 @@ const ServiceBookingCard = ({
             {canReview && !hasReviewed && (
               <Button
                 onClick={() => setIsReviewOpen(true)}
-                className="w-full px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="w-full px-4 py-2 sm:py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
               >
-                <Star className="h-5 w-5" />
+                <Star className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span>Write a Review</span>
               </Button>
             )}
@@ -253,9 +266,9 @@ const ServiceBookingCard = ({
                 </div>
                 <Button
                   onClick={() => setIsReviewOpen(true)}
-                  className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  className="w-full px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
-                  <Edit className="h-5 w-5" />
+                  <Edit className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Edit Review</span>
                 </Button>
               </>
@@ -269,7 +282,9 @@ const ServiceBookingCard = ({
             )}
 
             {booking.status === "COMPLETED" && !booking.isPaid && (
-              <Payment amount={booking.basePrice} bookingId={booking.id} />
+              <div className="w-full">
+                <Payment amount={booking.basePrice} bookingId={booking.id} />
+              </div>
             )}
           </div>
         </div>

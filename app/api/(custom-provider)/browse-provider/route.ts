@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     const payload = await verifyAuth(userToken); // contains user info like city, email, etc.
+    console.log({ payload });
     const userCity = payload?.city;
 
     if (!userCity) {

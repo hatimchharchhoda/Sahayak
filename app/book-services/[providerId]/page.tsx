@@ -47,7 +47,10 @@ const ProviderServicesPage = () => {
         ) : (
           <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
             {services.map((service) => (
-              <Link href={`/book-services/${providerId}/${service.id}`}>
+              <Link
+                key={service.id}
+                href={`/book-services/${providerId}/${service.id}`}
+              >
                 <ServiceCard service={service} />
               </Link>
             ))}

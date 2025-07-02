@@ -11,32 +11,36 @@ interface OurServicesProps {
 
 const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
   return (
-    <section className="py-16 md:py-24 px-4 bg-gradient-to-br from-blue-50/50 to-indigo-50/50">
+    <section className="py-12 md:py-16 lg:py-20 px-4 bg-gray-50">
       <div className="container mx-auto max-w-6xl">
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600"
+          className="text-center mb-8 md:mb-12 lg:mb-16"
         >
-          Our Services
-        </motion.h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-2 md:mb-4">
+            Our Services
+          </h2>
+        </motion.div>
+
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+          /* Loading Skeleton */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div
                 key={i}
-                className="h-32 md:h-40 bg-white rounded-xl shadow-md animate-pulse"
-              />
+                className="bg-white p-4 md:p-6 rounded-xl shadow-lg animate-pulse"
+              >
+                <div className="w-full h-32 md:h-40 lg:h-48 bg-gray-200 rounded-lg mb-3 md:mb-4"></div>
+                <div className="h-4 md:h-5 lg:h-6 bg-gray-200 rounded mb-2 md:mb-3"></div>
+                <div className="h-3 md:h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
             ))}
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
-          >
+          /* Services Grid */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {categories.map((category: Category, index: number) => (
               <motion.div
                 key={category.id}
@@ -47,7 +51,7 @@ const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
                 <ServicesCard category={category} />
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

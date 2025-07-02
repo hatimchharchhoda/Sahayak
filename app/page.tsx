@@ -181,7 +181,7 @@ const HomePage = () => {
               <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
                 Discover Our Services
               </h2>
-              <p className="text-base md:text-xl text-gray-600 leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed">
                 From home repairs to beauty services, we&apos;ve got you covered
                 with our network of verified professionals.
               </p>
@@ -193,7 +193,7 @@ const HomePage = () => {
                 </Button>
               </Link>
             </div>
-            <div className="w-full md:w-1/2">
+            <div className="hidden md:flex w-full md:w-1/2">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}

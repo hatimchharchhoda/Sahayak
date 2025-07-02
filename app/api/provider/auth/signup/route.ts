@@ -55,7 +55,6 @@ export async function POST(req: NextRequest) {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("before create");
 
     // Create the new provider
     const provider = await prisma.serviceProvider.create({
@@ -70,7 +69,7 @@ export async function POST(req: NextRequest) {
         role: "PROVIDER",
       },
     });
-    console.log("after create");
+
     // Fetch services under the selected category (specialization)
     const services = await prisma.service.findMany({
       where: {
@@ -85,7 +84,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    console.log({ services });
     // Create provider-service links
     const links = await Promise.all(
       services.map((service) =>
@@ -97,7 +96,7 @@ export async function POST(req: NextRequest) {
         })
       )
     );
-
+    console.log({ links });
     // Create token
     const token = jwt.sign(
       {

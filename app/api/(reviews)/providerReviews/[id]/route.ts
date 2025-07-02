@@ -18,11 +18,8 @@ export async function POST(req: Request) {
             name: true,
           },
         },
-        Service: {
-          select: {
-            name: true,
-          },
-        },
+        Service: true,
+        Booking: true,
       },
       orderBy: {
         Booking: {

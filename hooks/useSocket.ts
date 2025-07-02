@@ -20,7 +20,7 @@ export const useSocket = (): Socket | null => {
 
     socketRef.current = s;
     setSocket(s);
-    console.log(s);
+
     s.on("connect", () => {
       console.log("✅ Connected to socket server with ID:", s.id);
     });

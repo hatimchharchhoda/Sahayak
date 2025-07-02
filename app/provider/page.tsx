@@ -34,15 +34,21 @@ import { useSocket } from "@/hooks/useSocket";
 function ProviderDashboard() {
   const { user, setUser, isLoading } = useAuth();
   const socket = useSocket();
-  const [availableServices, setAvailableServices] = useState<[]>([]);
-  const [allServices, setAllServices] = useState<[]>([]);
 
+  const [allServices, setAllServices] = useState<[]>([]);
+  console.log({ allServices });
   const [availableServicesLoading, setAvailableServicesLoading] =
     useState(false);
   const [allServicesLoading, setAllServicesLoading] = useState(false);
   const router = useRouter();
 
   // Separate services using useMemo
+  const availableServices = useMemo(
+    () => allServices?.filter((service) => service.status === "PENDING") || [],
+    [allServices]
+  );
+  console.log({ availableServices });
+
   const acceptedServices = useMemo(
     () => allServices?.filter((service) => service.status === "ACCEPTED") || [],
     [allServices]
@@ -59,23 +65,6 @@ function ProviderDashboard() {
     () => [...availableServices, ...allServices],
     [availableServices, allServices]
   );
-
-  const fetchAvailableServices = async () => {
-    if (user?.specialization) {
-      setAvailableServicesLoading(true);
-      try {
-        const response = await axios.post("/api/providerAvailableServices", {
-          specialization: user.specialization,
-        });
-        setAvailableServices(response.data.bookedServices || []);
-      } catch (error) {
-        console.error("Error fetching pending services:", error);
-        toast.error("Failed to fetch pending services");
-      } finally {
-        setAvailableServicesLoading(false);
-      }
-    }
-  };
 
   const fetchAllServices = async () => {
     if (user?.id) {
@@ -97,7 +86,6 @@ function ProviderDashboard() {
 
   useEffect(() => {
     if (user) {
-      fetchAvailableServices();
       fetchAllServices();
     }
   }, [user]);
@@ -268,7 +256,7 @@ function ProviderDashboard() {
                     </div>
                   ) : (
                     <ProviderServicesCalendar
-                      services={allCombinedServices}
+                      services={allServices}
                       onEventClick={handleCalendarEventClick}
                     />
                   )}

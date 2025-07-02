@@ -36,6 +36,8 @@ const Navbar = () => {
     try {
       await axios.get("/api/auth/logout");
       setUser({ name: "", email: "" });
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       router.push("/auth");
     } catch (error) {
       console.log(error);
@@ -130,24 +132,29 @@ const Navbar = () => {
             className="md:hidden pb-4"
           >
             <div className="flex flex-col space-y-4 pt-2 pb-3">
-              {["Home", "Services", "About", "Booked Services", "Profile"].map(
-                (item) => {
-                  const formattedHref =
-                    item === "Home"
-                      ? "/"
-                      : `/${item.toLowerCase().replace(/\s+/g, "-")}`;
-                  return (
-                    <Link
-                      key={item}
-                      href={formattedHref}
-                      className="text-gray-700 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
-                      onClick={toggleMenu}
-                    >
-                      {item}
-                    </Link>
-                  );
-                }
-              )}
+              {[
+                "Home",
+                "Services",
+                "About",
+                "Booked Services",
+                "Raise Ticket",
+                "Profile",
+              ].map((item) => {
+                const formattedHref =
+                  item === "Home"
+                    ? "/"
+                    : `/${item.toLowerCase().replace(/\s+/g, "-")}`;
+                return (
+                  <Link
+                    key={item}
+                    href={formattedHref}
+                    className="text-gray-700 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
+                    onClick={toggleMenu}
+                  >
+                    {item}
+                  </Link>
+                );
+              })}
               {user ? (
                 <div>
                   <Button

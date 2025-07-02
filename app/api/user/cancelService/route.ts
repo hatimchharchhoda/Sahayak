@@ -26,12 +26,13 @@ export async function POST(req: NextRequest) {
 
     // 3. Send to internal API
     try {
-      await axios.post(
-        "https://sahayak-socket.onrender.com/api/services/modify-service",
+      const res = await axios.post(
+        "https://sahayak-socket.onrender.com/api/services/modify-provider",
         {
           booking: fullBooking,
         }
       );
+      console.log({ res });
     } catch (error) {
       console.error("Error sending booking to /api/services:", error.message);
     }

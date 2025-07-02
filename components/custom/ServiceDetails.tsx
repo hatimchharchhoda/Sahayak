@@ -240,7 +240,6 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
                       className="w-full"
                       min={new Date().toISOString().split("T")[0]}
                     />
-                    <CalendarIcon className="absolute right-3 top-3 w-4 h-4 text-gray-400" />
                   </div>
                 </div>
 

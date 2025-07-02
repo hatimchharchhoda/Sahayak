@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     );
 
     const response = NextResponse.json(
-      { message: "Login successful" },
+      { message: "Signup successful" },
       { status: 200 }
     );
     response.cookies.set("adminToken", token, {

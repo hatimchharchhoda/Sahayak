@@ -70,6 +70,7 @@ export interface Rating {
   review: string;
   User: User;
 }
+
 export interface Booking {
   id: string;
   providerId: string;
@@ -98,7 +99,9 @@ export default function ServiceDetailPage() {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newPrice, setNewPrice] = useState<string>("");
+
   console.log(serviceDetails);
+
   useEffect(() => {
     const fetchServiceDetails = async () => {
       try {
@@ -189,10 +192,8 @@ export default function ServiceDetailPage() {
     );
   }
 
-  // console.log(serviceDetails);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -200,39 +201,43 @@ export default function ServiceDetailPage() {
           transition={{ duration: 0.5 }}
         >
           <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-8">
-              <div className="flex justify-between items-start mb-6">
-                <h1 className="text-3xl font-bold text-gray-900">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              {/* Header Section - Responsive */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   Service Details
                 </h1>
                 <Badge
-                  className={
+                  className={`${
                     statusColors[
                       serviceDetails.status as keyof typeof statusColors
                     ]
-                  }
+                  } text-sm sm:text-base px-3 py-1 self-start sm:self-auto`}
                 >
                   {serviceDetails.status}
                 </Badge>
               </div>
 
-              <div className="grid gap-6">
+              <div className="grid gap-4 sm:gap-6">
                 {/* Service Information */}
                 {serviceDetails.Service && (
                   <Card className="bg-indigo-50">
-                    <CardContent className="p-6">
-                      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+                    <CardContent className="p-4 sm:p-6">
+                      <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
                         Service Information
                       </h2>
                       <div className="space-y-2">
-                        <p className="text-lg font-semibold text-gray-900">
+                        <p className="text-base sm:text-lg font-semibold text-gray-900">
                           {serviceDetails.Service.name}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600">
                           {serviceDetails.Service.description}
                         </p>
                         {serviceDetails.Service.ServiceCategory && (
-                          <Badge variant="outline" className="mt-2">
+                          <Badge
+                            variant="outline"
+                            className="mt-2 text-xs sm:text-sm"
+                          >
                             {serviceDetails.Service.ServiceCategory.name}
                           </Badge>
                         )}
@@ -241,13 +246,14 @@ export default function ServiceDetailPage() {
                   </Card>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Date and Time Cards - Responsive Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <Card className="bg-blue-50">
                     <CardContent className="flex items-center p-4">
-                      <CalendarIcon className="w-8 h-8 mr-4 text-blue-600" />
-                      <div>
-                        <p className="text-sm text-gray-600">Date</p>
-                        <p className="text-lg font-semibold">
+                      <CalendarIcon className="w-6 h-6 sm:w-8 sm:h-8 mr-3 sm:mr-4 text-blue-600 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm text-gray-600">Date</p>
+                        <p className="text-sm sm:text-lg font-semibold truncate">
                           {new Date(serviceDetails.date).toLocaleDateString()}
                         </p>
                       </div>
@@ -256,10 +262,10 @@ export default function ServiceDetailPage() {
 
                   <Card className="bg-blue-50">
                     <CardContent className="flex items-center p-4">
-                      <ClockIcon className="w-8 h-8 mr-4 text-blue-600" />
-                      <div>
-                        <p className="text-sm text-gray-600">Time</p>
-                        <p className="text-lg font-semibold">
+                      <ClockIcon className="w-6 h-6 sm:w-8 sm:h-8 mr-3 sm:mr-4 text-blue-600 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm text-gray-600">Time</p>
+                        <p className="text-sm sm:text-lg font-semibold truncate">
                           {new Date(serviceDetails.date).toLocaleTimeString()}
                         </p>
                       </div>
@@ -267,46 +273,56 @@ export default function ServiceDetailPage() {
                   </Card>
                 </div>
 
+                {/* Client Information - Responsive */}
                 <Card className="bg-green-50">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <h2 className="text-xl font-semibold text-gray-800">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                         Client Information
                       </h2>
-                      {/* Chat Button - Positioned in Client Information header */}
+                      {/* Chat Button - Responsive positioning */}
                       {serviceDetails.status !== "PENDING" && (
-                        <Link href={`/chat/${serviceDetails.userId}`}>
-                          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+                        <Link
+                          href={`/chat/${serviceDetails.userId}`}
+                          className="w-full sm:w-auto"
+                        >
+                          <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-md text-sm sm:text-base">
                             <MessageCircle className="w-4 h-4 mr-2" />
                             Chat with Client
                           </Button>
                         </Link>
                       )}
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center">
-                        <UserIcon className="w-6 h-6 mr-3 text-green-600" />
-                        <div>
-                          <p className="text-sm text-gray-600">Name</p>
-                          <p className="text-lg font-semibold">
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-start">
+                        <UserIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs sm:text-sm text-gray-600">
+                            Name
+                          </p>
+                          <p className="text-sm sm:text-lg font-semibold break-words">
                             {serviceDetails.User?.name}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center">
-                        <MapPinIcon className="w-6 h-6 mr-3 text-green-600" />
-                        <div>
-                          <p className="text-sm text-gray-600">Address</p>
-                          <p className="text-lg font-semibold">
+                      <div className="flex items-start">
+                        <MapPinIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs sm:text-sm text-gray-600">
+                            Address
+                          </p>
+                          <p className="text-sm sm:text-lg font-semibold break-words">
                             {serviceDetails.User?.address}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center">
-                        <PhoneIcon className="w-6 h-6 mr-3 text-green-600" />
-                        <div>
-                          <p className="text-sm text-gray-600">Phone</p>
-                          <p className="text-lg font-semibold">
+                      <div className="flex items-start">
+                        <PhoneIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs sm:text-sm text-gray-600">
+                            Phone
+                          </p>
+                          <p className="text-sm sm:text-lg font-semibold break-all">
                             {serviceDetails.User?.phone}
                           </p>
                         </div>
@@ -315,51 +331,63 @@ export default function ServiceDetailPage() {
                   </CardContent>
                 </Card>
 
+                {/* Price Section - Highly Responsive */}
                 <Card className="bg-purple-50">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <IndianRupee className="w-8 h-8 mr-3 text-purple-600" />
-                        <div>
-                          <p className="text-sm text-gray-600">Price</p>
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                      {/* Price Display Section */}
+                      <div className="flex items-start lg:items-center">
+                        <IndianRupee className="w-6 h-6 sm:w-8 sm:h-8 mr-3 text-purple-600 flex-shrink-0 mt-1 lg:mt-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1">
+                            Price
+                          </p>
                           {isEditing ? (
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                               <Input
                                 type="number"
                                 value={newPrice}
                                 onChange={(e) => setNewPrice(e.target.value)}
-                                className="w-32"
+                                className="w-full sm:w-32 text-sm"
                                 min="0"
                                 step="0.01"
+                                placeholder="Enter price"
                               />
-                              <Button onClick={handleUpdatePrice} size="sm">
-                                Save
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  setIsEditing(false);
-                                  setNewPrice(
-                                    serviceDetails.basePrice?.toString() || ""
-                                  );
-                                }}
-                                variant="outline"
-                                size="sm"
-                              >
-                                Cancel
-                              </Button>
+                              <div className="flex gap-2 w-full sm:w-auto">
+                                <Button
+                                  onClick={handleUpdatePrice}
+                                  size="sm"
+                                  className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                >
+                                  Save
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    setIsEditing(false);
+                                    setNewPrice(
+                                      serviceDetails.basePrice?.toString() || ""
+                                    );
+                                  }}
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
                             </div>
                           ) : (
                             <div className="flex flex-col">
-                              <div className="flex items-center gap-3 mb-1">
-                                <p className="text-2xl font-bold text-gray-800">
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1">
+                                <p className="text-xl sm:text-2xl font-bold text-gray-800">
                                   ₹
                                   {serviceDetails.basePrice?.toFixed(2) ||
                                     "N/A"}
                                 </p>
                                 {serviceDetails.isPaid && (
-                                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-full border border-green-200 shadow-sm">
-                                    <CheckCircle className="h-4 w-4" />
-                                    <span className="text-sm font-semibold">
+                                  <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-100 text-green-700 rounded-full border border-green-200 shadow-sm self-start">
+                                    <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    <span className="text-xs sm:text-sm font-semibold">
                                       Payment Successful
                                     </span>
                                   </div>
@@ -369,13 +397,15 @@ export default function ServiceDetailPage() {
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-2">
+
+                      {/* Action Buttons - Responsive Stack */}
+                      <div className="flex flex-col sm:flex-row gap-2 lg:flex-shrink-0">
                         {serviceDetails.status === "PENDING" && (
                           <Button
                             onClick={handleAccept}
-                            className="bg-green-600 hover:bg-green-700"
+                            className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-sm sm:text-base"
                           >
-                            <CheckCircle className="w-5 h-5 mr-2" />
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                             Accept Service
                           </Button>
                         )}
@@ -384,17 +414,17 @@ export default function ServiceDetailPage() {
                             <Button
                               onClick={() => setIsEditing(true)}
                               variant="outline"
-                              className="gap-2"
+                              className="w-full sm:w-auto gap-2 text-sm sm:text-base"
                               disabled={isEditing}
                             >
-                              <Edit className="w-4 h-4" />
+                              <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                               Edit Price
                             </Button>
                             <Button
                               onClick={handleCompleteService}
-                              className="bg-blue-600 hover:bg-blue-700 gap-2"
+                              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 gap-2 text-sm sm:text-base"
                             >
-                              <CheckCircle className="w-4 h-4" />
+                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                               Complete Service
                             </Button>
                           </>
@@ -405,7 +435,10 @@ export default function ServiceDetailPage() {
                 </Card>
               </div>
 
-              <ReviewSection serviceDetails={serviceDetails} />
+              {/* Review Section */}
+              <div className="mt-6">
+                <ReviewSection serviceDetails={serviceDetails} />
+              </div>
             </CardContent>
           </Card>
         </motion.div>

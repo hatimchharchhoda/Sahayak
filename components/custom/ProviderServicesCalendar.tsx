@@ -32,32 +32,83 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
   const calendarRef = useRef(null);
   const [calendar, setCalendar] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if screen is mobile size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     if (calendarRef.current) {
       const calendarInstance = new Calendar(calendarRef.current, {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-        initialView: "dayGridMonth",
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        },
+        initialView: isMobile ? "dayGridMonth" : "dayGridMonth",
+        headerToolbar: isMobile
+          ? {
+              left: "prev,next",
+              center: "title",
+              right: "today",
+            }
+          : {
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
+            },
+        // Make calendar responsive
         height: "auto",
+        aspectRatio: isMobile ? 1.0 : 1.35,
+        handleWindowResize: true,
         eventClick: handleEventClick,
         events: formatServicesForCalendar(services),
         eventDisplay: "block",
-        dayMaxEvents: 3,
+        dayMaxEvents: isMobile ? 2 : 3,
         moreLinkClick: "popover",
         eventTimeFormat: {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
         },
-        // 👇 Add this
+        // Custom button for mobile view switching
+        customButtons: isMobile
+          ? {
+              viewSwitcher: {
+                text: "View",
+                click: function () {
+                  const currentView = calendarInstance.view.type;
+                  if (currentView === "dayGridMonth") {
+                    calendarInstance.changeView("timeGridWeek");
+                  } else if (currentView === "timeGridWeek") {
+                    calendarInstance.changeView("timeGridDay");
+                  } else {
+                    calendarInstance.changeView("dayGridMonth");
+                  }
+                },
+              },
+            }
+          : {},
         eventDidMount: (info) => {
           info.el.style.cursor = "pointer";
+          // Adjust event text size for mobile
+          if (isMobile) {
+            info.el.style.fontSize = "11px";
+            info.el.style.padding = "1px 2px";
+          }
         },
+        // Mobile-specific configurations
+        dayHeaderFormat: isMobile
+          ? { weekday: "short" }
+          : { weekday: "short", month: "numeric", day: "numeric" },
+        titleFormat: isMobile
+          ? { month: "short", year: "numeric" }
+          : { month: "long", year: "numeric" },
       });
 
       calendarInstance.render();
@@ -67,7 +118,7 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
         calendarInstance.destroy();
       };
     }
-  }, []);
+  }, [isMobile]);
 
   // Update events when services change
   useEffect(() => {
@@ -76,6 +127,29 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
       calendar.addEventSource(formatServicesForCalendar(services));
     }
   }, [services, calendar]);
+
+  // Update calendar configuration when mobile state changes
+  useEffect(() => {
+    if (calendar) {
+      calendar.setOption(
+        "headerToolbar",
+        isMobile
+          ? {
+              left: "prev,next",
+              center: "title",
+              right: "viewSwitcher",
+            }
+          : {
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
+            }
+      );
+
+      calendar.setOption("aspectRatio", isMobile ? 1.0 : 1.35);
+      calendar.setOption("dayMaxEvents", isMobile ? 2 : 3);
+    }
+  }, [isMobile, calendar]);
 
   const formatServicesForCalendar = (services) => {
     return services.map((service) => {
@@ -119,13 +193,52 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+            <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5" />
             Services Calendar
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div ref={calendarRef} className="w-full" />
+        <CardContent className="p-2 sm:p-6">
+          {/* Add responsive wrapper with overflow handling */}
+          <div className="w-full overflow-hidden">
+            <div
+              ref={calendarRef}
+              className="w-full min-w-0"
+              style={{
+                fontSize: isMobile ? "12px" : "14px",
+              }}
+            />
+          </div>
+
+          {/* Mobile view switcher buttons */}
+          {isMobile && (
+            <div className="flex gap-2 mt-4 justify-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => calendar?.changeView("dayGridMonth")}
+                className="text-xs"
+              >
+                Month
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => calendar?.changeView("timeGridWeek")}
+                className="text-xs"
+              >
+                Week
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => calendar?.changeView("timeGridDay")}
+                className="text-xs"
+              >
+                Day
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -134,8 +247,8 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
         <Card className="border-l-4 border-l-blue-500">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <CalendarIcon className="h-5 w-5" />
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 Service Details
               </CardTitle>
               <Button variant="ghost" size="sm" onClick={closeEventDetails}>
@@ -144,9 +257,9 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">
+                <h3 className="font-semibold text-base sm:text-lg mb-2">
                   {selectedEvent.title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-3">
@@ -156,14 +269,14 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-gray-500" />
+                    <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
                     <span className="text-sm">
                       {new Date(selectedEvent.start).toLocaleString()}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <IndianRupee className="h-4 w-4 text-gray-500" />
+                    <IndianRupee className="h-4 w-4 text-gray-500 flex-shrink-0" />
                     <span className="text-sm font-medium">
                       ₹
                       {selectedEvent.extendedProps.basePrice?.toFixed(2) ||
@@ -172,8 +285,8 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm">
+                    <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                    <span className="text-sm break-all">
                       User ID: {selectedEvent.extendedProps.userId}
                     </span>
                   </div>
@@ -191,6 +304,7 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
                         backgroundColor: selectedEvent.backgroundColor,
                         color: "white",
                       }}
+                      className="text-xs"
                     >
                       {statusDisplayNames[selectedEvent.extendedProps.status]}
                     </Badge>
@@ -202,7 +316,8 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
                     onClick={() => {
                       window.location.href = `/provider/service/${selectedEvent.id}`;
                     }}
-                    className="w-full"
+                    className="w-full text-sm"
+                    size="sm"
                   >
                     View Full Details
                   </Button>
@@ -219,19 +334,77 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
           <CardTitle className="text-sm">Status Legend</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {Object.entries(statusColors).map(([status, color]) => (
-              <div key={status} className="flex items-center gap-2">
+              <div key={status} className="flex items-center gap-1 sm:gap-2">
                 <div
-                  className="w-4 h-4 rounded"
+                  className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-sm">{statusDisplayNames[status]}</span>
+                <span className="text-xs sm:text-sm">
+                  {statusDisplayNames[status]}
+                </span>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
+
+      {/* Add responsive CSS styles */}
+      <style jsx global>{`
+        /* Mobile responsive styles for FullCalendar */
+        @media (max-width: 767px) {
+          .fc-header-toolbar {
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .fc-toolbar-chunk {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .fc-button-group .fc-button {
+            font-size: 11px;
+            padding: 4px 8px;
+          }
+
+          .fc-daygrid-event {
+            font-size: 10px !important;
+            margin: 1px 0;
+          }
+
+          .fc-event-title {
+            font-size: 10px;
+          }
+
+          .fc-col-header-cell {
+            font-size: 11px;
+          }
+
+          .fc-daygrid-day-number {
+            font-size: 12px;
+          }
+
+          /* Hide toolbar on very small screens if needed */
+          @media (max-width: 480px) {
+            .fc-toolbar-title {
+              font-size: 16px;
+            }
+          }
+        }
+
+        /* Ensure calendar container doesn't overflow */
+        .fc {
+          width: 100%;
+          overflow-x: auto;
+        }
+
+        .fc-view-harness {
+          overflow-x: auto;
+        }
+      `}</style>
     </div>
   );
 };

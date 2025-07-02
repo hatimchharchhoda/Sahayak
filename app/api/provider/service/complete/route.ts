@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     // 3. Send to internal API
     try {
       await axios.post(
-        "https://sahayak-socket.onrender.com/api/services/modify-service",
+        "https://sahayak-socket.onrender.com/api/services/modify-user",
         {
           booking: fullBooking,
         }

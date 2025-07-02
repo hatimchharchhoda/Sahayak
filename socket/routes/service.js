@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/modify-service", async (req, res) => {
+router.post("/modify-provider", async (req, res) => {
   try {
     const { booking } = req.body;
     console.log({ booking });
@@ -49,6 +49,38 @@ router.post("/modify-service", async (req, res) => {
     const { providerId } = booking;
 
     const receiverSocketId = getReceiverSocketId(providerId);
+
+    if (!receiverSocketId) {
+      console.log("Provider is not online.");
+    } else {
+      io.to(receiverSocketId).emit("modify-service", {
+        service: booking,
+      });
+
+      console.log("New Booking event emitted to:", receiverSocketId);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error in /api/services/modifyservice route:", error);
+    res.status(500).json({
+      error: "Failed to process modify service event",
+      details: error.message || error,
+    });
+  }
+});
+
+router.post("/modify-user", async (req, res) => {
+  try {
+    const { booking } = req.body;
+    console.log({ booking });
+    if (!booking) {
+      return res.status(400).json({ error: "No updated bookings provided" });
+    }
+
+    const { userId } = booking;
+
+    const receiverSocketId = getReceiverSocketId(userId);
 
     if (!receiverSocketId) {
       console.log("Provider is not online.");
