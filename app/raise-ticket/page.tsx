@@ -115,7 +115,7 @@ const Page = () => {
             <div className="flex items-center">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
               <p className="text-green-800 font-medium">
-                Ticket submitted successfully! We'll get back to you soon.
+                Ticket submitted successfully! We&apos;ll get back to you soon.
               </p>
             </div>
           </div>

@@ -60,7 +60,10 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            {["Home", "Services", "Booked Services", "Raise Ticket"].map(
+            {["Home", "Services", "Booked Services", 
+            "Raise Ticket"
+            ]
+            .map(
               (item) => {
                 const formattedHref =
                   item === "Home"
@@ -137,8 +140,8 @@ const Navbar = () => {
                 "Services",
                 "About",
                 "Booked Services",
-                "Raise Ticket",
-                "Profile",
+                // "Raise Ticket",
+                // "Profile",
               ].map((item) => {
                 const formattedHref =
                   item === "Home"

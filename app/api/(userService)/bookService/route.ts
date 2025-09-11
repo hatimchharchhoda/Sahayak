@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyAuth } from "@/lib/auth";
 import axios from "axios";
+import { sendEmail } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
   try {
@@ -109,6 +110,28 @@ export async function POST(req: NextRequest) {
         },
       });
       console.log(fullBooking);
+
+      // Fetch user & provider emails
+      const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+      const serviceDetails = await prisma.service.findUnique({ where: { id: service.id } });
+
+      // Send confirmation email to customer
+      if (user?.email) {
+        await sendEmail(
+          user.email,
+          "Booking Confirmation",
+          `Hello ${user.name},\n\nYour booking for ${serviceDetails?.name} has been placed on ${new Date(date).toLocaleString()}.\n\nThank you for using Sahayak!`
+        );
+      }
+
+      // Send notification email to provider
+      if (provider?.email) {
+        await sendEmail(
+          provider.email,
+          "New Booking Assigned",
+          `Hello ${provider.name},\n\nYou have a new booking for ${serviceDetails?.name} scheduled on ${new Date(date).toLocaleString()}.\n\nPlease check your dashboard for details.`
+        );
+      }
 
       // 11. Send to socket API — external notification
       try {

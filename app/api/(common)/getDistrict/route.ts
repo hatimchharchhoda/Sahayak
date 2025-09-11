@@ -1,4 +1,3 @@
-import citiesData from "@/app/lib/cityData.json";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -10,6 +9,7 @@ export async function GET() {
 
     console.log("✅ Gujarat city data seeded successfully.");
     return NextResponse.json({ allDistrict });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to load city data" },

@@ -41,6 +41,7 @@ const AuthPage = () => {
   const [cities, setCities] = useState();
   const [selectedCity, setSelectedCity] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -72,6 +73,7 @@ const AuthPage = () => {
         setSuccess("Account created successfully!");
         router.push("/");
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err.response?.data?.error || err.message);
       setError(err.response?.data?.error || "Something went wrong");
