@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-nocheck
 "use client";
 
@@ -20,34 +21,31 @@ import {
   Star,
   CalendarDays,
   List,
+  User,
+  Ticket,
 } from "lucide-react";
 
-import type { User as UserType } from "@/lib/types";
 import BookedServicesList from "@/components/custom/BookedServicesList";
 import ProviderServicesCalendar from "@/components/custom/ProviderServicesCalendar";
-
 import IncomeAnalysisChart from "@/components/custom/IncomeAnalysisChart";
 import Loading from "@/components/custom/loading";
 import { useAuth } from "@/context/userContext";
 import { useSocket } from "@/hooks/useSocket";
 
 function ProviderDashboard() {
-  const { user, setUser, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const socket = useSocket();
-
-  const [allServices, setAllServices] = useState<[]>([]);
-  console.log({ allServices });
-  const [availableServicesLoading, setAvailableServicesLoading] =
-    useState(false);
-  const [allServicesLoading, setAllServicesLoading] = useState(false);
   const router = useRouter();
 
-  // Separate services using useMemo
+  const [allServices, setAllServices] = useState<[]>([]);
+  const [availableServicesLoading, setAvailableServicesLoading] = useState(false);
+  const [allServicesLoading, setAllServicesLoading] = useState(false);
+
+  // Separate services
   const availableServices = useMemo(
     () => allServices?.filter((service) => service.status === "PENDING") || [],
     [allServices]
   );
-  console.log({ availableServices });
 
   const acceptedServices = useMemo(
     () => allServices?.filter((service) => service.status === "ACCEPTED") || [],
@@ -55,29 +53,20 @@ function ProviderDashboard() {
   );
 
   const completedServices = useMemo(
-    () =>
-      allServices?.filter((service) => service.status === "COMPLETED") || [],
+    () => allServices?.filter((service) => service.status === "COMPLETED") || [],
     [allServices]
   );
 
-  // Combine all services for calendar view
-  const allCombinedServices = useMemo(
-    () => [...availableServices, ...allServices],
-    [availableServices, allServices]
-  );
-
+  // Fetch services
   const fetchAllServices = async () => {
     if (user?.id) {
       setAllServicesLoading(true);
       try {
-        console.log("first");
-        const response = await axios.post("/api/providerAllServices", {
-          id: user.id,
-        });
+        const response = await axios.post("/api/providerAllServices", { id: user.id });
         setAllServices(response?.data?.allServices || []);
       } catch (error) {
         console.error("Error fetching all services:", error);
-        toast.error("Failed to fetch all services");
+        toast.error("Failed to fetch services");
       } finally {
         setAllServicesLoading(false);
       }
@@ -85,11 +74,10 @@ function ProviderDashboard() {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchAllServices();
-    }
+    if (user) fetchAllServices();
   }, [user]);
 
+  // Logout
   const handleLogout = async () => {
     try {
       const response = await axios.get("/api/provider/auth/logout");
@@ -106,51 +94,36 @@ function ProviderDashboard() {
   };
 
   const handleCalendarEventClick = (service) => {
-    // Navigate to service details or show more info
     router.push(`/provider/service/${service.id}`);
   };
 
+  // Realtime socket updates
   useEffect(() => {
     if (!socket) return;
 
     const handleServices = ({ service }) => {
-      console.log(service);
-
-      setAllServices((prev) =>
-        prev.map((s) => (s.id === service.id ? service : s))
-      );
+      setAllServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
     };
 
-    const handleCancleService = ({ service }) => {
-      console.log(service);
-      setAllServices((prev) =>
-        prev.map((s) => (s.id === service.id ? service : s))
-      );
+    const handleCancelService = ({ service }) => {
+      setAllServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
     };
 
     const handleNewService = ({ service }) => {
-      console.log(service);
-
       setAllServices((prev) => [...prev, service]);
     };
 
     socket.on("payment", handleServices);
     socket.on("new-booking", handleNewService);
-    socket.on("modify-service", handleCancleService);
+    socket.on("modify-service", handleCancelService);
   }, [socket]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-  console.log(allServices);
+  if (isLoading) return <Loading />;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
             <CardContent className="p-6">
               {/* Header */}
@@ -163,19 +136,36 @@ function ProviderDashboard() {
                     Role: {user?.role} | Specialization: {user?.specialization}
                   </p>
                 </div>
-                <div className="flex gap-4 mt-4 md:mt-0">
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
+                  <Button
+                    onClick={() => router.push(`/provider/profile/${user?.id}`)}
+                    variant="outline"
+                    className="flex items-center"
+                  >
+                    <User className="mr-2 h-4 w-4" /> Profile
+                  </Button>
+                  <Button
+                    onClick={() => router.push(`/provider/ticket/new`)}
+                    variant="outline"
+                    className="flex items-center"
+                  >
+                    <Ticket className="mr-2 h-4 w-4" /> Raise Ticket
+                  </Button>
                   <Button
                     onClick={() => router.push(`/provider/reviews/${user?.id}`)}
                     variant="outline"
                     className="flex items-center"
                   >
-                    <Star className="mr-2 h-4 w-4" /> View Reviews
+                    <Star className="mr-2 h-4 w-4" /> Reviews
                   </Button>
-                  <Button onClick={handleLogout} variant="outline">
+                  <Button onClick={handleLogout} variant="destructive" className="flex items-center">
                     <LogOut className="mr-2 h-4 w-4" /> Logout
                   </Button>
                 </div>
               </div>
+
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
@@ -203,12 +193,8 @@ function ProviderDashboard() {
                   icon={<IndianRupee className="h-8 w-8 text-green-500" />}
                   title="Total Earnings"
                   value={`₹${completedServices
-                    ?.filter((service: any) => service.isPaid) // ✅ Only paid services
-                    .reduce(
-                      (sum: number, service: any) =>
-                        sum + (service.basePrice || 0),
-                      0
-                    )
+                    ?.filter((service: any) => service.isPaid)
+                    .reduce((sum: number, service: any) => sum + (service.basePrice || 0), 0)
                     .toFixed(2)}`}
                   color="bg-green-100"
                   loading={allServicesLoading}
@@ -222,20 +208,14 @@ function ProviderDashboard() {
                 </div>
               ) : (
                 <div className="mb-8">
-                  <IncomeAnalysisChart
-                    completedServices={completedServices}
-                    providerName={user?.name}
-                  />
+                  <IncomeAnalysisChart completedServices={completedServices} providerName={user?.name} />
                 </div>
               )}
 
               {/* Tabs for Calendar and List View */}
               <Tabs defaultValue="calendar" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger
-                    value="calendar"
-                    className="flex items-center gap-2"
-                  >
+                  <TabsTrigger value="calendar" className="flex items-center gap-2">
                     <CalendarDays className="h-4 w-4" />
                     Calendar View
                   </TabsTrigger>
@@ -250,70 +230,31 @@ function ProviderDashboard() {
                   {availableServicesLoading || allServicesLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                      <p className="text-gray-700 font-medium">
-                        Loading calendar...
-                      </p>
+                      <p className="text-gray-700 font-medium">Loading calendar...</p>
                     </div>
                   ) : (
-                    <ProviderServicesCalendar
-                      services={allServices}
-                      onEventClick={handleCalendarEventClick}
-                    />
+                    <ProviderServicesCalendar services={allServices} onEventClick={handleCalendarEventClick} />
                   )}
                 </TabsContent>
 
                 {/* List View */}
                 <TabsContent value="list">
                   <div className="space-y-8">
-                    {/* Available Services */}
-                    <div className="relative">
-                      {availableServicesLoading && (
-                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                          <p className="text-gray-700 font-medium">
-                            Loading available services...
-                          </p>
-                        </div>
-                      )}
-                      <BookedServicesList
-                        services={availableServices}
-                        title="Available Services"
-                        emptyMessage="No available services at the moment."
-                      />
-                    </div>
-
-                    {/* Accepted Services */}
-                    <div className="relative">
-                      {allServicesLoading && (
-                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                          <p className="text-gray-700 font-medium">
-                            Loading accepted services...
-                          </p>
-                        </div>
-                      )}
-                      <BookedServicesList
-                        services={acceptedServices}
-                        title="Accepted Services"
-                        emptyMessage="No accepted services at the moment."
-                      />
-                    </div>
-                    {/* Completed Services */}
-                    <div className="relative">
-                      {allServicesLoading && (
-                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                          <p className="text-gray-700 font-medium">
-                            Loading completed services...
-                          </p>
-                        </div>
-                      )}
-                      <BookedServicesList
-                        services={completedServices}
-                        title="Completed Services"
-                        emptyMessage="No completed services yet."
-                      />
-                    </div>
+                    <BookedServicesList
+                      services={availableServices}
+                      title="Available Services"
+                      emptyMessage="No available services at the moment."
+                    />
+                    <BookedServicesList
+                      services={acceptedServices}
+                      title="Accepted Services"
+                      emptyMessage="No accepted services at the moment."
+                    />
+                    <BookedServicesList
+                      services={completedServices}
+                      title="Completed Services"
+                      emptyMessage="No completed services yet."
+                    />
                   </div>
                 </TabsContent>
               </Tabs>
@@ -325,23 +266,9 @@ function ProviderDashboard() {
   );
 }
 
-function StatCard({
-  icon,
-  title,
-  value,
-  color,
-  loading = false,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  color: string;
-  loading?: boolean;
-}) {
+function StatCard({ icon, title, value, color, loading = false }) {
   return (
-    <Card
-      className={loading ? "border-none bg-gray-100" : `${color} border-none`}
-    >
+    <Card className={loading ? "border-none bg-gray-100" : `${color} border-none`}>
       <CardContent className="flex items-center p-6">
         {loading ? (
           <>

@@ -13,6 +13,7 @@ import { Avatar } from "@/components/ui/avatar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import TicketsContent from "@/components/custom/TicketsContent";
+import ServiceCategoryContent from "@/components/custom/ServiceCategoryContent";
 
 interface AdminData {
   email: string;
@@ -22,7 +23,7 @@ interface AdminData {
 
 const AdminDashboard = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("services");
+  const [activeTab, setActiveTab] = useState("users");
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const [isEditServiceOpen, setIsEditServiceOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
   console.log({ isAddServiceOpen, isEditServiceOpen, selectedService });
   const getMe = async () => {
     try {
-      const response = await axios.get("/api/admin/auth/getMe");
+      const response = await axios.get("/api/admin/auth/getMe", { withCredentials: true });
       setAdmin(response.data.user);
     } catch (error) {
       console.log(error);
@@ -62,6 +63,7 @@ const AdminDashboard = () => {
     { icon: Users, label: "Users", value: "users" },
     { icon: UserCog, label: "Providers", value: "providers" },
     { icon: Ticket, label: "Tickets", value: "tickets" },
+    { icon: Grid, label: "Service Categories", value: "categories" }, 
   ];
 
   return (
@@ -141,6 +143,11 @@ const AdminDashboard = () => {
           <TabsContent value="tickets">
             <TicketsContent />
           </TabsContent>
+
+          <TabsContent value="categories">
+            <ServiceCategoryContent />
+          </TabsContent>
+
         </Tabs>
       </div>
     </div>

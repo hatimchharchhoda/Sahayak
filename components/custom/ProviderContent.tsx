@@ -25,6 +25,7 @@ interface Provider {
   phone: string;
   specialization: string;
   role: string;
+  status: string;
 }
 
 const ProvidersContent: FC = () => {
@@ -104,6 +105,7 @@ const ProvidersContent: FC = () => {
                   <TableHead>Phone</TableHead>
                   <TableHead>Specialization</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -127,6 +129,21 @@ const ProvidersContent: FC = () => {
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{provider.role}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant={provider.status === "BLOCKED" ? "destructive" : "outline"}
+                          size="sm"
+                          onClick={async () => {
+                            await axios.patch("/api/admin/block/provider", {
+                              providerId: provider.id,
+                              status: provider.status === "BLOCKED" ? "ACTIVE" : "BLOCKED",
+                            });
+                            fetchAllProviders(); // refresh
+                          }}
+                        >
+                          {provider.status === "BLOCKED" ? "Unblock" : "Block"}
+                        </Button>
                       </TableCell>
                       <TableCell>
                         <Button

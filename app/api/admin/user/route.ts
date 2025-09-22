@@ -14,6 +14,7 @@ export async function GET() {
         name: true,
         phone: true,
         address: true,
+        status: true,
       },
     });
 

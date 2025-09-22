@@ -17,6 +17,10 @@ export async function POST(req: NextRequest) {
       where: { email: email.toLowerCase() },
     });
 
+    if (user.status === "BLOCKED") {
+      return NextResponse.json({ error: "Account is blocked by admin" }, { status: 403 });
+    }
+
     if (!user) {
       return NextResponse.json(
         { error: "Invalid credentials" },

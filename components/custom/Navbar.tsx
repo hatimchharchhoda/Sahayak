@@ -86,9 +86,15 @@ const Navbar = () => {
           {user ? (
             <div className="hidden md:flex items-center space-x-4">
               <Link href={"/profile"}>
-                <span className="font-bold text-gray-900 border rounded-full px-3 py-2 bg-blue-100">
-                  {user.name.charAt(0).toUpperCase()}
-                </span>
+                {user?.name ? (
+                  <span className="font-bold text-gray-900 border rounded-full px-3 py-2 bg-blue-100">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                ) : (
+                  <span className="font-bold text-gray-900 border rounded-full px-3 py-2 bg-gray-200">
+                    ?
+                  </span>
+                )}
               </Link>
 
               <Button

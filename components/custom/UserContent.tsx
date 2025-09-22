@@ -25,6 +25,7 @@ interface User {
   phone: string;
   address: string;
   role: string;
+  status: string;
 }
 
 const UsersContent = () => {
@@ -98,6 +99,7 @@ const UsersContent = () => {
                   <TableHead>Phone</TableHead>
                   <TableHead>Address</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -116,6 +118,21 @@ const UsersContent = () => {
                       <TableCell>{user.address}</TableCell>
                       <TableCell>
                         <Badge variant="outline">{user.role}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant={user.status === "BLOCKED" ? "destructive" : "outline"}
+                          size="sm"
+                          onClick={async () => {
+                            await axios.patch("/api/admin/block/user", {
+                              userId: user.id,
+                              status: user.status === "BLOCKED" ? "ACTIVE" : "BLOCKED",
+                            });
+                            fetchAllUsers(); // refresh
+                          }}
+                        >
+                          {user.status === "BLOCKED" ? "Unblock" : "Block"}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))

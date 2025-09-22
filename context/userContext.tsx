@@ -42,14 +42,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (pathname === "/auth" || pathname === "/provider/auth") {
+    if (pathname === "/auth" || pathname === "/provider/auth" || pathname === "/admin/auth") {
       setLoading(false);
       return;
     }
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/getMe");
+        let res ;
+        if(pathname.includes("admin"))
+          res = await axios.get("/api/admin/auth/getMe");
+        else res = await axios.get("/api/getMe");
         setUser(res.data);
       } catch (err) {
         console.error("Error fetching user", err);

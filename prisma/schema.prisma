@@ -15,6 +15,14 @@ datasource db {
 
 // Prisma schema for Service Booking Platform
 
+
+// Add this enum
+enum AccountStatus {
+  ACTIVE
+  BLOCKED
+}
+
+
 // 1. User Model
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -30,7 +38,7 @@ model User {
   ratings   Rating[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
-  
+  status    AccountStatus @default(ACTIVE)
   supportTickets Ticket[] // 👈 Add this to complete the relation
 }
 
@@ -49,6 +57,7 @@ model ServiceProvider {
   services       ServiceProviderService[]
   ratings        Rating[]
   bookings       Booking[]
+  status    AccountStatus @default(ACTIVE) 
 }
 
 // 3. Admin Model

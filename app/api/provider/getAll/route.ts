@@ -15,6 +15,7 @@ export async function GET() {
         phone: true,
         address: true,
         specialization: true,
+        status: true,
       },
     });
 
