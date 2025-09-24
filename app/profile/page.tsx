@@ -35,7 +35,7 @@ const UserProfile = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEditUser((prev) => ({ ...prev, [name]: value }));
+    setEditUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCancel = () => {
@@ -169,8 +169,8 @@ const UserProfile = () => {
                   <input
                     type="email"
                     name="email"
+                    disabled
                     value={editUserData.email}
-                    onChange={handleChange}
                     className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Email"
                   />
@@ -184,7 +184,7 @@ const UserProfile = () => {
                     type="text"
                     name="phone"
                     value={editUserData.phone}
-                    onChange={handleChange}
+                    disabled
                     className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Phone"
                   />
