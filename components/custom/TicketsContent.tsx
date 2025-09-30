@@ -32,6 +32,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+export interface IProvider {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city?: string;
+  district?: string;
+  specialization?: string; // 👈 you had specialization for provider profile
+}
+
 export interface ITicket {
   id: string;
   userId: string;
@@ -43,7 +54,8 @@ export interface ITicket {
   status: "OPEN" | "PENDING" | "RESOLVED";
   createdAt: Date;
   updatedAt: Date;
-
+  provider?: IProvider;
+  
   // Optional nested objects if you're including them in queries
   user?: IUser;
   booking?: Booking;
@@ -128,14 +140,15 @@ const TicketsContent = () => {
   }, []);
   console.log(tickets);
 
-  const filteredTickets = tickets.filter(
-    (ticket) =>
-      ticket.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.status?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.id?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTickets = tickets.filter((ticket) =>
+    ticket.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.status?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ticket.provider?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||   // 👈 added provider name
+    ticket.provider?.email?.toLowerCase().includes(searchTerm.toLowerCase())     // 👈 added provider email
   );
 
   // Function to get status badge variant
@@ -300,12 +313,15 @@ const TicketsContent = () => {
                     <User className="h-4 w-4 text-gray-400" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">
-                        {ticket.user?.name || "Unknown User"}
+                        {ticket.user?.name || ticket.provider?.name || "Unknown User"}
                       </p>
                       <p className="text-gray-500 truncate">
-                        {ticket.user?.email || "No email"}
+                        {ticket.user?.email || ticket.provider?.email || "No email"}
                       </p>
                     </div>
+                    <Badge variant="secondary">
+                      {ticket.user ? "User Ticket" : "Provider Ticket"}
+                    </Badge>
                   </div>
 
                   {/* Date and Actions */}

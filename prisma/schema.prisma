@@ -57,6 +57,7 @@ model ServiceProvider {
   services       ServiceProviderService[]
   ratings        Rating[]
   bookings       Booking[]
+  tickets        Ticket[]
   status    AccountStatus @default(ACTIVE) 
 }
 
@@ -178,19 +179,23 @@ model GujaratCity {
 }
 
 model Ticket {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  bookingId String?  @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String?  @db.ObjectId       // optional if provider creates ticket for customer
+  providerId      String?  @db.ObjectId       // 👈 add provider
+  bookingId       String?  @db.ObjectId
+  imageUrl        String
+  subject         String
+  message         String
+  customerName    String?   // 👈 optional customer info
+  customerMobile  String?   // 👈 optional customer info
+  customerAddress String?   // 👈 optional customer info
+  status          TicketStatus @default(OPEN)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  imageUrl  String
-  subject   String
-  message   String
-  status    TicketStatus @default(OPEN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user      User     @relation(fields: [userId], references: [id])
-  booking   Booking? @relation(fields: [bookingId], references: [id])
+  user            User?     @relation(fields: [userId], references: [id])
+  provider        ServiceProvider? @relation(fields: [providerId], references: [id])
+  booking         Booking?  @relation(fields: [bookingId], references: [id])
 }
 
 enum TicketStatus {

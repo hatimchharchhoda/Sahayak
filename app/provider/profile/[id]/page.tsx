@@ -1,133 +1,161 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// @ts-nocheck
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Briefcase, Calendar, User, Mail, Phone, MapPin } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { User, Mail, Phone, Building, Save, X, Edit2, Briefcase } from "lucide-react";
+import { useAuth } from "@/context/userContext";
+import Loading from "@/components/custom/loading";
 
-export default function ProviderProfile() {
-  const [loading, setLoading] = useState(true);
-  const [provider, setProvider] = useState<any>(null);
+const ProviderProfile = () => {
+  const { user, setUser, isLoading } = useAuth(); // provider info comes from context
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(user?.name || "");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/provider/me"); // ✅ Get provider details
-        setProvider(res.data);
-      } catch (err) {
-        console.error("Error fetching provider profile", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const handleCancel = () => {
+    setIsEditing(false);
+    setName(user?.name || "");
+  };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/provider/updateName", {
+        id: user.id,
+        name,
+      });
+      setUser(response.data.updatedProvider);
+      localStorage.setItem("user", JSON.stringify(response.data.updatedProvider));
+      setIsEditing(false);
+      toast.success("Name updated successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Error updating name");
+    }
+  };
 
-  const services = provider?.services || [];
-  const bookings = provider?.bookings || [];
+  if (isLoading) return <Loading />;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Provider Profile</h1>
-
-      {/* 👤 Provider Info View Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>My Details</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center space-x-3">
-              <User className="w-5 h-5 text-blue-600" />
-              <span className="font-medium">{provider?.name}</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Mail className="w-5 h-5 text-blue-600" />
-              <span>{provider?.email}</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-blue-600" />
-              <span>{provider?.phone}</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin className="w-5 h-5 text-blue-600" />
-              <span>
-                {provider?.address}, {provider?.city}, {provider?.district}
-              </span>
+    <div className="min-h-screen bg-green-50 py-8 px-4">
+      <div className="max-w-xl mx-auto pt-16">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="p-8 shadow-sm bg-gray-50">
+            <div className="flex items-center space-x-4">
+              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center shadow-inner">
+                <Building className="h-10 w-10 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Provider Profile
+                </h2>
+                <p className="text-gray-600">
+                  View and manage your provider information
+                </p>
+              </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* 📌 Tabs for Services and Bookings */}
-      <Tabs defaultValue="services" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="services" className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4" /> Services Offered
-          </TabsTrigger>
-          <TabsTrigger value="bookings" className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" /> Bookings
-          </TabsTrigger>
-        </TabsList>
+          <div className="p-6">
+            {isEditing ? (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Provider Name"
+                  />
+                </div>
 
-        {/* 🛠 Services Offered */}
-        <TabsContent value="services">
-          <Card>
-            <CardHeader>
-              <CardTitle>Services Offered</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {services.length === 0 ? (
-                <p className="text-muted-foreground">No services added yet.</p>
-              ) : (
-                <ul className="list-disc pl-6 space-y-1">
-                  {services.map((s: any) => (
-                    <li key={s.id}>
-                      {s.Service?.name || "Unnamed Service"} – ₹
-                      {s.customPrice ?? s.Service?.basePrice}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+                <div className="flex space-x-3 pt-4">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                  >
+                    <Save className="h-5 w-5" />
+                    <span>Save</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                    <span>Cancel</span>
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <User className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Provider Name</p>
+                    <p className="font-medium text-gray-900">{user?.name}</p>
+                  </div>
+                </div>
 
-        {/* 📅 Bookings */}
-        <TabsContent value="bookings">
-          <Card>
-            <CardHeader>
-              <CardTitle>My Bookings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {bookings.length === 0 ? (
-                <p className="text-muted-foreground">No bookings yet.</p>
-              ) : (
-                <ul className="divide-y divide-gray-200">
-                  {bookings.map((b: any) => (
-                    <li key={b.id} className="py-2">
-                      <span className="font-medium">
-                        {b.Service?.name || "Service"}
-                      </span>{" "}
-                      - {new Date(b.date).toLocaleDateString()} ({b.status})
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <Mail className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-medium text-gray-900">{user?.email}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <Phone className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="font-medium text-gray-900">{user?.phone}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <Briefcase className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Specialization Id</p>
+                    <p className="font-medium text-gray-900">{user?.specialization}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <Building className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">District</p>
+                    <p className="font-medium text-gray-900">{user?.district}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                  <Building className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">City</p>
+                    <p className="font-medium text-gray-900">{user?.city}</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="w-full mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                >
+                  <Edit2 className="h-5 w-5" />
+                  <span>Edit Name</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default ProviderProfile;

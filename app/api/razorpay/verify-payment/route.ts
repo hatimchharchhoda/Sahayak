@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
       console.log(updatedBookings);
       return NextResponse.redirect(
-        "https://sahayak0.vercel.app/payment-success",
+        "http://localhost:3000/payment-success",
         303
       );
     } catch (error) {
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     }
   } else {
     return NextResponse.redirect(
-      "https://sahayak0.vercel.app/payment-success",
+      "http://localhost:3000/payment-success",
       303
     );
   }

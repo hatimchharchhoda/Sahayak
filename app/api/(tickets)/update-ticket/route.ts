@@ -12,6 +12,10 @@ export async function POST(req: NextRequest) {
       data: {
         status: updatedTicketStatus,
       },
+      include: {
+        user: true,       // 👈 include user
+        provider: true,   // 👈 include provider
+      },
     });
     console.log(ticket);
     return NextResponse.json({ ticket });

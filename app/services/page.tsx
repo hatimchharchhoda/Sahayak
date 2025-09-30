@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link"; // 👈 import Link
 import ServicesCard from "@/components/custom/ServicesCard";
 import Loading from "@/components/custom/loading";
 
@@ -57,6 +58,26 @@ const ServicesPage = () => {
                 <ServicesCard key={category.id} category={category} />
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* 👇 Gradient Animated Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-12 flex justify-center"
+          >
+            <Link href="/browse-providers">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative px-8 py-4 rounded-full text-white font-semibold text-lg 
+                           bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
+                           animate-gradient-x shadow-lg overflow-hidden"
+              >
+                🔎 Find Services Near You
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
       </section>

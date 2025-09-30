@@ -147,7 +147,7 @@ function ProviderDashboard() {
                     <User className="mr-2 h-4 w-4" /> Profile
                   </Button>
                   <Button
-                    onClick={() => router.push(`/provider/ticket/new`)}
+                    onClick={() => router.push(`/provider/raise-ticket`)}
                     variant="outline"
                     className="flex items-center"
                   >

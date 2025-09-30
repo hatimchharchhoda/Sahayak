@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
     const tickets = await prisma.ticket.findMany({
       include: {
         user: true,
+        provider: true,
         booking: true,
       },
     });
