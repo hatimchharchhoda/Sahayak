@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link"; // 👈 import Link
+import Link from "next/link";
 import ServicesCard from "@/components/custom/ServicesCard";
 import Loading from "@/components/custom/loading";
 
@@ -23,25 +23,26 @@ const ServicesPage = () => {
         setLoading(false);
       }
     };
-
     fetchCategories();
   }, []);
 
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] pt-20">
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
+          {/* Page Heading */}
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800"
+            className="text-4xl md:text-5xl font-nunito font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-[#FF7043] to-pink-400"
           >
             Our Services
           </motion.h1>
 
+          {/* Services Grid */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -60,7 +61,7 @@ const ServicesPage = () => {
             ))}
           </motion.div>
 
-          {/* 👇 Gradient Animated Button */}
+          {/* Call-to-Action Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,9 +72,9 @@ const ServicesPage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative px-8 py-4 rounded-full text-white font-semibold text-lg 
-                           bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
-                           animate-gradient-x shadow-lg overflow-hidden"
+                className="relative px-8 py-4 rounded-full text-white font-poppins font-semibold text-lg
+                           bg-gradient-to-r from-[#FF7043] via-pink-400 to-[#FFAB91]
+                           shadow-lg overflow-hidden transition-all duration-300"
               >
                 🔎 Find Services Near You
               </motion.button>

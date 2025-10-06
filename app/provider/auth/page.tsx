@@ -39,7 +39,6 @@ const ProviderAuthPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
 
-  // Form data state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,7 +52,6 @@ const ProviderAuthPage = () => {
   const [districts, setDistricts] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -62,7 +60,6 @@ const ProviderAuthPage = () => {
     }));
   };
 
-  // Handle specialization selection
   const handleSpecializationChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -88,15 +85,9 @@ const ProviderAuthPage = () => {
           }
         : formData;
 
-      console.log(formData);
-
       const response = await axios.post(endpoint, submitData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
-
-      console.log(response);
 
       if (isLogin) {
         localStorage.setItem("provider_token", response.data.token);
@@ -107,7 +98,6 @@ const ProviderAuthPage = () => {
         router.push("/provider");
       }
     } catch (err: any) {
-      console.log(err);
       if (err.response?.data?.error) {
         setError(err.response.data.error);
       } else {
@@ -123,7 +113,6 @@ const ProviderAuthPage = () => {
       const response = await axios.get("/api/categories");
       setCategories(response.data);
     } catch (error: any) {
-      console.error("Error fetching categories:", error);
       setError("Failed to load categories");
     }
   };
@@ -131,7 +120,6 @@ const ProviderAuthPage = () => {
   async function getDistrict() {
     try {
       const response = await axios.get("/api/getDistrict");
-      console.log(response);
       setDistricts(response.data.allDistrict);
     } catch (error) {
       console.log(error);
@@ -139,12 +127,10 @@ const ProviderAuthPage = () => {
   }
 
   async function getCities() {
-    console.log("second");
     try {
       const response = await axios.post("/api/getCity", {
         district: formData.district,
       });
-      console.log(response);
       setCities(response.data.cities);
     } catch (error) {
       console.log(error);
@@ -158,55 +144,56 @@ const ProviderAuthPage = () => {
 
   useEffect(() => {
     getCities();
-    console.log("first");
   }, [formData.district]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex justify-center items-center">
-      {/* Benefits Section */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6 md:block hidden">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#80DEEA] flex justify-center items-center p-4 transition-all duration-500">
+      <div className="container mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          {/* Motivational Cards Section */}
+          <div className="space-y-6 md:block hidden animate-slideInRight">
+            <h1 className="text-4xl font-poppins font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00C853] to-[#AEEA00]">
               Join Our Professional Service Provider Network
             </h1>
-            <p className="text-lg text-gray-600">
-              Become a part of the leading home services platform and grow your
-              business
+            <p className="text-lg font-nunito text-[#212121]">
+              Become a part of the leading home services platform and grow your business
             </p>
 
             <div className="grid gap-4">
-              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm">
-                <div className="p-2 bg-blue-100 rounded-full">
-                  <Briefcase className="w-6 h-6 text-blue-600" />
+              {/* Earnings */}
+              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <Briefcase className="w-6 h-6 text-[#00C853]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Increased Earnings</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold font-poppins text-[#212121]">Increased Earnings</h3>
+                  <p className="text-sm font-nunito text-[#616161]">
                     Get regular clients and boost your income
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm">
+              {/* Reputation */}
+              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
                 <div className="p-2 bg-green-100 rounded-full">
-                  <Star className="w-6 h-6 text-green-600" />
+                  <Star className="w-6 h-6 text-[#00C853]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Build Your Reputation</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold font-poppins text-[#212121]">Build Your Reputation</h3>
+                  <p className="text-sm font-nunito text-[#616161]">
                     Earn reviews and grow your professional profile
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm">
-                <div className="p-2 bg-purple-100 rounded-full">
-                  <Clock className="w-6 h-6 text-purple-600" />
+              {/* Flexible Schedule */}
+              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <Clock className="w-6 h-6 text-[#00C853]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Flexible Schedule</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold font-poppins text-[#212121]">Flexible Schedule</h3>
+                  <p className="text-sm font-nunito text-[#616161]">
                     Work on your own terms and timing
                   </p>
                 </div>
@@ -214,29 +201,29 @@ const ProviderAuthPage = () => {
             </div>
           </div>
 
-          <div>
+          {/* Auth Form Section */}
+          <div className="animate-slideInRight">
             <div className="md:hidden mb-4">
-              <h1 className="text-2xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-poppins font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00C853] to-[#AEEA00]">
                 Join Our Professional Service Provider Network
               </h1>
-              <p className="text-base text-muted-foreground">
-                Become a part of the leading home services platform and grow
-                your business
+              <p className="text-base font-nunito text-[#212121]">
+                Become a part of the leading home services platform and grow your business
               </p>
             </div>
-            <Card className="w-full max-w-md mx-auto">
+
+            <Card className="w-full max-w-md mx-auto rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
               <CardHeader>
-                <CardTitle className="text-2xl text-center">
-                  {isLogin
-                    ? "Welcome Back, Professional!"
-                    : "Create Your Professional Account"}
+                <CardTitle className="text-2xl text-center font-poppins font-semibold">
+                  {isLogin ? "Welcome Back, Professional!" : "Create Your Professional Account"}
                 </CardTitle>
-                <CardDescription className="text-center">
+                <CardDescription className="text-center font-nunito text-[#616161]">
                   {isLogin
                     ? "Access your service provider dashboard"
                     : "Start your journey with us today"}
                 </CardDescription>
               </CardHeader>
+
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {!isLogin && (
@@ -250,7 +237,7 @@ const ProviderAuthPage = () => {
                           onChange={handleInputChange}
                           required
                           placeholder="Your professional name"
-                          className="w-full"
+                          className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
                         />
                       </div>
 
@@ -264,7 +251,7 @@ const ProviderAuthPage = () => {
                           onChange={handleInputChange}
                           required
                           placeholder="+91 98765 43210"
-                          className="w-full"
+                          className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
                         />
                       </div>
 
@@ -274,7 +261,7 @@ const ProviderAuthPage = () => {
                           value={formData.specialization}
                           onValueChange={handleSpecializationChange}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
                             <SelectValue placeholder="Select your service category" />
                           </SelectTrigger>
                           <SelectContent>
@@ -292,23 +279,16 @@ const ProviderAuthPage = () => {
                         <Select
                           value={formData.district}
                           onValueChange={(value) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              district: value,
-                            }))
+                            setFormData((prev) => ({ ...prev, district: value }))
                           }
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
                             <SelectValue placeholder="Select District" />
                           </SelectTrigger>
                           <SelectContent>
-                            {districts &&
-                              districts.length > 0 &&
-                              districts.map((d, i) => (
-                                <SelectItem key={i} value={d}>
-                                  {d}
-                                </SelectItem>
-                              ))}
+                            {districts.map((d, i) => (
+                              <SelectItem key={i} value={d}>{d}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
@@ -321,21 +301,18 @@ const ProviderAuthPage = () => {
                             setFormData((prev) => ({ ...prev, city: value }))
                           }
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
                             <SelectValue placeholder="Select City" />
                           </SelectTrigger>
                           <SelectContent>
-                            {cities && cities.length > 0 ? (
-                              cities.map((c, i) => (
-                                <SelectItem key={i} value={c}>
-                                  {c}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <SelectItem value="null">
-                                Please select district first
-                              </SelectItem>
-                            )}
+                            {cities.length > 0
+                              ? cities.map((c, i) => (
+                                  <SelectItem key={i} value={c}>
+                                    {c}
+                                  </SelectItem>
+                                ))
+                              : <SelectItem value="null">Please select district first</SelectItem>
+                            }
                           </SelectContent>
                         </Select>
                       </div>
@@ -352,7 +329,7 @@ const ProviderAuthPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="you@example.com"
-                      className="w-full"
+                      className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
                     />
                   </div>
 
@@ -366,19 +343,19 @@ const ProviderAuthPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="••••••••"
-                      className="w-full"
+                      className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
                     />
                   </div>
 
                   {error && (
-                    <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded">
+                    <div className="flex items-center gap-2 text-[#E53935] bg-red-50 p-3 rounded transition-all">
                       <AlertCircle size={18} />
                       <span>{error}</span>
                     </div>
                   )}
 
                   {success && (
-                    <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded">
+                    <div className="flex items-center gap-2 text-[#43A047] bg-green-50 p-3 rounded transition-all">
                       <CheckCircle2 size={18} />
                       <span>{success}</span>
                     </div>
@@ -386,24 +363,20 @@ const ProviderAuthPage = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    className="w-full bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white font-poppins font-bold uppercase hover:scale-105 transform transition-all duration-300"
                     disabled={loading}
                   >
-                    {loading
-                      ? "Please wait..."
-                      : isLogin
-                      ? "Sign In"
-                      : "Join as Service Provider"}
+                    {loading ? "Please wait..." : isLogin ? "Sign In" : "Join as Service Provider"}
                   </Button>
 
-                  <div className="text-center">
-                    <div className="text-sm text-blue-600 hover:underline">
+                  <div className="text-center space-y-1">
+                    <div className="text-sm text-[#2979FF] hover:underline font-nunito">
                       <Link href={"/auth"}>Join as User</Link>
                     </div>
                     <button
                       type="button"
                       onClick={() => setIsLogin(!isLogin)}
-                      className="text-sm text-blue-600 hover:underline"
+                      className="text-sm text-[#2979FF] hover:underline font-nunito"
                     >
                       {isLogin
                         ? "Don't have an account? Join now"

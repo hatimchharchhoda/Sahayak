@@ -78,7 +78,6 @@ const Page = () => {
     if (!socket) return;
 
     function handleModifyedService({ service }) {
-      console.log(service);
       setServices((prev) =>
         prev.map((s) => (s.id === service.id ? service : s))
       );
@@ -87,24 +86,18 @@ const Page = () => {
     socket.on("modify-service", handleModifyedService);
   }, [socket]);
 
-  // Group services by status
   const groupServicesByStatus = (services: any[]) => {
     const statusOrder = ["PENDING", "ACCEPTED", "COMPLETED", "CANCELLED"];
     const grouped = services.reduce((acc, service) => {
       const status = service.status;
-      if (!acc[status]) {
-        acc[status] = [];
-      }
+      if (!acc[status]) acc[status] = [];
       acc[status].push(service);
       return acc;
     }, {});
 
-    // Sort the grouped object by status order
     const sortedGrouped = {};
     statusOrder.forEach((status) => {
-      if (grouped[status]) {
-        sortedGrouped[status] = grouped[status];
-      }
+      if (grouped[status]) sortedGrouped[status] = grouped[status];
     });
 
     return sortedGrouped;
@@ -128,89 +121,85 @@ const Page = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-600";
+        return "bg-[#FFD54F]/80 text-[#212121]";
       case "ACCEPTED":
-        return "bg-blue-600";
+        return "bg-teal-400 text-white";
       case "COMPLETED":
-        return "bg-green-600";
+        return "bg-[#81C784] text-white";
       case "CANCELLED":
-        return "bg-red-600";
+        return "bg-[#E57373] text-white";
       default:
-        return "bg-gray-600";
+        return "bg-gray-400 text-white";
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
+  if (loading) return <Loading />;
 
   const groupedServices = groupServicesByStatus(filteredServices);
 
   return (
-    <div className="min-h-screen pt-16 sm:pt-20 px-3 sm:px-4 lg:px-6 bg-gray-50">
+    <div className="min-h-screen pt-16 sm:pt-20 px-3 sm:px-6 lg:px-8 bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] animate-fadeIn">
       <div className="max-w-7xl mx-auto">
         {/* User Profile Card */}
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
-              <User className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6 border border-transparent hover:border-[#FF7043]/40 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="h-16 w-16 rounded-full bg-[#FFAB91]/20 flex items-center justify-center">
+              <User className="h-8 w-8 text-[#FF7043]" />
             </div>
-            <div className="text-center sm:text-left flex-1 min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+            <div className="flex-1 text-center sm:text-left min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#212121] truncate font-[Nunito_Sans]">
                 {user.name}
               </h1>
-              <p className="text-sm sm:text-base text-gray-500">
+              <p className="text-sm sm:text-base text-[#757575]">
                 Your Service Bookings
               </p>
             </div>
           </div>
 
-          {/* User Info Grid - Responsive */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4 p-3 sm:px-4 sm:py-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-2 min-w-0">
-              <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 flex-shrink-0" />
-              <span className="text-sm sm:text-base text-gray-600 truncate">
+          {/* User Info */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 p-4 bg-[#FFE0B2]/30 rounded-xl">
+            <div className="flex items-center space-x-2">
+              <Mail className="h-5 w-5 text-[#757575]" />
+              <span className="text-sm sm:text-base text-[#212121] truncate font-[Lato]">
                 {user.email}
               </span>
             </div>
-            <div className="flex items-center space-x-2 min-w-0">
-              <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 flex-shrink-0" />
-              <span className="text-sm sm:text-base text-gray-600 truncate">
+            <div className="flex items-center space-x-2">
+              <Phone className="h-5 w-5 text-[#757575]" />
+              <span className="text-sm sm:text-base text-[#212121] truncate font-[Lato]">
                 {user.phone}
               </span>
             </div>
-            <div className="flex items-center space-x-2 min-w-0 sm:col-span-2">
-              <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 flex-shrink-0" />
-              <span className="text-sm sm:text-base text-gray-600 truncate">
+            <div className="flex items-center space-x-2 sm:col-span-2">
+              <MapPin className="h-5 w-5 text-[#757575]" />
+              <span className="text-sm sm:text-base text-[#212121] truncate font-[Lato]">
                 {user.address}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4">
-            {/* Search Input */}
-            <div className="relative flex-1 lg:flex-1">
+        {/* Search & Filter */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6 border border-transparent hover:border-[#FF7043]/40 transition-all duration-300">
+          <div className="flex flex-col lg:flex-row items-stretch gap-4">
+            <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+                <Search className="h-5 w-5 text-[#757575]" />
               </div>
               <input
                 type="text"
                 placeholder="Search by status, service or provider..."
-                className="pl-8 sm:pl-10 pr-4 py-2 sm:py-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                className="border border-gray-300 focus:border-[#FF7043] pl-10 pr-4 py-3 w-full rounded-xl text-sm sm:text-base font-[Lato] focus:outline-none focus:ring-2 focus:ring-[#FF7043] placeholder:text-[#BDBDBD] transition-all duration-200"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {/* Filter Dropdown */}
             <div className="w-full lg:w-64 xl:w-80">
               <Select onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-2 sm:py-3">
+                <SelectTrigger className="w-full border border-gray-300 rounded-xl py-3 focus:border-[#26A69A] focus:ring-2 focus:ring-[#26A69A]">
                   <div className="flex items-center">
-                    <Filter className="h-4 w-4 mr-2 text-gray-400 flex-shrink-0" />
+                    <Filter className="h-5 w-5 mr-2 text-[#757575]" />
                     <SelectValue placeholder="Filter by status" />
                   </div>
                 </SelectTrigger>
@@ -225,53 +214,46 @@ const Page = () => {
             </div>
           </div>
 
-          {/* Results Count */}
-          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100">
-            <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-              <User className="inline h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-              <span>
-                {filteredServices.length} booking
-                {filteredServices.length !== 1 ? "s" : ""} found
-                {selectedStatus && selectedStatus !== "all" && (
-                  <span className="hidden sm:inline">
-                    {" "}
-                    with status: {getStatusDisplayName(selectedStatus)}
-                  </span>
-                )}
-              </span>
+          <div className="mt-4 border-t border-[#FFE0B2]/50 pt-3">
+            <p className="text-sm text-[#757575] flex items-center font-[Lato]">
+              <User className="h-4 w-4 mr-1" />
+              {filteredServices.length} booking
+              {filteredServices.length !== 1 ? "s" : ""} found
+              {selectedStatus && selectedStatus !== "all" && (
+                <span className="hidden sm:inline">
+                  {" "}
+                  with status: {getStatusDisplayName(selectedStatus)}
+                </span>
+              )}
             </p>
           </div>
         </div>
 
-        {/* Services Content */}
+        {/* Services */}
         {Object.keys(groupedServices).length === 0 ? (
-          <div className="text-center py-8 sm:py-12 bg-white rounded-lg sm:rounded-xl shadow-md">
+          <div className="text-center py-12 bg-white rounded-2xl shadow-xl">
             <div className="max-w-md mx-auto px-4">
-              <User className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-sm sm:text-base text-gray-500">
+              <User className="h-16 w-16 text-[#BDBDBD] mx-auto mb-4" />
+              <p className="text-base text-[#757575] font-[Lato]">
                 No services found matching your search criteria.
               </p>
             </div>
           </div>
         ) : (
-          <div className="space-y-6 sm:space-y-8 mb-6 sm:mb-8">
+          <div className="space-y-6">
             {Object.entries(groupedServices).map(([status, statusServices]) => (
               <div
                 key={status}
-                className="bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden"
+                className="bg-white rounded-2xl shadow-xl overflow-hidden border border-transparent hover:border-[#FF7043]/40 transition-all duration-300"
               >
                 {/* Status Header */}
-                <div
-                  className={`${getStatusColor(
-                    status
-                  )} text-white px-4 sm:px-6 py-3 sm:py-4`}
-                >
+                <div className={`${getStatusColor(status)} px-6 py-4`}>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <h2 className="text-lg sm:text-xl font-bold">
+                      <h2 className="text-xl font-bold font-[Nunito_Sans]">
                         {getStatusDisplayName(status)}
                       </h2>
-                      <p className="text-white/80 mt-1 text-sm sm:text-base">
+                      <p className="text-white/80 mt-1 text-sm">
                         {statusServices.length} service
                         {statusServices.length !== 1 ? "s" : ""}
                       </p>
@@ -280,18 +262,16 @@ const Page = () => {
                 </div>
 
                 {/* Services Grid */}
-                <div className="p-4 sm:p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                    {statusServices.map((service) => (
-                      <div key={service?.id} className="w-full">
-                        <ServiceBookingCard
-                          booking={service}
-                          onCancelSuccess={fetchUserServices}
-                          onReviewSuccess={fetchUserServices}
-                        />
-                      </div>
-                    ))}
-                  </div>
+                <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {statusServices.map((service) => (
+                    <div key={service?.id} className="w-full animate-fadeInUp">
+                      <ServiceBookingCard
+                        booking={service}
+                        onCancelSuccess={fetchUserServices}
+                        onReviewSuccess={fetchUserServices}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

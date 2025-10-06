@@ -1,8 +1,7 @@
 // @ts-nocheck
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Send, Loader2 } from "lucide-react";
 
@@ -15,8 +14,16 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Function to handle sending a message
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, loading]);
+
   const sendMessage = async (): Promise<void> => {
     if (!input.trim()) return;
 
@@ -45,26 +52,29 @@ const Chatbot: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-[#E0F7FA] to-[#80DEEA] transition-all duration-300">
       {/* Chat Header */}
+      <div className="bg-white shadow-md border-b border-gray-200 px-4 py-3 flex items-center justify-center">
+        <h2 className="text-lg font-poppins font-semibold text-[#212121]">
+          AI Chatbot
+        </h2>
+      </div>
 
       {/* Chat Messages */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[75%] p-3 rounded-xl shadow-md ${
+              className={`max-w-[75%] p-3 rounded-2xl shadow-md transition-all duration-200 transform hover:scale-102 ${
                 msg.sender === "user"
-                  ? "bg-blue-500 text-white self-end"
-                  : "bg-gray-300 text-gray-900 self-start"
+                  ? "bg-gradient-to-br from-teal-400 to-lime-400 text-white"
+                  : "bg-white text-[#212121] border border-gray-200"
               }`}
             >
-              {msg.text}
+              <p className="font-nunito break-words">{msg.text}</p>
             </div>
           </div>
         ))}
@@ -72,34 +82,35 @@ const Chatbot: React.FC = () => {
         {/* Typing Indicator */}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-gray-300 text-gray-900 p-3 rounded-xl shadow-md animate-pulse">
-              Typing...
+            <div className="bg-lime-50 border-2 border-lime-200 px-4 py-2 rounded-2xl shadow-md animate-pulse">
+              <p className="font-nunito text-[#616161]">Typing...</p>
             </div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-white border-t border-gray-200 sticky bottom-0">
-        <div className="flex items-center space-x-2">
+      <div className="p-4 bg-white border-t border-gray-200 sticky bottom-0 shadow-lg">
+        <div className="flex items-center gap-3 max-w-4xl mx-auto">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your question here..."
-            className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            className="flex-1 p-3 border-2 border-gray-200 rounded-2xl font-nunito focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent placeholder-gray-500 transition-all duration-200"
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
           <button
             onClick={sendMessage}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center disabled:opacity-50"
             disabled={!input.trim() || loading}
+            className={`p-3 rounded-2xl transition-all duration-200 hover:scale-105 active:scale-95 shadow-md font-poppins font-bold text-white ${
+              input.trim()
+                ? "bg-gradient-to-br from-teal-400 to-lime-400"
+                : "bg-gray-200 text-gray-400"
+            }`}
           >
-            {loading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </button>
         </div>
       </div>

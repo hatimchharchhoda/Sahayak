@@ -27,7 +27,6 @@ const UserProfile = () => {
     city: "",
   });
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
   const [cities, setCities] = useState([]);
   const [district, setDistrict] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
@@ -60,45 +59,30 @@ const UserProfile = () => {
       setUser(response.data.updatedUser);
       localStorage.setItem("user", JSON.stringify(response.data.updatedUser));
       setIsEditing(false);
-      setUser(response.data.updatedUser);
       toast.success("Profile updated successfully");
     } catch (error: any) {
       toast.error(error.message || "Error updating profile");
     }
   };
 
-  const handleCityChange = (value: string) => {
-    setSelectedCity(value);
-    console.log("Selected city:", value);
-  };
-
-  const handleDistrictChange = (value: string) => {
-    setSelectedDistrict(value);
-    console.log("Selected district:", value);
-  };
+  const handleCityChange = (value: string) => setSelectedCity(value);
+  const handleDistrictChange = (value: string) => setSelectedDistrict(value);
 
   const fetchCities = async () => {
     const districtToUse = selectedDistrict || user.district;
     if (!districtToUse) return;
-
     try {
-      const response = await axios.post("/api/getCity", {
-        district: districtToUse,
-      });
+      const response = await axios.post("/api/getCity", { district: districtToUse });
       setCities(response.data.cities);
-      console.log("Cities fetched:", response.data.cities);
     } catch (error) {
       console.log(error);
     }
   };
 
   const fetchUserDistrict = async () => {
-    // if (!user.district) return;
     try {
       const response = await axios.get("/api/getDistrict");
       setDistrict(response.data.allDistrict);
-      console.log(response);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -119,212 +103,136 @@ const UserProfile = () => {
   }, [isEditing]);
 
   useEffect(() => {
-    console.log(isEditing);
     if (isEditing) fetchCities();
   }, [selectedDistrict, isEditing]);
 
   if (isLoading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-blue-50 py-8 px-4">
+    <section className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] py-12 px-4 font-lato">
       <div className="max-w-xl mx-auto pt-16">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="p-8 shadow-sm bg-gray-50">
-            <div className="flex items-center space-x-4">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 flex items-center justify-center shadow-inner">
-                <User className="h-10 w-10 text-blue-600" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  User Profile
-                </h2>
-                <p className="text-gray-600">
-                  Manage your personal information
-                </p>
-              </div>
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden animate-fadeIn">
+          {/* Profile Header */}
+          <div className="p-8 bg-gradient-to-r from-[#FF7043] to-[#FF8A65] text-white shadow-inner rounded-t-3xl flex items-center space-x-4">
+            <div className="h-20 w-20 rounded-full bg-white flex items-center justify-center shadow-lg">
+              <User className="h-10 w-10 text-[#FF7043]" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-nunito font-bold">User Profile</h2>
+              <p className="text-sm text-white/80">Manage your personal information</p>
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="p-8 space-y-6">
             {isEditing ? (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
+                {[
+                  { icon: User, name: "name", placeholder: "Name" },
+                  { icon: Mail, name: "email", placeholder: "Email", disabled: true },
+                  { icon: Phone, name: "phone", placeholder: "Phone", disabled: true },
+                  { icon: MapPin, name: "address", placeholder: "Address" },
+                ].map((field) => (
+                  <div className="relative" key={field.name}>
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <field.icon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type={field.name === "email" ? "email" : "text"}
+                      name={field.name}
+                      value={editUserData[field.name]}
+                      disabled={field.disabled || false}
+                      onChange={handleChange}
+                      placeholder={field.placeholder}
+                      className="pl-10 w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#FF7043] focus:outline-none transition-all"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    name="name"
-                    value={editUserData.name}
-                    onChange={handleChange}
-                    className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Name"
-                  />
-                </div>
+                ))}
 
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="email"
-                    name="email"
-                    disabled
-                    value={editUserData.email}
-                    className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Email"
-                  />
-                </div>
-
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    name="phone"
-                    value={editUserData.phone}
-                    disabled
-                    className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Phone"
-                  />
-                </div>
-
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <MapPin className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    name="address"
-                    value={editUserData.address}
-                    onChange={handleChange}
-                    className="pl-10 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Address"
-                  />
-                </div>
-
-                <div className="flex justify-center gap-5">
-                  <Select onValueChange={handleCityChange}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={user.city} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cities && cities.length > 0 ? (
-                        cities.map((d, index) => (
-                          <SelectItem value={d} key={index}>
-                            {d}
-                          </SelectItem>
-                        ))
-                      ) : (
-                        <SelectItem value="null">
-                          Please Select District First
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-
+                <div className="flex justify-between gap-4">
                   <Select onValueChange={handleDistrictChange}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder={user.district} />
                     </SelectTrigger>
                     <SelectContent>
-                      {district &&
-                        district.length > 0 &&
-                        district.map((d, index) => (
-                          <SelectItem value={d} key={index}>
-                            {d}
-                          </SelectItem>
-                        ))}
+                      {district.length
+                        ? district.map((d, i) => <SelectItem key={i} value={d}>{d}</SelectItem>)
+                        : <SelectItem value="null">Loading...</SelectItem>}
+                    </SelectContent>
+                  </Select>
+
+                  <Select onValueChange={handleCityChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={user.city} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cities.length
+                        ? cities.map((c, i) => <SelectItem key={i} value={c}>{c}</SelectItem>)
+                        : <SelectItem value="null">Select District First</SelectItem>}
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="flex space-x-3 pt-4">
+                <div className="flex gap-4 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                    className="flex-1 bg-gradient-to-r from-[#FF7043] to-[#FF8A65] text-white px-4 py-3 rounded-xl font-poppins font-semibold flex items-center justify-center space-x-2 transition-all hover:scale-105"
                   >
-                    <Save className="h-5 w-5" />
-                    <span>Save Changes</span>
+                    <Save className="h-5 w-5" /> <span>Save Changes</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-poppins font-semibold flex items-center justify-center space-x-2 transition-all hover:bg-gray-300"
                   >
-                    <X className="h-5 w-5" />
-                    <span>Cancel</span>
+                    <X className="h-5 w-5" /> <span>Cancel</span>
                   </button>
                 </div>
               </form>
             ) : (
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                  <User className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <p className="text-sm text-gray-500">Name</p>
-                    <p className="font-medium text-gray-900">{user?.name}</p>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium text-gray-900">{user?.email}</p>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-medium text-gray-900">{user?.phone}</p>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                  <MapPin className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <p className="text-sm text-gray-500">Address</p>
-                    <p className="font-medium text-gray-900">{user.address}</p>
-                  </div>
-                </div>
-
-                <div className="flex w-full gap-5">
-                  <div className="p-4 flex-1 bg-gray-50 rounded-lg flex items-center space-x-3">
-                    <MapPin className="h-5 w-5 text-blue-600" />
+                {[
+                  { icon: User, label: "Name", value: user.name },
+                  { icon: Mail, label: "Email", value: user.email },
+                  { icon: Phone, label: "Phone", value: user.phone },
+                  { icon: MapPin, label: "Address", value: user.address },
+                  { icon: MapPin, label: "City", value: user.city },
+                  { icon: MapPin, label: "District", value: user.district },
+                ].map((item) => (
+                  <div key={item.label} className="p-4 flex items-center space-x-3 bg-white rounded-xl shadow-sm">
+                    <item.icon className="h-5 w-5 text-[#FF7043]" />
                     <div>
-                      <p className="text-sm text-gray-500">City</p>
-                      <p className="font-medium text-gray-900">{user.city}</p>
+                      <p className="text-xs text-gray-400">{item.label}</p>
+                      <p className="font-medium text-gray-900">{item.value}</p>
                     </div>
                   </div>
-
-                  <div className="p-4 flex-1 bg-gray-50 rounded-lg flex items-center space-x-3">
-                    <MapPin className="h-5 w-5 text-blue-600" />
-                    <div>
-                      <p className="text-sm text-gray-500">District</p>
-                      <p className="font-medium text-gray-900">
-                        {user.district}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
 
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                  className="w-full mt-4 bg-gradient-to-r from-[#FF7043] to-[#FF8A65] text-white px-4 py-3 rounded-xl font-poppins font-semibold flex items-center justify-center space-x-2 hover:scale-105 transition-transform"
                 >
-                  <Edit2 className="h-5 w-5" />
-                  <span>Edit Profile</span>
+                  <Edit2 className="h-5 w-5" /> <span>Edit Profile</span>
                 </button>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+
+      <style jsx>{`
+        .animate-fadeIn {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 0.6s forwards;
+        }
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </section>
   );
 };
 

@@ -65,7 +65,6 @@ const ServiceBookingCard = ({
   });
 
   useEffect(() => {
-    // Check if the booking has been reviewed
     const checkReviewStatus = async () => {
       try {
         const response = await axios.get(
@@ -79,22 +78,16 @@ const ServiceBookingCard = ({
         console.error("Error checking review status:", error);
       }
     };
-
-    if (booking.status === "COMPLETED") {
-      checkReviewStatus();
-    }
+    if (booking.status === "COMPLETED") checkReviewStatus();
   }, [booking.id, booking.status]);
 
   const handleCancelService = async () => {
     setIsCancelling(true);
     try {
-      await axios.post("/api/user/cancelService", {
-        serviceId: booking.id,
-      });
-
+      await axios.post("/api/user/cancelService", { serviceId: booking.id });
       toast.success("Service cancelled successfully");
       setIsConfirmOpen(false);
-      onCancelSuccess(); // Refresh the services list
+      onCancelSuccess();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to cancel service");
     } finally {
@@ -105,7 +98,6 @@ const ServiceBookingCard = ({
   const handleSubmitReview = async (stars: number, review: string) => {
     try {
       if (existingReview) {
-        // Update existing review
         await axios.put("/api/review", {
           bookingId: booking.id,
           stars,
@@ -113,7 +105,6 @@ const ServiceBookingCard = ({
         });
         toast.success("Review updated successfully");
       } else {
-        // Create new review
         await axios.post("/api/review", {
           bookingId: booking.id,
           userId: booking.userId,
@@ -127,14 +118,8 @@ const ServiceBookingCard = ({
 
       setHasReviewed(true);
 
-      // Refresh the existing review data
-      const response = await axios.get(
-        `/api/review/check?bookingId=${booking.id}`
-      );
-      if (response.data.review) {
-        setExistingReview(response.data.review);
-      }
-
+      const response = await axios.get(`/api/review/check?bookingId=${booking.id}`);
+      if (response.data.review) setExistingReview(response.data.review);
       if (onReviewSuccess) onReviewSuccess();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to submit review");
@@ -147,102 +132,91 @@ const ServiceBookingCard = ({
 
   return (
     <>
-      <div className="bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div className="p-4 sm:p-6">
-          {/* Header Section */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-0">
+      <div className="bg-gradient-to-br from-[#FFF0E5] via-[#FFD6C4] to-[#FFBCB3] rounded-2xl shadow-xl overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-2xl">
+        <div className="p-5 sm:p-6">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0 items-start">
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
+              <h3 className="text-lg sm:text-xl font-bold font-nunito truncate text-[#212121]">
                 {booking.Service?.name}
               </h3>
-              <p className="text-sm sm:text-base text-gray-500 mt-1 line-clamp-2">
+              <p className="text-sm sm:text-base font-lato text-[#757575] mt-1 line-clamp-2">
                 {booking.Service?.description}
               </p>
             </div>
             <div
-              className={`px-2 sm:px-3 py-1 rounded-full flex items-center space-x-1 ${getStatusColor(
+              className={`px-3 py-1 rounded-full flex items-center space-x-2 ${getStatusColor(
                 booking.status
-              )} flex-shrink-0 self-start`}
+              )} flex-shrink-0 self-start font-poppins font-semibold text-xs sm:text-sm`}
             >
               {getStatusIcon(booking.status)}
-              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
-                {booking.status}
-              </span>
+              <span>{booking.status}</span>
             </div>
           </div>
 
-          {/* Date and Price Grid - Responsive */}
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
-              <span className="text-sm sm:text-base truncate">{date}</span>
+          {/* Date & Price */}
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex items-center space-x-2 text-[#757575]">
+              <Calendar className="h-5 w-5 text-[#26A69A]" />
+              <span className="font-lato text-sm sm:text-base">{date}</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600">
-              <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
-              <span className="text-sm sm:text-base">₹{booking.basePrice}</span>
+            <div className="flex items-center space-x-2 text-[#757575]">
+              <IndianRupee className="h-5 w-5 text-[#81C784]" />
+              <span className="font-lato text-sm sm:text-base">₹{booking.basePrice}</span>
             </div>
           </div>
 
-          {/* Service Provider Section */}
+          {/* Provider Info */}
           {booking.ServiceProvider && (
-            <div className="mt-4 sm:mt-6 border-t pt-4">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
-                <h4 className="text-sm font-semibold text-gray-900">
+            <div className="mt-5 border-t pt-4">
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="text-sm font-semibold text-[#212121] font-nunito">
                   Service Provider
                 </h4>
                 {booking.status !== "PENDING" && !booking.isPaid && (
                   <Link href={`/chat/${booking.ServiceProvider.id}`}>
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm px-3 py-2 text-sm w-full sm:w-auto">
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      Chat
+                    <Button className="bg-gradient-to-r from-[#FF7043] to-[#FF8A65] hover:scale-105 text-white px-4 py-2 rounded-lg shadow-sm flex items-center space-x-2 transition-transform text-sm sm:text-base">
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Chat</span>
                     </Button>
                   </Link>
                 )}
               </div>
 
-              {/* Provider Info Grid - Responsive */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 <div className="flex items-center space-x-2 min-w-0">
-                  <User className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span className="text-sm text-gray-600 truncate">
-                    {booking.ServiceProvider.name}
-                  </span>
+                  <User className="h-4 w-4 text-[#757575]" />
+                  <span className="text-sm truncate">{booking.ServiceProvider.name}</span>
                 </div>
                 <div className="flex items-center space-x-2 min-w-0">
-                  <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span className="text-sm text-gray-600 truncate">
-                    {booking.ServiceProvider.phone}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2 min-w-0 sm:col-span-1">
-                  <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span className="text-sm text-gray-600 truncate">
-                    {booking.ServiceProvider.email}
-                  </span>
+                  <Phone className="h-4 w-4 text-[#757575]" />
+                  <span className="text-sm truncate">{booking.ServiceProvider.phone}</span>
                 </div>
                 <div className="flex items-center space-x-2 min-w-0">
-                  <Hash className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span className="text-sm text-gray-600 truncate">
-                    ID: {booking.ServiceProvider.id}
-                  </span>
+                  <Mail className="h-4 w-4 text-[#757575]" />
+                  <span className="text-sm truncate">{booking.ServiceProvider.email}</span>
+                </div>
+                <div className="flex items-center space-x-2 min-w-0">
+                  <Hash className="h-4 w-4 text-[#757575]" />
+                  <span className="text-sm truncate">ID: {booking.ServiceProvider.id}</span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Action Buttons Section */}
-          <div className="mt-4 sm:mt-6 pt-4 border-t flex flex-col space-y-3">
+          {/* Actions */}
+          <div className="mt-5 border-t pt-4 flex flex-col space-y-3">
             {canCancel && (
               <Button
-                variant={"destructive"}
+                variant="destructive"
                 onClick={() => setIsConfirmOpen(true)}
                 disabled={isCancelling}
-                className="w-full px-4 py-2 sm:py-3 disabled:bg-red-300 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
+                className="w-full bg-[#E57373] hover:bg-[#EF5350] text-white font-poppins rounded-lg px-4 py-2 flex items-center justify-center space-x-2 transition-transform hover:scale-[1.02]"
               >
                 {isCancelling ? (
-                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <XCircle className="h-4 w-4" />
                 )}
                 <span>{isCancelling ? "Cancelling..." : "Cancel Service"}</span>
               </Button>
@@ -251,40 +225,34 @@ const ServiceBookingCard = ({
             {canReview && !hasReviewed && (
               <Button
                 onClick={() => setIsReviewOpen(true)}
-                className="w-full px-4 py-2 sm:py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-[#FFD54F] to-[#FFCA28] hover:scale-105 text-[#212121] font-poppins rounded-lg px-4 py-2 flex items-center justify-center space-x-2 transition-transform"
               >
-                <Star className="h-4 w-4 sm:h-5 sm:w-5" />
+                <Star className="h-4 w-4" />
                 <span>Write a Review</span>
               </Button>
             )}
 
             {hasReviewed && (
               <>
-                <div className="text-center text-sm text-green-600 flex items-center justify-center mb-2">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>You&apos;ve reviewed this service</span>
-                </div>
                 <Button
                   onClick={() => setIsReviewOpen(true)}
-                  className="w-full px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="w-full bg-gradient-to-r from-[#26A69A] to-[#4DB6AC] hover:scale-105 text-white font-poppins rounded-lg px-4 py-2 flex items-center justify-center space-x-2 transition-transform"
                 >
-                  <Edit className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <Edit className="h-4 w-4" />
                   <span>Edit Review</span>
                 </Button>
               </>
             )}
 
             {booking.isPaid && (
-              <div className="text-center text-sm text-green-600 flex items-center justify-center mb-2">
+              <div className="text-center text-sm text-[#81C784] flex items-center justify-center mb-2">
                 <CheckCircle className="h-4 w-4 mr-1" />
                 <span>Payment Successful</span>
               </div>
             )}
 
             {booking.status === "COMPLETED" && !booking.isPaid && (
-              <div className="w-full">
-                <Payment amount={booking.basePrice} bookingId={booking.id} />
-              </div>
+              <Payment amount={booking.basePrice} bookingId={booking.id} />
             )}
           </div>
         </div>

@@ -56,7 +56,7 @@ const ServiceDialog = ({ isOpen, onClose }: ServiceDialogProps) => {
 
   useEffect(() => {
     fetchCategories();
-  }, []); //Fixed useEffect dependency issue
+  }, []);
 
   const handleServiceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,83 +107,100 @@ const ServiceDialog = ({ isOpen, onClose }: ServiceDialogProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-[#0D1B2A]/90 via-[#1B263B]/70 to-[#3A0CA3]/80 backdrop-blur-md border border-purple-700/30 rounded-2xl shadow-lg">
         <DialogHeader>
-          <DialogTitle>Add New Service or Category</DialogTitle>
+          <DialogTitle className="text-white text-lg font-bold">
+            Add New Service or Category
+          </DialogTitle>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="service">Add Service</TabsTrigger>
-            <TabsTrigger value="category">Add Category</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-4">
+          <TabsList className="grid w-full grid-cols-2 border-b border-purple-500/50">
+            <TabsTrigger
+  value="service"
+  className="bg-[#0D1B2A] text-white font-medium hover:text-teal-400 data-[state=active]:text-teal-400 data-[state=active]:border-b-2 data-[state=active]:border-teal-400 rounded-t-md"
+>
+  Add Service
+</TabsTrigger>
+<TabsTrigger
+  value="category"
+  className="bg-[#0D1B2A] text-white font-medium hover:text-purple-400 data-[state=active]:text-purple-400 data-[state=active]:border-b-2 data-[state=active]:border-purple-400 rounded-t-md"
+>
+  Add Category
+</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="service">
+          <TabsContent value="service" className="mt-4">
             <form onSubmit={handleServiceSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="serviceName">Service Name</Label>
+                <Label htmlFor="serviceName" className="text-gray-300">
+                  Service Name
+                </Label>
                 <Input
                   id="serviceName"
                   value={serviceForm.name}
                   onChange={(e) =>
-                    setServiceForm((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
+                    setServiceForm((prev) => ({ ...prev, name: e.target.value }))
                   }
                   placeholder="Enter service name"
+                  className="bg-[#0D1B2A] text-white border-teal-500 focus:border-teal-400 placeholder-gray-400"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="serviceDescription">Description</Label>
+                <Label htmlFor="serviceDescription" className="text-gray-300">
+                  Description
+                </Label>
                 <Textarea
                   id="serviceDescription"
                   value={serviceForm.description}
                   onChange={(e) =>
-                    setServiceForm((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
+                    setServiceForm((prev) => ({ ...prev, description: e.target.value }))
                   }
                   placeholder="Enter service description"
+                  className="bg-[#0D1B2A] text-white border-teal-500 focus:border-teal-400 placeholder-gray-400"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="servicePrice">Base Price</Label>
+                <Label htmlFor="servicePrice" className="text-gray-300">
+                  Base Price
+                </Label>
                 <Input
                   id="servicePrice"
                   type="number"
                   step="0.01"
                   value={serviceForm.basePrice}
                   onChange={(e) =>
-                    setServiceForm((prev) => ({
-                      ...prev,
-                      basePrice: e.target.value,
-                    }))
+                    setServiceForm((prev) => ({ ...prev, basePrice: e.target.value }))
                   }
                   placeholder="Enter base price"
+                  className="bg-[#0D1B2A] text-white border-teal-500 focus:border-teal-400 placeholder-gray-400"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="serviceCategory">Category</Label>
+                <Label htmlFor="serviceCategory" className="text-gray-300">
+                  Category
+                </Label>
                 <Select
                   value={serviceForm.categoryId}
                   onValueChange={(value) =>
                     setServiceForm((prev) => ({ ...prev, categoryId: value }))
                   }
                 >
-                  <SelectTrigger id="serviceCategory">
+                  <SelectTrigger
+                    id="serviceCategory"
+                    className="bg-[#0D1B2A] text-white border-teal-500 focus:border-teal-400"
+                  >
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#0D1B2A] text-white">
                     {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                      <SelectItem key={category.id} value={category.id} className="text-white">
                         {category.name}
                       </SelectItem>
                     ))}
@@ -191,26 +208,37 @@ const ServiceDialog = ({ isOpen, onClose }: ServiceDialogProps) => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-teal-400 to-aqua-400 text-black hover:shadow-lg hover:scale-105 transition-all duration-200"
+                disabled={loading}
+              >
                 {loading ? "Creating..." : "Create Service"}
               </Button>
             </form>
           </TabsContent>
 
-          <TabsContent value="category">
+          <TabsContent value="category" className="mt-4">
             <form onSubmit={handleCategorySubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="categoryName">Category Name</Label>
+                <Label htmlFor="categoryName" className="text-gray-300">
+                  Category Name
+                </Label>
                 <Input
                   id="categoryName"
                   value={categoryName}
                   onChange={(e) => setCategoryName(e.target.value)}
                   placeholder="Enter category name"
+                  className="bg-[#0D1B2A] text-white border-teal-500 focus:border-teal-400 placeholder-gray-400"
                   required
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-teal-400 to-aqua-400 text-black hover:shadow-lg hover:scale-105 transition-all duration-200"
+                disabled={loading}
+              >
                 {loading ? "Creating..." : "Create Category"}
               </Button>
             </form>
@@ -218,13 +246,13 @@ const ServiceDialog = ({ isOpen, onClose }: ServiceDialogProps) => {
         </Tabs>
 
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="mt-4 bg-red-800 text-white">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         {success && (
-          <Alert>
+          <Alert className="mt-4 bg-green-700 text-hite">
             <AlertDescription>{success}</AlertDescription>
           </Alert>
         )}

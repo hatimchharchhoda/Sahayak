@@ -1,4 +1,3 @@
-// components/custom/ServiceDetails.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -18,11 +17,11 @@ import {
   ArrowRight,
   MapPin,
   Star,
-  Calendar as CalendarIcon,
   IndianRupee,
   Loader2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 interface Service {
   name: string;
@@ -44,14 +43,8 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
   const [selectedTime, setSelectedTime] = useState<string>("");
 
   const timeSlots: string[] = [
-    "09:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "02:00 PM",
-    "03:00 PM",
-    "04:00 PM",
-    "05:00 PM",
+    "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+    "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM",
   ];
 
   const fetchService = async () => {
@@ -80,21 +73,19 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
 
   const handleBookService = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedDate || !selectedTime) return;
 
     const bookingData: any = {
-      serviceId: serviceId,
+      serviceId,
       date: new Date(`${selectedDate}T${convertTo24Hour(selectedTime)}`),
       basePrice: service?.basePrice ?? 0,
     };
-
-    if (providerId) {
-      bookingData.providerId = providerId; // ✅ Include only if available
-    }
+    if (providerId) bookingData.providerId = providerId;
 
     try {
       setisloading(true);
-      const response = await axios.post("/api/bookService", bookingData);
-      toast.success("Service Booked");
+      await axios.post("/api/bookService", bookingData);
+      toast.success("Service Booked!");
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Booking failed");
     } finally {
@@ -102,69 +93,57 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="container mx-auto max-w-6xl px-4 pt-24">
-          <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="h-96 bg-gray-200 rounded"></div>
-              <div className="space-y-4">
-                <div className="h-8 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSkeleton />;
 
   if (!service) return null;
 
   return (
-    // 🔁 Put your full JSX here exactly as it was — no need to change it
-    // Just replace `serviceId` from params with the prop
-    // No routing logic inside here
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] font-lato">
       <div className="container mx-auto max-w-6xl px-4 pt-24 pb-16">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
+          <h1 className="text-4xl font-bold font-nunito text-[#212121] mb-4">
             {service.name}
           </h1>
-          <div className="flex items-center text-gray-600 gap-4">
+          <div className="flex items-center text-[#757575] gap-4">
             <span className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" /> {service.categoryName}
+              <MapPin className="w-5 h-5 text-[#FF7043]" /> {service.categoryName}
             </span>
             <span className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-400" /> 4.8 (120+ reviews)
+              <Star className="w-5 h-5 text-[#FFD54F]" /> 4.8 (120+ reviews)
             </span>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <Card>
+          {/* Service Details */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="space-y-8"
+          >
+            <Card className="shadow-lg rounded-2xl bg-white">
               <CardHeader>
-                <CardTitle>Service Details</CardTitle>
-                <CardDescription>{service.description}</CardDescription>
+                <CardTitle className="font-nunito text-[#212121]">Service Details</CardTitle>
+                <CardDescription className="text-[#757575]">{service.description}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-                  <IndianRupee className="w-5 h-5 text-blue-600" />
+                <div className="flex items-center gap-3 p-4 bg-[#FFE0B2] rounded-lg">
+                  <IndianRupee className="w-5 h-5 text-[#FF7043]" />
                   <div>
-                    <p className="font-semibold">
+                    <p className="font-semibold text-[#212121]">
                       Starting from ₹{service.basePrice}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-[#757575]">
                       Final price may vary based on your requirements
                     </p>
                   </div>
                 </div>
-
                 <div className="space-y-3 mt-6">
                   {[
                     "Professional and verified service providers",
@@ -173,85 +152,52 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
                     "Transparent pricing",
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-gray-600">{benefit}</span>
+                      <CheckCircle className="w-5 h-5 text-[#81C784]" />
+                      <span className="text-[#757575] font-lato">{benefit}</span>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
 
-            <Card>
+          {/* Booking Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Card className="sticky top-24 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-300 bg-white">
               <CardHeader>
-                <CardTitle>How It Works</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {[
-                    {
-                      title: "Book",
-                      desc: "Select your preferred date and time",
-                    },
-                    {
-                      title: "Confirm",
-                      desc: "We'll assign the best professional",
-                    },
-                    {
-                      title: "Service",
-                      desc: "Get your service done hassle-free",
-                    },
-                    {
-                      title: "Payment",
-                      desc: "Pay only after service completion",
-                    },
-                  ].map((step, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">{step.title}</h3>
-                        <p className="text-gray-600">{step.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div>
-            <Card className="sticky top-24">
-              <CardHeader>
-                <CardTitle>Book Your Service</CardTitle>
-                <CardDescription>
-                  Select your preferred date and time
-                </CardDescription>
+                <CardTitle className="font-nunito text-[#212121]">Book Your Service</CardTitle>
+                <CardDescription className="text-[#757575]">Select your preferred date & time</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="date">Select Date</Label>
-                  <div className="relative">
-                    <Input
-                      id="date"
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full"
-                      min={new Date().toISOString().split("T")[0]}
-                    />
-                  </div>
+                  <Label htmlFor="date" className="font-poppins text-[#212121]">Select Date</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full focus:border-[#FF7043] placeholder:text-[#BDBDBD]"
+                    min={new Date().toISOString().split("T")[0]}
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Select Time Slot</Label>
+                  <Label className="font-poppins text-[#212121]">Select Time Slot</Label>
                   <div className="grid grid-cols-2 gap-2">
                     {timeSlots.map((time) => (
                       <Button
                         key={time}
                         variant={selectedTime === time ? "default" : "outline"}
                         onClick={() => setSelectedTime(time)}
-                        className="w-full"
+                        className={`w-full font-poppins rounded-lg ${
+                          selectedTime === time
+                            ? "bg-gradient-to-r from-[#FF7043] to-pink-400 text-white shadow-lg hover:scale-105 transition-transform"
+                            : "border-[#26A69A] text-[#26A69A] hover:bg-[#26A69A] hover:text-white transition-colors"
+                        }`}
                       >
                         {time}
                       </Button>
@@ -259,26 +205,20 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
                   </div>
                 </div>
 
-                {isloading ? (
-                  <Button
-                    onClick={handleBookService}
-                    className="w-full bg-blue-600 text-white hover:bg-blue-700"
-                    disabled={!selectedDate || !selectedTime}
-                  >
-                    <Loader2 className="animate-spin" /> Loading
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleBookService}
-                    className="w-full bg-blue-600 text-white hover:bg-blue-700"
-                    disabled={!selectedDate || !selectedTime}
-                  >
-                    Book Now <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                )}
+                <Button
+                  onClick={handleBookService}
+                  className="w-full font-poppins rounded-lg bg-gradient-to-r from-[#FF7043] to-pink-400 text-white hover:scale-105 transition-transform shadow-lg"
+                  disabled={!selectedDate || !selectedTime || isloading}
+                >
+                  {isloading ? <Loader2 className="animate-spin mx-auto" /> : (
+                    <>
+                      Book Now <ArrowRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
@@ -286,3 +226,21 @@ const ServiceDetails: React.FC<Props> = ({ serviceId, providerId }) => {
 };
 
 export default ServiceDetails;
+
+// Loading Skeleton
+const LoadingSkeleton: React.FC = () => (
+  <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] animate-pulse">
+    <div className="container mx-auto max-w-6xl px-4 pt-24 space-y-8">
+      <div className="h-8 bg-[#BDBDBD] rounded w-1/3"></div>
+      <div className="h-4 bg-[#BDBDBD] rounded w-1/2"></div>
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="h-96 bg-[#FFE0B2] rounded-lg shadow-inner"></div>
+        <div className="space-y-4">
+          <div className="h-8 bg-[#FFE0B2] rounded"></div>
+          <div className="h-4 bg-[#FFE0B2] rounded w-3/4"></div>
+          <div className="h-4 bg-[#FFE0B2] rounded w-1/2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);

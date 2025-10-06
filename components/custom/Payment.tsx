@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { IndianRupee, Loader2 } from "lucide-react";
@@ -8,18 +10,26 @@ import toast from "react-hot-toast";
 interface IPaymentProps {
   amount: number;
   bookingId: string;
+  user?: {
+    name: string;
+    email: string;
+    contact: string;
+  };
 }
 
-const Payment = ({ amount, bookingId }: IPaymentProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
+  const [loading, setLoading] = useState(false);
+
   async function handlePayment() {
     if (typeof window === "undefined" || !(window as any).Razorpay) {
       toast.error("Razorpay SDK not loaded yet. Please try again in a moment.");
       return;
     }
+
     setLoading(true);
-    console.log({ bookingId });
+
     try {
+      // Create Razorpay order from backend
       const response = await axios.post("/api/razorpay/create-payment", {
         amount,
         bookingId,
@@ -28,28 +38,28 @@ const Payment = ({ amount, bookingId }: IPaymentProps) => {
       const order = response.data;
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // public key only
         amount: order.amount,
         currency: order.currency,
-        name: "Your Company",
-        description: "Test Transaction",
+        name: "Sahayak",
+        description: `Payment for booking #${bookingId}`,
         order_id: order.id,
-        callback_url: "http://localhost:3000/api/razorpay/verify-payment",
-        // callback_url: "http://localhost:3000/api/razorpay/verify-payment",
+        callback_url: `http://localhost:3000/api/razorpay/verify-payment`,
         prefill: {
-          name: "Test User",
-          email: "test@example.com",
-          contact: "9999999999",
+          name: user?.name || "Guest User",
+          email: user?.email || "guest@example.com",
+          contact: user?.contact || "9999999999",
         },
         theme: {
-          color: "#3399cc",
+          color: "#16a34a", // green accent
         },
       };
 
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Payment Error:", error);
+      toast.error("Something went wrong while initiating payment.");
     } finally {
       setLoading(false);
     }
@@ -57,26 +67,29 @@ const Payment = ({ amount, bookingId }: IPaymentProps) => {
 
   return (
     <div>
-      {loading ? (
-        <Button
-          disabled={loading}
-          onClick={handlePayment}
-          className="w-full px-4 py-2 cursor-progress bg-green-500 hover:bg-green-600/100 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
-        >
-          <Loader2 className="animate-spin" /> <span>Loading</span>
-        </Button>
-      ) : (
-        <Button
-          disabled={loading}
-          onClick={handlePayment}
-          className="w-full px-4 py-2 bg-green-500 hover:bg-green-600/100 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
-        >
-          <IndianRupee className="h-5 w-5" />
-          <span>Make a Payment</span>
-        </Button>
-      )}
+      <Button
+        disabled={loading}
+        onClick={handlePayment}
+        className={`w-full px-4 py-2 ${
+          loading
+            ? "cursor-progress bg-green-500"
+            : "bg-green-500 hover:bg-green-600"
+        } text-white rounded-lg transition-colors flex items-center justify-center space-x-2`}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="animate-spin h-5 w-5" />
+            <span>Processing...</span>
+          </>
+        ) : (
+          <>
+            <span>Pay ₹{amount}</span>
+          </>
+        )}
+      </Button>
 
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      {/* Razorpay SDK Script */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
     </div>
   );
 };

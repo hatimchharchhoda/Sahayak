@@ -121,154 +121,153 @@ function ProviderDashboard() {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#80DEEA] py-12 px-4 sm:px-6 lg:px-8"
+    >
       <div className="max-w-7xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              {/* Header */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                <div>
-                  <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
-                    Welcome, {user?.name}!
-                  </h1>
-                  <p className="text-lg text-gray-600">
-                    Role: {user?.role} | Specialization: {user?.specialization}
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
-                  <Button
-                    onClick={() => router.push(`/provider/profile/${user?.id}`)}
-                    variant="outline"
-                    className="flex items-center"
-                  >
-                    <User className="mr-2 h-4 w-4" /> Profile
-                  </Button>
-                  <Button
-                    onClick={() => router.push(`/provider/raise-ticket`)}
-                    variant="outline"
-                    className="flex items-center"
-                  >
-                    <Ticket className="mr-2 h-4 w-4" /> Raise Ticket
-                  </Button>
-                  <Button
-                    onClick={() => router.push(`/provider/reviews/${user?.id}`)}
-                    variant="outline"
-                    className="flex items-center"
-                  >
-                    <Star className="mr-2 h-4 w-4" /> Reviews
-                  </Button>
-                  <Button onClick={handleLogout} variant="destructive" className="flex items-center">
-                    <LogOut className="mr-2 h-4 w-4" /> Logout
-                  </Button>
-                </div>
+        <Card className="w-full shadow-xl rounded-2xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300">
+          <CardContent className="p-6">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-poppins font-semibold mb-2 bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-transparent bg-clip-text">
+                  Welcome, {user?.name}!
+                </h1>
+                <p className="text-lg font-nunito text-[#212121]">
+                  Role: <span className="font-semibold">{user?.role}</span> | Specialization:{" "}
+                  <span className="font-semibold">{user?.specialization}</span>
+                </p>
               </div>
 
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <StatCard
-                  icon={<Clock className="h-8 w-8 text-yellow-500" />}
-                  title="Available Services"
-                  value={availableServices.length.toString()}
-                  color="bg-yellow-100"
-                  loading={availableServicesLoading}
-                />
-                <StatCard
-                  icon={<Calendar className="h-8 w-8 text-blue-500" />}
-                  title="Accepted Services"
-                  value={acceptedServices.length.toString()}
-                  color="bg-blue-100"
-                  loading={allServicesLoading}
-                />
-                <StatCard
-                  icon={<CheckCircle className="h-8 w-8 text-green-500" />}
-                  title="Completed Services"
-                  value={completedServices?.length?.toString() || "0"}
-                  color="bg-green-100"
-                  loading={allServicesLoading}
-                />
-                <StatCard
-                  icon={<IndianRupee className="h-8 w-8 text-green-500" />}
-                  title="Total Earnings"
-                  value={`₹${completedServices
-                    ?.filter((service: any) => service.isPaid)
-                    .reduce((sum: number, service: any) => sum + (service.basePrice || 0), 0)
-                    .toFixed(2)}`}
-                  color="bg-green-100"
-                  loading={allServicesLoading}
-                />
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
+                {[
+                  { icon: <User className="mr-2 h-4 w-4" />, label: "Profile", path: `/provider/profile/${user?.id}` },
+                  { icon: <Ticket className="mr-2 h-4 w-4" />, label: "Raise Ticket", path: `/provider/raise-ticket` },
+                  { icon: <Star className="mr-2 h-4 w-4" />, label: "Reviews", path: `/provider/reviews/${user?.id}` },
+                ].map((btn) => (
+                  <Button
+                    key={btn.label}
+                    onClick={() => router.push(btn.path)}
+                    className="bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
+                  >
+                    {btn.icon} {btn.label}
+                  </Button>
+                ))}
+                <Button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-red-500 to-pink-500 text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
+                >
+                  <LogOut className="mr-2 h-4 w-4" /> Logout
+                </Button>
               </div>
+            </div>
 
-              {/* Income Chart */}
-              {allServicesLoading ? (
-                <div className="mb-8">
-                  <Skeleton className="h-64 w-full" />
-                </div>
-              ) : (
-                <div className="mb-8">
-                  <IncomeAnalysisChart completedServices={completedServices} providerName={user?.name} />
-                </div>
-              )}
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <StatCard
+                icon={<Clock className="h-8 w-8 text-[#FBC02D]" />}
+                title="Available Services"
+                value={availableServices.length.toString()}
+                color="bg-[#FFFDE7]"
+                loading={availableServicesLoading}
+              />
+              <StatCard
+                icon={<Calendar className="h-8 w-8 text-[#2979FF]" />}
+                title="Accepted Services"
+                value={acceptedServices.length.toString()}
+                color="bg-[#E3F2FD]"
+                loading={allServicesLoading}
+              />
+              <StatCard
+                icon={<CheckCircle className="h-8 w-8 text-[#43A047]" />}
+                title="Completed Services"
+                value={completedServices?.length?.toString() || "0"}
+                color="bg-[#E8F5E9]"
+                loading={allServicesLoading}
+              />
+              <StatCard
+                icon={<IndianRupee className="h-8 w-8 text-[#43A047]" />}
+                title="Total Earnings"
+                value={`₹${completedServices
+                  ?.filter((service: any) => service.isPaid)
+                  .reduce((sum: number, service: any) => sum + (service.basePrice || 0), 0)
+                  .toFixed(2)}`}
+                color="bg-[#E8F5E9]"
+                loading={allServicesLoading}
+              />
+            </div>
 
-              {/* Tabs for Calendar and List View */}
-              <Tabs defaultValue="calendar" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="calendar" className="flex items-center gap-2">
-                    <CalendarDays className="h-4 w-4" />
-                    Calendar View
-                  </TabsTrigger>
-                  <TabsTrigger value="list" className="flex items-center gap-2">
-                    <List className="h-4 w-4" />
-                    List View
-                  </TabsTrigger>
-                </TabsList>
+            {/* Income Chart */}
+            {allServicesLoading ? (
+              <div className="mb-8">
+                <Skeleton className="h-64 w-full bg-gradient-to-r from-[#00C853] to-[#AEEA00] shimmer" />
+              </div>
+            ) : (
+              <div className="mb-8">
+                <IncomeAnalysisChart completedServices={completedServices} providerName={user?.name} />
+              </div>
+            )}
 
-                {/* Calendar View */}
-                <TabsContent value="calendar">
-                  {availableServicesLoading || allServicesLoading ? (
-                    <div className="flex flex-col items-center justify-center py-12">
-                      <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                      <p className="text-gray-700 font-medium">Loading calendar...</p>
-                    </div>
-                  ) : (
-                    <ProviderServicesCalendar services={allServices} onEventClick={handleCalendarEventClick} />
-                  )}
-                </TabsContent>
+            {/* Tabs for Calendar and List View */}
+            <Tabs defaultValue="calendar" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6 border-b-2 border-green-500">
+                <TabsTrigger value="calendar" className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]">
+                  <CalendarDays className="h-4 w-4" />
+                  Calendar View
+                </TabsTrigger>
+                <TabsTrigger value="list" className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]">
+                  <List className="h-4 w-4" />
+                  List View
+                </TabsTrigger>
+              </TabsList>
 
-                {/* List View */}
-                <TabsContent value="list">
-                  <div className="space-y-8">
-                    <BookedServicesList
-                      services={availableServices}
-                      title="Available Services"
-                      emptyMessage="No available services at the moment."
-                    />
-                    <BookedServicesList
-                      services={acceptedServices}
-                      title="Accepted Services"
-                      emptyMessage="No accepted services at the moment."
-                    />
-                    <BookedServicesList
-                      services={completedServices}
-                      title="Completed Services"
-                      emptyMessage="No completed services yet."
-                    />
+              {/* Calendar View */}
+              <TabsContent value="calendar">
+                {availableServicesLoading || allServicesLoading ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <Loader2 className="h-10 w-10 text-[#00C853] animate-spin mb-4" />
+                    <p className="text-[#616161] font-medium">Loading calendar...</p>
                   </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </motion.div>
+                ) : (
+                  <ProviderServicesCalendar services={allServices} onEventClick={handleCalendarEventClick} />
+                )}
+              </TabsContent>
+
+              {/* List View */}
+              <TabsContent value="list">
+                <div className="space-y-8">
+                  <BookedServicesList
+                    services={availableServices}
+                    title="Available Services"
+                    emptyMessage="No available services at the moment."
+                  />
+                  <BookedServicesList
+                    services={acceptedServices}
+                    title="Accepted Services"
+                    emptyMessage="No accepted services at the moment."
+                  />
+                  <BookedServicesList
+                    services={completedServices}
+                    title="Completed Services"
+                    emptyMessage="No completed services yet."
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 function StatCard({ icon, title, value, color, loading = false }) {
   return (
-    <Card className={loading ? "border-none bg-gray-100" : `${color} border-none`}>
+    <Card className={`rounded-xl ${loading ? "bg-gray-100 border-none" : `${color} border-none`} hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1`}>
       <CardContent className="flex items-center p-6">
         {loading ? (
           <>
@@ -282,8 +281,8 @@ function StatCard({ icon, title, value, color, loading = false }) {
           <>
             <div className="mr-4">{icon}</div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
-              <p className="text-2xl font-bold text-gray-900">{value}</p>
+              <h2 className="text-lg font-poppins font-semibold text-[#212121]">{title}</h2>
+              <p className="text-2xl font-poppins font-bold text-[#212121]">{value}</p>
             </div>
           </>
         )}

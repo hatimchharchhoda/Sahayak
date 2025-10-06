@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-
 import {
   Star,
   User,
@@ -35,12 +34,9 @@ export default function ProviderReviews() {
     const fetchReviews = async () => {
       if (!providerId) return;
       try {
-        const response = await axios.post(
-          `/api/providerReviews/${providerId}`,
-          {
-            providerId,
-          }
-        );
+        const response = await axios.post(`/api/providerReviews/${providerId}`, {
+          providerId,
+        });
         setReviews(response.data.reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -64,13 +60,13 @@ export default function ProviderReviews() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return "text-green-600 bg-green-100";
+        return "text-[#43A047] bg-[#E8F5E9]"; // success
       case "PENDING":
-        return "text-yellow-600 bg-yellow-100";
+        return "text-[#FBC02D] bg-[#FFF8E1]"; // warning
       case "CANCELLED":
-        return "text-red-600 bg-red-100";
+        return "text-[#E53935] bg-[#FFEBEE]"; // error
       default:
-        return "text-gray-600 bg-gray-100";
+        return "text-[#616161] bg-[#F5F5F5]"; // neutral
     }
   };
 
@@ -79,51 +75,58 @@ export default function ProviderReviews() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F1F8E9] to-[#DCEDC8] py-12 px-4 sm:px-6 lg:px-8 font-[Nunito_Sans] text-[#212121]">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="container mx-auto p-6">
-                <div className="mb-8">
-                  <h1 className="text-3xl font-bold text-gray-800">
-                    My Reviews
-                  </h1>
-                  <p className="text-gray-600 mt-2">
-                    View all reviews for your services
-                  </p>
-                </div>
+          <Card className="w-full shadow-2xl bg-white/90 backdrop-blur-md rounded-2xl">
+            <CardContent className="p-8">
+              <div className="mb-8">
+                <h1 className="text-3xl font-[Poppins] font-semibold text-[#212121]">
+                  My Reviews
+                </h1>
+                <p className="text-[#616161] mt-2">
+                  View all reviews for your services
+                </p>
+              </div>
 
-                {reviews.length === 0 ? (
-                  <Card className="text-center py-12">
-                    <CardContent>
-                      <Star className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        No reviews yet
-                      </h3>
-                      <p className="text-gray-500">
-                        Reviews will appear here once customers rate your
-                        services.
-                      </p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div className="space-y-6">
-                    {reviews.map((review) => (
-                      <Card key={review.id} className="duration-300">
+              {reviews.length === 0 ? (
+                <Card className="text-center py-12 bg-white/80 shadow-md rounded-xl">
+                  <CardContent>
+                    <Star className="mx-auto h-12 w-12 text-[#9E9E9E] mb-4" />
+                    <h3 className="text-lg font-semibold text-[#212121] mb-2">
+                      No reviews yet
+                    </h3>
+                    <p className="text-[#616161]">
+                      Reviews will appear here once customers rate your services.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-6">
+                  {reviews.map((review) => (
+                    <motion.div
+                      key={review.id}
+                      whileHover={{
+                        y: -4,
+                        scale: 1.01,
+                        boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                      }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <Card className="rounded-xl shadow-md border border-[#AEEA00]/40 bg-white/95">
                         <CardContent className="p-6">
                           {/* Header Section */}
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center space-x-3">
-                              <div className="bg-blue-100 p-2 rounded-full">
-                                <User className="h-5 w-5 text-blue-600" />
+                              <div className="bg-[#E0F7FA] p-2 rounded-full shadow-sm">
+                                <User className="h-5 w-5 text-[#00C853]" />
                               </div>
                               <div>
-                                <h3 className="font-semibold text-lg text-gray-900">
+                                <h3 className="font-semibold text-lg text-[#212121]">
                                   {review.User.name}
                                 </h3>
                                 <div className="flex items-center mt-1">
@@ -132,13 +135,13 @@ export default function ProviderReviews() {
                                       key={index}
                                       className={`h-4 w-4 ${
                                         index < review.stars
-                                          ? "text-yellow-400 fill-current"
-                                          : "text-gray-300"
+                                          ? "text-[#FBC02D] fill-current"
+                                          : "text-[#E0E0E0]"
                                       }`}
                                     />
                                   ))}
-                                  <span className="ml-2 text-sm text-gray-600">
-                                    {review.stars} out of 5 stars
+                                  <span className="ml-2 text-sm text-[#616161]">
+                                    {review.stars} out of 5
                                   </span>
                                 </div>
                               </div>
@@ -155,28 +158,28 @@ export default function ProviderReviews() {
                             </div>
                           </div>
 
-                          {/* Service Information */}
-                          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                          {/* Service Info */}
+                          <div className="bg-[#F5F5F5] rounded-lg p-4 mb-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="flex items-center space-x-3">
-                                <Package className="h-5 w-5 text-indigo-600" />
+                                <Package className="h-5 w-5 text-[#00C853]" />
                                 <div>
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-[#212121]">
                                     {review.Service.name}
                                   </p>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-[#616161]">
                                     {review.Service.description}
                                   </p>
                                 </div>
                               </div>
 
                               <div className="flex items-center space-x-3">
-                                <IndianRupee className="h-5 w-5 text-green-600" />
+                                <IndianRupee className="h-5 w-5 text-[#43A047]" />
                                 <div>
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-[#212121]">
                                     {review.Booking.basePrice}
                                   </p>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-[#616161]">
                                     Service Price
                                   </p>
                                 </div>
@@ -187,9 +190,9 @@ export default function ProviderReviews() {
                           {/* Booking Details */}
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div className="flex items-center space-x-2">
-                              <Calendar className="h-4 w-4 text-blue-600" />
+                              <Calendar className="h-4 w-4 text-[#43A047]" />
                               <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-[#9E9E9E]">
                                   Service Date
                                 </p>
                                 <p className="text-sm font-medium">
@@ -199,9 +202,9 @@ export default function ProviderReviews() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                              <CheckCircle className="h-4 w-4 text-green-600" />
+                              <CheckCircle className="h-4 w-4 text-[#43A047]" />
                               <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-[#9E9E9E]">
                                   Payment Status
                                 </p>
                                 <p className="text-sm font-medium">
@@ -211,9 +214,9 @@ export default function ProviderReviews() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                              <Package className="h-4 w-4 text-purple-600" />
+                              <Package className="h-4 w-4 text-[#00C853]" />
                               <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-[#9E9E9E]">
                                   Order ID
                                 </p>
                                 <p className="text-sm font-medium font-mono">
@@ -225,26 +228,26 @@ export default function ProviderReviews() {
 
                           {/* Review Text */}
                           {review.review && (
-                            <div className="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 rounded-r-lg">
-                              <p className="text-sm text-gray-700 italic">
+                            <div className="border-l-4 border-[#00C853] pl-4 py-2 bg-[#E8F5E9] rounded-r-lg">
+                              <p className="text-sm text-[#424242] italic">
                                 "{review.review}"
                               </p>
                             </div>
                           )}
 
-                          {/* Payment Verification Date */}
+                          {/* Payment Verified Date */}
                           {review.Booking.paymentVerifiedAt && (
-                            <div className="mt-4 text-xs text-gray-500">
+                            <div className="mt-4 text-xs text-[#616161]">
                               Payment verified on{" "}
                               {formatDate(review.Booking.paymentVerifiedAt)}
                             </div>
                           )}
                         </CardContent>
                       </Card>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>

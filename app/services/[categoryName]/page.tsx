@@ -19,7 +19,6 @@ export interface Service {
 
 const ServiceListPage = () => {
   const { categoryName } = useParams();
-
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,23 +39,23 @@ const ServiceListPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7]">
         <div className="container mx-auto max-w-7xl px-4 pt-16 md:pt-20 lg:pt-24">
           {/* Loading Header */}
           <div className="mb-6 md:mb-8 lg:mb-12">
-            <div className="h-6 md:h-8 lg:h-10 bg-gray-200 rounded w-48 md:w-64 lg:w-80 animate-pulse mb-2 md:mb-4"></div>
-            <div className="h-4 md:h-5 bg-gray-200 rounded w-32 md:w-40 lg:w-48 animate-pulse"></div>
+            <div className="h-6 md:h-8 lg:h-10 bg-gradient-to-r from-[#FFCC80] via-[#FFAB91] to-[#E1BEE7] rounded w-48 md:w-64 lg:w-80 animate-pulse mb-2 md:mb-4"></div>
+            <div className="h-4 md:h-5 bg-gradient-to-r from-[#FFCC80] via-[#FFAB91] to-[#E1BEE7] rounded w-32 md:w-40 lg:w-48 animate-pulse"></div>
           </div>
 
           {/* Loading Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
-              <Card key={index} className="animate-pulse">
+              <Card key={index} className="animate-pulse rounded-xl shadow-lg bg-white/80 backdrop-blur-sm">
                 <CardHeader className="space-y-3 md:space-y-4 p-4 md:p-6">
-                  <div className="h-5 md:h-6 lg:h-8 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 md:h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-12 md:h-16 lg:h-20 bg-gray-200 rounded"></div>
-                  <div className="h-8 md:h-10 bg-gray-200 rounded w-2/3"></div>
+                  <div className="h-5 md:h-6 lg:h-8 bg-[#FFCC80]/60 rounded w-3/4"></div>
+                  <div className="h-3 md:h-4 bg-[#FFAB91]/60 rounded w-1/2"></div>
+                  <div className="h-12 md:h-16 lg:h-20 bg-[#E1BEE7]/60 rounded"></div>
+                  <div className="h-8 md:h-10 bg-[#FFAB91]/60 rounded w-2/3"></div>
                 </CardHeader>
               </Card>
             ))}
@@ -68,27 +67,27 @@ const ServiceListPage = () => {
 
   if (!services.length) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="max-w-sm md:max-w-md lg:max-w-lg mx-auto shadow-xl">
-            <CardHeader className="text-center p-6 md:p-8 lg:p-10">
-              <div className="text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6">
-                🔍
-              </div>
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 md:mb-4">
+          <Card className="max-w-sm md:max-w-md lg:max-w-lg mx-auto shadow-2xl rounded-2xl">
+            <CardHeader className="text-center p-6 md:p-8 lg:p-10 space-y-4">
+              <div className="text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6">🔍</div>
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold font-nunito text-[#212121] mb-2 md:mb-4">
                 No Services Found
               </h2>
-              <CardDescription className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed">
+              <CardDescription className="text-sm md:text-base lg:text-lg text-[#757575] leading-relaxed">
                 There are currently no services available in this category.
                 Please try browsing other categories or check back later.
               </CardDescription>
               <Link
                 href="/services"
-                className="inline-block mt-4 md:mt-6 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm md:text-base rounded-full hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
+                className="inline-block mt-4 md:mt-6 px-4 md:px-6 py-2 md:py-3 rounded-full font-poppins font-semibold
+                           bg-gradient-to-r from-[#FF7043] via-pink-400 to-[#FFAB91]
+                           text-white text-sm md:text-base hover:scale-105 transition-all duration-300 shadow-lg"
               >
                 Browse All Services
               </Link>
@@ -100,7 +99,7 @@ const ServiceListPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7]">
       <div className="container mx-auto max-w-7xl px-4 pt-16 md:pt-20 lg:pt-24 pb-8 md:pb-12 lg:pb-16">
         {/* Page Header */}
         <motion.div
@@ -109,18 +108,18 @@ const ServiceListPage = () => {
           transition={{ duration: 0.5 }}
           className="mb-6 md:mb-8 lg:mb-12"
         >
-          <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-2 md:mb-4">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-nunito bg-clip-text text-transparent bg-gradient-to-r from-[#FF7043] via-pink-400 to-[#FFAB91] mb-2 md:mb-4">
             Available Services
           </h1>
           {categoryName && (
-            <p className="text-sm md:text-base lg:text-lg text-gray-600 capitalize">
+            <p className="text-sm md:text-base lg:text-lg text-[#757575] capitalize">
               Showing services in:{" "}
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-[#212121]">
                 {decodeURIComponent(categoryName as string)}
               </span>
             </p>
           )}
-          <div className="text-xs md:text-sm text-gray-500 mt-1 md:mt-2">
+          <div className="text-xs md:text-sm text-[#BDBDBD] mt-1 md:mt-2">
             {services.length} service{services.length !== 1 ? "s" : ""} found
           </div>
         </motion.div>
@@ -153,7 +152,7 @@ const ServiceListPage = () => {
         >
           <Link
             href="/services"
-            className="inline-flex items-center text-sm md:text-base text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300"
+            className="inline-flex items-center text-sm md:text-base text-[#FF7043] hover:text-pink-400 font-medium transition-colors duration-300"
           >
             ← Back to All Services
           </Link>

@@ -33,7 +33,7 @@ const AdminDashboard = () => {
     role: "",
     userId: "",
   });
-  console.log({ isAddServiceOpen, isEditServiceOpen, selectedService });
+
   const getMe = async () => {
     try {
       const response = await axios.get("/api/admin/auth/getMe", { withCredentials: true });
@@ -49,7 +49,6 @@ const AdminDashboard = () => {
   const handleAdminLogout = async () => {
     try {
       const response = await axios.get("/api/admin/auth/logout");
-
       if (response.status === 200) {
         router.push("/auth");
       }
@@ -63,65 +62,67 @@ const AdminDashboard = () => {
     { icon: Users, label: "Users", value: "users" },
     { icon: UserCog, label: "Providers", value: "providers" },
     { icon: Ticket, label: "Tickets", value: "tickets" },
-    { icon: Grid, label: "Service Categories", value: "categories" }, 
+    { icon: Grid, label: "Service Categories", value: "categories" },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gradient-to-br from-[#0D1B2A] via-[#1B263B] to-[#3A0CA3] flex text-[#F8F9FA] font-poppins animate-fade-in-up">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg h-screen sticky top-0">
-        <div className="flex flex-col h-full">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-800">Admin Panel</h2>
-          </div>
-          <nav className="mt-6 flex-grow">
-            {navItems.map((item) => (
-              <Button
-                key={item.value}
-                variant={activeTab === item.value ? "secondary" : "ghost"}
-                className="w-full justify-start p-4 mb-2"
-                onClick={() => setActiveTab(item.value)}
-              >
-                <item.icon className="mr-2 h-5 w-5" />
-                {item.label}
-              </Button>
-            ))}
-          </nav>
-          <div className="p-4 border-t">
-            <div className="flex items-center mb-4">
-              <Avatar className="h-10 w-10 flex justify-center items-center">
-                <UserIcon />
-              </Avatar>
-              <div className="ml-3">
-                <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-gray-500">{admin.email}</p>
-              </div>
-            </div>
+      <div className="w-64 bg-[#0D1B2A]/80 backdrop-blur-xl shadow-lg h-screen sticky top-0 flex flex-col border-r border-[#9D4EDD]/40 animate-slide-in-left">
+        <div className="p-6 border-b border-[#9D4EDD]/40">
+          <h2 className="text-2xl font-inter font-bold tracking-widest uppercase text-[#9D4EDD]">Admin Panel</h2>
+        </div>
+        <nav className="mt-6 flex-grow space-y-2">
+          {navItems.map((item) => (
             <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={handleAdminLogout}
+              key={item.value}
+              variant="ghost"
+              className={`w-full justify-start p-4 rounded-xl transition-all duration-300 ${
+                activeTab === item.value
+                  ? "bg-gradient-to-r from-[#00F5D4] to-cyan-400 text-[#0D1B2A] font-bold shadow-[0_0_12px_#00F5D4]"
+                  : "text-[#ADB5BD] hover:bg-[#1B263B] hover:text-[#9D4EDD]"
+              }`}
+              onClick={() => setActiveTab(item.value)}
             >
-              <LogOut className="mr-2 h-4 w-4" /> Log out
+              <item.icon className="mr-2 h-5 w-5" />
+              {item.label}
             </Button>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-[#9D4EDD]/40">
+          <div className="flex items-center mb-4">
+            <Avatar className="h-10 w-10 flex justify-center items-center bg-[#1B263B] text-[#00F5D4]">
+              <UserIcon />
+            </Avatar>
+            <div className="ml-3">
+              <p className="text-sm font-medium font-inter">Admin User</p>
+              <p className="text-xs text-[#ADB5BD]">{admin.email}</p>
+            </div>
           </div>
+          <Button
+            variant="outline"
+            className="w-full justify-start border border-[#9D4EDD] hover:text-[#9D4EDD] bg-[#9D4EDD] text-white transition-all"
+            onClick={handleAdminLogout}
+          >
+            <LogOut className="mr-2 h-4 w-4" /> Log out
+          </Button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        <Card className="mb-8">
+      <div className="flex-1 p-8 space-y-6 overflow-y-auto">
+        <Card className="bg-[#1B263B]/60 backdrop-blur-md shadow-lg border-t-4 border-[#00F5D4] hover:scale-[1.02] hover:shadow-[0_0_15px_#00F5D4] transition-all">
           <CardContent className="p-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            <h1 className="text-3xl font-inter font-bold uppercase tracking-widest text-[#9D4EDD] mb-2">
               Welcome, Admin
             </h1>
-            <p className="text-gray-600">
+            <p className="text-[#ADB5BD] font-poppins">
               Manage your services, users, and providers from this dashboard.
             </p>
           </CardContent>
         </Card>
 
-        <Tabs value={activeTab} className="space-y-4">
+        <Tabs value={activeTab} className="space-y-6">
           <TabsContent value="services">
             <ServicesContent
               setIsAddServiceOpen={setIsAddServiceOpen}
@@ -147,7 +148,6 @@ const AdminDashboard = () => {
           <TabsContent value="categories">
             <ServiceCategoryContent />
           </TabsContent>
-
         </Tabs>
       </div>
     </div>

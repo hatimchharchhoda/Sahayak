@@ -41,7 +41,6 @@ const AuthPage = () => {
   const [cities, setCities] = useState();
   const [selectedCity, setSelectedCity] = useState("");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -51,7 +50,6 @@ const AuthPage = () => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    // 👇 Add district and city to data before sending
     const payload = {
       ...data,
       district: selectedDistrict,
@@ -63,7 +61,7 @@ const AuthPage = () => {
       const response = await axios.post(endpoint, payload, {
         withCredentials: true,
       });
-      console.log(response);
+
       if (isLogin) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -73,9 +71,7 @@ const AuthPage = () => {
         setSuccess("Account created successfully!");
         router.push("/");
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err.response?.data?.error || err.message);
       setError(err.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
@@ -84,18 +80,15 @@ const AuthPage = () => {
 
   const handleDistrictChange = (value: string) => {
     setSelectedDistrict(value);
-    console.log("Selected district:", value);
   };
 
   const handleCityChange = (value: string) => {
     setSelectedCity(value);
-    console.log("Selected city:", value);
   };
 
   async function getDistrict() {
     try {
       const response = await axios.get("/api/getDistrict");
-      console.log(response);
       setDistrict(response.data.allDistrict);
     } catch (error) {
       console.log(error);
@@ -106,7 +99,6 @@ const AuthPage = () => {
       const response = await axios.post("/api/getCity", {
         district: selectedDistrict,
       });
-      console.log(response);
       setCities(response.data.cities);
     } catch (error) {
       console.log(error);
@@ -118,61 +110,65 @@ const AuthPage = () => {
   }, []);
 
   useEffect(() => {
-    getCities();
+    if (selectedDistrict) getCities();
   }, [selectedDistrict]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex justify-center items-center p-4">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
-          {/* Left side - Benefits */}
+    <div className="min-h-screen flex justify-center items-center p-6 bg-gradient-to-br from-[#FFE0B2] via-[#FFAB91] to-[#E1BEE7] transition-all duration-700">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid md:grid-cols-2 gap-10 items-center max-w-6xl mx-auto animate-fadeIn">
+          {/* Left side - Lifestyle Benefits */}
           <div className="space-y-8 hidden md:block">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent mb-4">
+              <h1 className="text-4xl font-bold font-['Nunito Sans'] text-[#212121]">
                 {isLogin ? "Welcome Back!" : "Join Our Community"}
               </h1>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-[#757575] font-['Lato'] mt-2">
                 {isLogin
-                  ? "Access your personalized dashboard and manage your services"
-                  : "Create an account to discover and book amazing services"}
+                  ? "Access your personalized lifestyle dashboard and book trusted services."
+                  : "Create your account to explore premium lifestyle services near you."}
               </p>
             </div>
 
             <div className="grid gap-6">
-              <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur rounded-lg shadow-sm">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <UserCheck className="w-6 h-6 text-blue-600" />
+              <div className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/90 backdrop-blur-sm transition hover:scale-[1.02] hover:shadow-lg">
+                <div className="p-3 bg-gradient-to-br from-[#FFAB91] to-[#E1BEE7] rounded-full">
+                  <UserCheck className="w-6 h-6 text-[#FF7043]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Easy Booking</h3>
-                  <p className="text-gray-600">
-                    Book services with just a few clicks
+                  <h3 className="font-semibold text-[#212121] font-['Nunito Sans']">
+                    Easy Booking
+                  </h3>
+                  <p className="text-[#757575] font-['Lato']">
+                    Book services with just a few taps.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur rounded-lg shadow-sm">
-                <div className="p-3 bg-indigo-100 rounded-full">
-                  <Shield className="w-6 h-6 text-indigo-600" />
+              <div className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/90 backdrop-blur-sm transition hover:scale-[1.02] hover:shadow-lg">
+                <div className="p-3 bg-gradient-to-br from-[#81C784] to-[#E1BEE7] rounded-full">
+                  <Shield className="w-6 h-6 text-[#26A69A]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-[#212121] font-['Nunito Sans']">
                     Secure Platform
                   </h3>
-                  <p className="text-gray-600">Your data is always protected</p>
+                  <p className="text-[#757575] font-['Lato']">
+                    Your data is always safe with us.
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur rounded-lg shadow-sm">
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <Lock className="w-6 h-6 text-purple-600" />
+              <div className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/90 backdrop-blur-sm transition hover:scale-[1.02] hover:shadow-lg">
+                <div className="p-3 bg-gradient-to-br from-[#FFD54F] to-[#FFAB91] rounded-full">
+                  <Lock className="w-6 h-6 text-[#E57373]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-[#212121] font-['Nunito Sans']">
                     Verified Providers
                   </h3>
-                  <p className="text-gray-600">
-                    Access trusted service professionals
+                  <p className="text-[#757575] font-['Lato']">
+                    Trusted professionals at your doorstep.
                   </p>
                 </div>
               </div>
@@ -181,90 +177,85 @@ const AuthPage = () => {
 
           {/* Right side - Auth Form */}
           <div>
-            <div className="block md:hidden text-center mb-4">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 bg-clip-text text-transparent mb-4">
-                {isLogin ? "Welcome Back!" : "Join Our Community"}
-              </h1>
-              <p className="text-base text-muted-foreground">
-                {isLogin
-                  ? "Access your personalized dashboard and manage your services"
-                  : "Create an account to discover and book amazing services"}
-              </p>
-            </div>
-
-            <Card className="w-full max-w-md mx-auto backdrop-blur-sm bg-white/90">
+            <Card className="w-full max-w-md mx-auto rounded-2xl shadow-lg bg-white/95 backdrop-blur-sm animate-slideUp">
               <CardHeader>
-                <CardTitle className="text-2xl text-center">
+                <CardTitle className="text-2xl text-center font-['Nunito Sans'] text-[#212121]">
                   {isLogin ? "Sign In to Your Account" : "Create Your Account"}
                 </CardTitle>
-                <CardDescription className="text-center">
+                <CardDescription className="text-center text-[#757575] font-['Lato']">
                   {isLogin
                     ? "Access your personalized dashboard"
-                    : "Join us to get started with our services"}
+                    : "Join us to explore lifestyle services"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   {!isLogin && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
+                        <Label htmlFor="name" className="font-['Poppins']">
+                          Full Name
+                        </Label>
                         <Input
                           id="name"
                           name="name"
                           required
                           placeholder="John Doe"
-                          className="w-full bg-white"
+                          className="w-full bg-white border-b-2 border-[#FFAB91] focus:border-[#FF7043] transition"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone" className="font-['Poppins']">
+                          Phone Number
+                        </Label>
                         <Input
                           id="phone"
                           name="phone"
                           type="tel"
                           required
                           placeholder="+91 9999999999"
-                          className="w-full bg-white"
+                          className="w-full bg-white border-b-2 border-[#FFAB91] focus:border-[#FF7043] transition"
                         />
                       </div>
 
-                      <div className="flex justify-between">
-                        <div className="space-y-2">
-                          <Label htmlFor="district">District</Label>
+                      <div className="flex gap-4">
+                        <div className="space-y-2 w-1/2">
+                          <Label htmlFor="district" className="font-['Poppins']">
+                            District
+                          </Label>
                           <Select onValueChange={handleDistrictChange}>
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="District" />
                             </SelectTrigger>
                             <SelectContent>
-                              {district &&
-                                district.length > 0 &&
-                                district.map((d, index) => (
-                                  <SelectItem value={d} key={index}>
-                                    {d}
-                                  </SelectItem>
-                                ))}
+                              {district?.map((d, index) => (
+                                <SelectItem value={d} key={index}>
+                                  {d}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="district">City</Label>
+                        <div className="space-y-2 w-1/2">
+                          <Label htmlFor="city" className="font-['Poppins']">
+                            City
+                          </Label>
                           <Select onValueChange={handleCityChange}>
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="City" />
                             </SelectTrigger>
                             <SelectContent>
                               {cities && cities.length > 0 ? (
-                                cities.map((d, index) => (
-                                  <SelectItem value={d} key={index}>
-                                    {d}
+                                cities.map((c, index) => (
+                                  <SelectItem value={c} key={index}>
+                                    {c}
                                   </SelectItem>
                                 ))
                               ) : (
                                 <SelectItem value="null">
-                                  Please Select District First
+                                  Select District First
                                 </SelectItem>
                               )}
                             </SelectContent>
@@ -273,51 +264,57 @@ const AuthPage = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="address">Address</Label>
+                        <Label htmlFor="address" className="font-['Poppins']">
+                          Address
+                        </Label>
                         <Input
                           id="address"
                           name="address"
                           required
                           placeholder="123 Main St, City, State"
-                          className="w-full bg-white"
+                          className="w-full bg-white border-b-2 border-[#FFAB91] focus:border-[#FF7043] transition"
                         />
                       </div>
                     </>
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="font-['Poppins']">
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
                       required
                       placeholder="you@example.com"
-                      className="w-full bg-white"
+                      className="w-full bg-white border-b-2 border-[#FFAB91] focus:border-[#FF7043] transition"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="font-['Poppins']">
+                      Password
+                    </Label>
                     <Input
                       id="password"
                       name="password"
                       type="password"
                       required
                       placeholder="••••••••"
-                      className="w-full bg-white"
+                      className="w-full bg-white border-b-2 border-[#FFAB91] focus:border-[#FF7043] transition"
                     />
                   </div>
 
                   {error && (
-                    <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded">
+                    <div className="flex items-center gap-2 text-[#E57373] bg-[#FFEBEE] p-3 rounded-lg">
                       <AlertCircle size={18} />
                       <span>{error}</span>
                     </div>
                   )}
 
                   {success && (
-                    <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded">
+                    <div className="flex items-center gap-2 text-[#81C784] bg-[#E8F5E9] p-3 rounded-lg">
                       <CheckCircle2 size={18} />
                       <span>{success}</span>
                     </div>
@@ -325,7 +322,7 @@ const AuthPage = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    className="w-full rounded-full font-['Poppins'] bg-gradient-to-r from-[#FF7043] to-pink-500 hover:scale-105 transition-all py-2 shadow-md"
                     disabled={loading}
                   >
                     {loading
@@ -336,13 +333,16 @@ const AuthPage = () => {
                   </Button>
 
                   <div className="space-y-2 text-center">
-                    <div className="text-sm text-blue-600 hover:underline">
-                      <Link href="/provider/auth">Join as Provider</Link>
-                    </div>
+                    <Link
+                      href="/provider/auth"
+                      className="text-sm font-['Poppins'] text-[#26A69A] hover:underline"
+                    >
+                      Join as Provider
+                    </Link>
                     <button
                       type="button"
                       onClick={() => setIsLogin(!isLogin)}
-                      className="text-sm text-blue-600 hover:underline"
+                      className="block mx-auto text-sm font-['Poppins'] text-[#26A69A] hover:underline"
                     >
                       {isLogin
                         ? "Don't have an account? Sign up"
