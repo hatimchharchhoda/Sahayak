@@ -6,6 +6,7 @@ import { IndianRupee, Loader2 } from "lucide-react";
 import axios from "axios";
 import Script from "next/script";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 interface IPaymentProps {
   amount: number;
@@ -29,7 +30,6 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
     setLoading(true);
 
     try {
-      // Create Razorpay order from backend
       const response = await axios.post("/api/razorpay/create-payment", {
         amount,
         bookingId,
@@ -38,7 +38,7 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
       const order = response.data;
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // public key only
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: "Sahayak",
@@ -51,7 +51,7 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
           contact: user?.contact || "9999999999",
         },
         theme: {
-          color: "#16a34a", // green accent
+          color: "#FF6F61", // coral accent for premium look
         },
       };
 
@@ -66,15 +66,20 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
   }
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
       <Button
         disabled={loading}
         onClick={handlePayment}
-        className={`w-full px-4 py-2 ${
+        className={`w-full px-4 py-3 rounded-2xl flex items-center justify-center space-x-2 font-poppins font-medium uppercase text-white shadow-lg transition-all duration-300 ${
           loading
-            ? "cursor-progress bg-green-500"
-            : "bg-green-500 hover:bg-green-600"
-        } text-white rounded-lg transition-colors flex items-center justify-center space-x-2`}
+            ? "cursor-progress bg-gradient-to-r from-[#FF6F61]/70 to-[#FF8A65]/70"
+            : "bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 hover:shadow-xl"
+        }`}
       >
         {loading ? (
           <>
@@ -83,6 +88,7 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
           </>
         ) : (
           <>
+            <IndianRupee className="h-5 w-5" />
             <span>Pay ₹{amount}</span>
           </>
         )}
@@ -90,7 +96,7 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
 
       {/* Razorpay SDK Script */}
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-    </div>
+    </motion.div>
   );
 };
 

@@ -145,9 +145,9 @@ function ProviderDashboard() {
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
                 {[
-                  { icon: <User className="mr-2 h-4 w-4" />, label: "Profile", path: `/provider/profile/${user?.id}` },
-                  { icon: <Ticket className="mr-2 h-4 w-4" />, label: "Raise Ticket", path: `/provider/raise-ticket` },
-                  { icon: <Star className="mr-2 h-4 w-4" />, label: "Reviews", path: `/provider/reviews/${user?.id}` },
+                  // { icon: <User className="mr-2 h-4 w-4" />, label: "Profile", path: `/provider/profile/${user?.id}` },
+                  // { icon: <Ticket className="mr-2 h-4 w-4" />, label: "Raise Ticket", path: `/provider/raise-ticket` },
+                  // { icon: <Star className="mr-2 h-4 w-4" />, label: "Reviews", path: `/provider/reviews/${user?.id}` },
                 ].map((btn) => (
                   <Button
                     key={btn.label}

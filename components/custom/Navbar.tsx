@@ -53,29 +53,30 @@ const Navbar = () => {
       transition={{ duration: 0.5 }}
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-gradient-to-r from-[#ffdfd5] via-[#ff7f58] to-[#fdd0c3] shadow-xl"
-          : "bg-gradient-to-r from-[#FFE0B2]/50 via-[#FFAB91]/50 to-[#E1BEE7]/50"
+          ? "bg-white/95 shadow-lg backdrop-blur-md"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+          {/* Brand */}
           <Link
             href="/"
-            className="text-2xl font-nunito font-bold text-[#FF7043] hover:text-pink-500 transition-colors"
+            className="text-2xl font-inter font-bold text-gray-900 hover:text-teal-600 transition-colors"
           >
             Sahayak
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-6 font-poppins font-medium text-[#212121]">
+          <div className="hidden md:flex items-center space-x-6 font-poppins font-medium text-gray-800">
             {menuItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`px-3 py-2 rounded-2xl transition-colors ${
+                className={`px-3 py-2 rounded-2xl transition-all ${
                   isActive(item.href)
-                    ? "bg-gradient-to-r from-[#FF7043] to-pink-400 text-white shadow-lg"
-                    : "hover:bg-[#FFAB91]/20"
+                    ? "bg-teal-100 text-teal-800 shadow"
+                    : "hover:bg-teal-50"
                 }`}
               >
                 {item.label}
@@ -86,7 +87,7 @@ const Navbar = () => {
               <>
                 <Link
                   href="/profile"
-                  className="font-bold px-3 py-2 bg-gradient-to-r from-[#FFAB91] to-[#FFE0B2] rounded-full shadow-inner"
+                  className="font-bold px-3 py-2 bg-teal-100 text-teal-800 rounded-full shadow-inner"
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </Link>
@@ -102,12 +103,12 @@ const Navbar = () => {
             ) : (
               <>
                 <Link href="/auth">
-                  <Button variant="ghost" className="text-gray-700">
+                  <Button variant="outline" className="text-gray-700">
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/auth">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button className="bg-teal-600 hover:bg-teal-700 text-white">
                     Sign Up
                   </Button>
                 </Link>
@@ -115,7 +116,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Toggle */}
           <div className="md:hidden">
             <Button variant="ghost" onClick={toggleMenu}>
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -137,12 +138,12 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`w-full block px-4 py-2 rounded-2xl transition-all font-poppins font-medium ${
-                    isActive(item.href)
-                      ? "bg-gradient-to-r from-[#FF7043] to-pink-400 text-white shadow-lg"
-                      : "hover:bg-[#FFAB91]/20"
-                  }`}
                   onClick={toggleMenu}
+                  className={`w-full block px-4 py-2 rounded-2xl font-poppins font-medium transition-all ${
+                    isActive(item.href)
+                      ? "bg-teal-100 text-teal-800 shadow"
+                      : "hover:bg-teal-50"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -152,7 +153,7 @@ const Navbar = () => {
                 <>
                   <Link
                     href="/profile"
-                    className="w-full block px-4 py-2 rounded-2xl font-bold bg-gradient-to-r from-[#FFAB91] to-[#FFE0B2] shadow-inner text-center"
+                    className="w-full block px-4 py-2 rounded-2xl font-bold bg-teal-100 text-teal-800 shadow-inner text-center"
                   >
                     {user.name.charAt(0).toUpperCase()}
                   </Link>
@@ -175,7 +176,7 @@ const Navbar = () => {
                     </Button>
                   </Link>
                   <Link href="/auth">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white">
                       Sign Up
                     </Button>
                   </Link>
