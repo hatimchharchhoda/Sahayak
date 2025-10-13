@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
       message: newMessage,
       socketResponse: response.data,
     });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error sending message:", error?.message || error);
 
