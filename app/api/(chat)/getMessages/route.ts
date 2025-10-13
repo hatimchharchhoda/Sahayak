@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ messages });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error fetching messages:", error?.message || error);
 
