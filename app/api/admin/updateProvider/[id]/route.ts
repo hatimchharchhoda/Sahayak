@@ -1,20 +1,18 @@
-// app/api/admin/updateProvider/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// ✅ Correct type signature for dynamic routes in Next.js 15+
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> } // ← Promise wrapper is important
 ) {
   try {
-    const { id } = params;
+    // ✅ Await params because Next.js 15 treats them as async
+    const { id } = await context.params;
     const body = await req.json();
 
     // 1. Check if provider exists
-    const provider = await prisma.serviceProvider.findUnique({
-      where: { id },
-    });
-
+    const provider = await prisma.serviceProvider.findUnique({ where: { id } });
     if (!provider) {
       return NextResponse.json({ error: "Provider not found" }, { status: 404 });
     }
@@ -22,12 +20,8 @@ export async function PUT(
     // 2. Check if email already exists (exclude current provider)
     if (body.email) {
       const existingEmail = await prisma.serviceProvider.findFirst({
-        where: {
-          email: body.email,
-          NOT: { id },
-        },
+        where: { email: body.email, NOT: { id } },
       });
-
       if (existingEmail) {
         return NextResponse.json(
           { error: "Email already in use" },
@@ -39,12 +33,8 @@ export async function PUT(
     // 3. Check if phone already exists (exclude current provider)
     if (body.phone) {
       const existingPhone = await prisma.serviceProvider.findFirst({
-        where: {
-          phone: body.phone,
-          NOT: { id },
-        },
+        where: { phone: body.phone, NOT: { id } },
       });
-
       if (existingPhone) {
         return NextResponse.json(
           { error: "Phone number already in use" },
@@ -65,9 +55,6 @@ export async function PUT(
     );
   } catch (error) {
     console.error("Update provider error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

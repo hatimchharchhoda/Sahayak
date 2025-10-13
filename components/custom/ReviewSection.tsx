@@ -1,7 +1,19 @@
-import { Booking } from "@/app/provider/service/[id]/page";
 import React from "react";
 import { Card, CardContent } from "../ui/card";
 import { Star, UserIcon } from "lucide-react";
+
+export interface Booking {
+  id: string;
+  status: string;
+  rating?: {
+    stars: number;
+    review?: string;
+    User: {
+      name: string;
+    };
+  };
+  // Add any other fields you need from serviceDetails
+}
 
 interface Props {
   serviceDetails: Booking;
