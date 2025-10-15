@@ -110,7 +110,10 @@ const UsersContent = () => {
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-slate-400">
+                    <TableCell
+                      colSpan={6}
+                      className="text-center text-slate-400"
+                    >
                       No users found
                     </TableCell>
                   </TableRow>
@@ -135,27 +138,28 @@ const UsersContent = () => {
                         </Badge>
                       </TableCell>
                       <TableCell>
-  <Button
-    size="sm"
-    className={`px-4 py-1 rounded-full font-semibold transition-all duration-200
+                        <Button
+                          size="sm"
+                          className={`px-4 py-1 rounded-full font-semibold transition-all duration-200
       ${
         user.status === "BLOCKED"
           ? "bg-red-600 text-white shadow-[0_0_10px_rgba(255,0,0,0.7)] hover:shadow-[0_0_20px_rgba(255,0,0,1)] hover:bg-red-700"
           : "bg-teal-500 text-white shadow-[0_0_10px_rgba(0,245,212,0.7)] hover:shadow-[0_0_20px_rgba(0,245,212,1)] hover:bg-teal-600"
       }`}
-    onClick={async () => {
-      await axios.patch("/api/admin/block/provider", {
-        providerId: provider.id,
-        status:
-          provider.status === "BLOCKED" ? "ACTIVE" : "BLOCKED",
-      });
-      fetchAllProviders();
-    }}
-  >
-    {user.status === "BLOCKED" ? "Unblock" : "Block"}
-  </Button>
-</TableCell>
-
+                          onClick={async () => {
+                            await axios.patch("/api/admin/block/user", {
+                              userId: user.id,
+                              status:
+                                user.status === "BLOCKED"
+                                  ? "ACTIVE"
+                                  : "BLOCKED",
+                            });
+                            fetchAllUsers();
+                          }}
+                        >
+                          {user.status === "BLOCKED" ? "Unblock" : "Block"}
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

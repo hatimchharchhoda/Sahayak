@@ -1,3 +1,4 @@
+// app/chat/[receiverId]/page.tsx
 // @ts-nocheck
 "use client";
 

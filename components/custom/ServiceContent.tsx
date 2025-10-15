@@ -17,6 +17,7 @@ import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 interface Service {
   id: string;
@@ -36,7 +37,7 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const fetchSevices = async () => {
+  const fetchServices = async () => {
     try {
       const response = await axios.get("/api/services");
       setServices(response.data);
@@ -48,8 +49,22 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
   };
 
   useEffect(() => {
-    fetchSevices();
+    fetchServices();
   }, []);
+
+  // 🧨 DELETE SERVICE FUNCTION
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this service?")) return;
+
+    try {
+      await axios.delete(`/api/admin/delete-service/${id}`);
+      setServices((prev) => prev.filter((service) => service.id !== id));
+      toast?.success?.("Service deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting service:", error);
+      toast?.error?.("Failed to delete service!");
+    }
+  };
 
   const filteredServices = services.filter(
     (service) =>
@@ -65,6 +80,7 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* SEARCH + ADD BUTTON UI */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-2">
             <Input
@@ -89,6 +105,7 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
           </Button>
         </div>
 
+        {/* SERVICES TABLE */}
         <div className="overflow-hidden rounded-2xl border border-teal-400/50 shadow-lg">
           <Table className="w-full">
             <TableHeader className="bg-white/5 backdrop-blur-md border-b border-purple-500/60">
@@ -142,6 +159,7 @@ const ServicesContent: FC<ServicesContentProps> = ({ onEditService }) => {
                         variant="outline"
                         size="sm"
                         className="text-red-600 border-red-600 hover:bg-red-600/20 w-full"
+                        onClick={() => handleDelete(service.id)} // ✅ DELETE ACTION
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
