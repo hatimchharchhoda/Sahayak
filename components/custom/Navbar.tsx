@@ -4,11 +4,12 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, MessageCircle } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/userContext";
+import { useMessages } from "@/context/messagesContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,14 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { hasUnread } = useMessages();
+  const [mounted, setMounted] = useState(false); // for client-side rendering
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    setMounted(true); // ensures unread badge only renders on client
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -52,9 +59,7 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 shadow-lg backdrop-blur-md"
-          : "bg-transparent"
+        scrolled ? "bg-white/95 shadow-lg backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4">
@@ -82,6 +87,14 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+
+            {/* Chat Icon */}
+            <Link href="/chat/unread" className="relative flex items-center">
+              <MessageCircle className="w-6 h-6" />
+              {mounted && hasUnread && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+              )}
+            </Link>
 
             {user ? (
               <>
@@ -148,6 +161,18 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {/* Mobile Chat Icon */}
+              <Link
+                href="/chat/unread"
+                onClick={toggleMenu}
+                className="relative w-full block px-4 py-2 rounded-2xl font-poppins font-medium transition-all hover:bg-teal-50"
+              >
+                💬 Chat / Messages
+                {mounted && hasUnread && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                )}
+              </Link>
 
               {user ? (
                 <>

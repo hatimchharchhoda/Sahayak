@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Fetch messages in both directions (sender to receiver and receiver to sender)
+    // Fetch messages in both directions
     const messages = await prisma.message.findMany({
       where: {
         OR: [
@@ -23,7 +23,20 @@ export async function POST(req: NextRequest) {
       orderBy: { timestamp: "asc" },
     });
 
+    // ✅ Mark messages as seen where the current user is the receiver
+    await prisma.message.updateMany({
+      where: {
+        senderId: receiverId, // messages sent by the other user
+        receiverId: senderId, // current user is receiver
+        seen: false,
+      },
+      data: {
+        seen: true,
+      },
+    });
+
     return NextResponse.json({ messages });
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error fetching messages:", error?.message || error);

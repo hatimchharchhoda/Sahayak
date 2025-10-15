@@ -167,6 +167,7 @@ model Message {
   receiverId String   @db.ObjectId
   content    String
   timestamp  DateTime @default(now())
+  seen       Boolean  @default(false) // ✅ New field
 
   sender     User     @relation("SentMessages", fields: [senderId], references: [id])
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])

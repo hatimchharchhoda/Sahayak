@@ -23,6 +23,7 @@ import {
   List,
   User,
   Ticket,
+  MessageCircle,
 } from "lucide-react";
 
 import BookedServicesList from "@/components/custom/BookedServicesList";
@@ -36,9 +37,10 @@ function ProviderDashboard() {
   const { user, isLoading } = useAuth();
   const socket = useSocket();
   const router = useRouter();
-
+  const [unreadCount, setUnreadCount] = useState(0);
   const [allServices, setAllServices] = useState<[]>([]);
-  const [availableServicesLoading, setAvailableServicesLoading] = useState(false);
+  const [availableServicesLoading, setAvailableServicesLoading] =
+    useState(false);
   const [allServicesLoading, setAllServicesLoading] = useState(false);
 
   // Separate services
@@ -53,7 +55,8 @@ function ProviderDashboard() {
   );
 
   const completedServices = useMemo(
-    () => allServices?.filter((service) => service.status === "COMPLETED") || [],
+    () =>
+      allServices?.filter((service) => service.status === "COMPLETED") || [],
     [allServices]
   );
 
@@ -62,7 +65,9 @@ function ProviderDashboard() {
     if (user?.id) {
       setAllServicesLoading(true);
       try {
-        const response = await axios.post("/api/providerAllServices", { id: user.id });
+        const response = await axios.post("/api/providerAllServices", {
+          id: user.id,
+        });
         setAllServices(response?.data?.allServices || []);
       } catch (error) {
         console.error("Error fetching all services:", error);
@@ -102,11 +107,15 @@ function ProviderDashboard() {
     if (!socket) return;
 
     const handleServices = ({ service }) => {
-      setAllServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
+      setAllServices((prev) =>
+        prev.map((s) => (s.id === service.id ? service : s))
+      );
     };
 
     const handleCancelService = ({ service }) => {
-      setAllServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
+      setAllServices((prev) =>
+        prev.map((s) => (s.id === service.id ? service : s))
+      );
     };
 
     const handleNewService = ({ service }) => {
@@ -117,6 +126,30 @@ function ProviderDashboard() {
     socket.on("new-booking", handleNewService);
     socket.on("modify-service", handleCancelService);
   }, [socket]);
+
+  // update the new messages of the chat every 30sec.
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const fetchUnreadMessages = async () => {
+      try {
+        const res = await axios.get(`/api/getUnreadMessages?userId=${user.id}`);
+        const totalUnread = res.data.unreadMessages?.reduce(
+          (sum: number, item: any) => sum + item.unreadCount,
+          0
+        );
+        setUnreadCount(totalUnread || 0);
+      } catch (error) {
+        console.error("Failed to fetch unread messages:", error);
+      }
+    };
+
+    fetchUnreadMessages();
+
+    // Optional: fetch every 30 seconds to update
+    const interval = setInterval(fetchUnreadMessages, 30000);
+    return () => clearInterval(interval);
+  }, [user?.id]);
 
   if (isLoading) return <Loading />;
 
@@ -137,17 +170,42 @@ function ProviderDashboard() {
                   Welcome, {user?.name}!
                 </h1>
                 <p className="text-lg font-nunito text-[#212121]">
-                  Role: <span className="font-semibold">{user?.role}</span> | Specialization:{" "}
+                  Role: <span className="font-semibold">{user?.role}</span> |
+                  Specialization:{" "}
                   <span className="font-semibold">{user?.specialization}</span>
                 </p>
               </div>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
+                <Button
+                  onClick={() => router.push("/chat/unread")}
+                  className="relative bg-gradient-to-r from-teal-400 to-lime-400 text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Chat
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Button>
                 {[
-                  { icon: <User className="mr-2 h-4 w-4" />, label: "Profile", path: `/provider/profile/${user?.id}` },
-                  { icon: <Ticket className="mr-2 h-4 w-4" />, label: "Raise Ticket", path: `/provider/raise-ticket` },
-                  { icon: <Star className="mr-2 h-4 w-4" />, label: "Reviews", path: `/provider/reviews/${user?.id}` },
+                  {
+                    icon: <User className="mr-2 h-4 w-4" />,
+                    label: "Profile",
+                    path: `/provider/profile/${user?.id}`,
+                  },
+                  {
+                    icon: <Ticket className="mr-2 h-4 w-4" />,
+                    label: "Raise Ticket",
+                    path: `/provider/raise-ticket`,
+                  },
+                  {
+                    icon: <Star className="mr-2 h-4 w-4" />,
+                    label: "Reviews",
+                    path: `/provider/reviews/${user?.id}`,
+                  },
                 ].map((btn) => (
                   <Button
                     key={btn.label}
@@ -194,7 +252,11 @@ function ProviderDashboard() {
                 title="Total Earnings"
                 value={`₹${completedServices
                   ?.filter((service: any) => service.isPaid)
-                  .reduce((sum: number, service: any) => sum + (service.basePrice || 0), 0)
+                  .reduce(
+                    (sum: number, service: any) =>
+                      sum + (service.basePrice || 0),
+                    0
+                  )
                   .toFixed(2)}`}
                 color="bg-[#E8F5E9]"
                 loading={allServicesLoading}
@@ -208,18 +270,27 @@ function ProviderDashboard() {
               </div>
             ) : (
               <div className="mb-8">
-                <IncomeAnalysisChart completedServices={completedServices} providerName={user?.name} />
+                <IncomeAnalysisChart
+                  completedServices={completedServices}
+                  providerName={user?.name}
+                />
               </div>
             )}
 
             {/* Tabs for Calendar and List View */}
             <Tabs defaultValue="calendar" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 border-b-2 border-green-500">
-                <TabsTrigger value="calendar" className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]">
+                <TabsTrigger
+                  value="calendar"
+                  className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]"
+                >
                   <CalendarDays className="h-4 w-4" />
                   Calendar View
                 </TabsTrigger>
-                <TabsTrigger value="list" className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]">
+                <TabsTrigger
+                  value="list"
+                  className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]"
+                >
                   <List className="h-4 w-4" />
                   List View
                 </TabsTrigger>
@@ -230,10 +301,15 @@ function ProviderDashboard() {
                 {availableServicesLoading || allServicesLoading ? (
                   <div className="flex flex-col items-center justify-center py-12">
                     <Loader2 className="h-10 w-10 text-[#00C853] animate-spin mb-4" />
-                    <p className="text-[#616161] font-medium">Loading calendar...</p>
+                    <p className="text-[#616161] font-medium">
+                      Loading calendar...
+                    </p>
                   </div>
                 ) : (
-                  <ProviderServicesCalendar services={allServices} onEventClick={handleCalendarEventClick} />
+                  <ProviderServicesCalendar
+                    services={allServices}
+                    onEventClick={handleCalendarEventClick}
+                  />
                 )}
               </TabsContent>
 
@@ -267,7 +343,11 @@ function ProviderDashboard() {
 
 function StatCard({ icon, title, value, color, loading = false }) {
   return (
-    <Card className={`rounded-xl ${loading ? "bg-gray-100 border-none" : `${color} border-none`} hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1`}>
+    <Card
+      className={`rounded-xl ${
+        loading ? "bg-gray-100 border-none" : `${color} border-none`
+      } hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1`}
+    >
       <CardContent className="flex items-center p-6">
         {loading ? (
           <>
@@ -281,8 +361,12 @@ function StatCard({ icon, title, value, color, loading = false }) {
           <>
             <div className="mr-4">{icon}</div>
             <div>
-              <h2 className="text-lg font-poppins font-semibold text-[#212121]">{title}</h2>
-              <p className="text-2xl font-poppins font-bold text-[#212121]">{value}</p>
+              <h2 className="text-lg font-poppins font-semibold text-[#212121]">
+                {title}
+              </h2>
+              <p className="text-2xl font-poppins font-bold text-[#212121]">
+                {value}
+              </p>
             </div>
           </>
         )}

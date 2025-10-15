@@ -20,12 +20,13 @@ export async function POST(req: NextRequest) {
       content
     );
 
-    // Save the message to DB
+    // Save the message to DB with `seen` status default false
     const newMessage = await prisma.message.create({
       data: {
         senderId,
         receiverId,
         content,
+        seen: false, // ✅ Add seen field
       },
     });
 
@@ -44,7 +45,8 @@ export async function POST(req: NextRequest) {
       message: newMessage,
       socketResponse: response.data,
     });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error sending message:", error?.message || error);
 

@@ -81,7 +81,7 @@ const IncomeAnalysisChart = ({
 
       const monthlySummaryData = monthlyData.map((item) => [
         item.month,
-        `₹${item.income.toLocaleString()}`,
+        `${item.income.toLocaleString()}`,
         item.services.length,
       ]);
 
@@ -112,7 +112,7 @@ const IncomeAnalysisChart = ({
         const detailedData = monthData.services.map((service) => [
           new Date(service.date).toLocaleDateString(),
           service.Service.name,
-          `₹${service.basePrice.toLocaleString()}`,
+          `${service.basePrice.toLocaleString()}`,
         ]);
 
         autoTable(doc, {
@@ -143,11 +143,11 @@ const IncomeAnalysisChart = ({
       autoTable(doc, {
         startY: yPos + 10,
         body: [
-          ["Total Income", `₹${totalIncome.toLocaleString()}`],
+          ["Total Income", `${totalIncome.toLocaleString()}`],
           ["Total Services Completed", totalServices.toString()],
           [
             "Average Income per Service",
-            `₹${(totalServices > 0
+            `${(totalServices > 0
               ? totalIncome / totalServices
               : 0
             ).toLocaleString()}`,
@@ -208,11 +208,11 @@ const IncomeAnalysisChart = ({
               />
               <YAxis
                 tick={{ fill: "#166534" }}
-                tickFormatter={(v) => `₹${v.toLocaleString()}`}
+                tickFormatter={(v) => `${v.toLocaleString()}`}
                 axisLine={{ stroke: "#22c55e" }}
               />
               <Tooltip
-                formatter={(value: number) => [`₹${value.toLocaleString()}`, "Income"]}
+                formatter={(value: number) => [`${value.toLocaleString()}`, "Income"]}
                 contentStyle={{
                   backgroundColor: "white",
                   border: "1px solid #22c55e",
