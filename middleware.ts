@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Define shared routes (public to all roles after login)
+  // Shared routes (accessible to both user & provider only)
   const sharedRoutes = ["/chat"];
   const isSharedRoute = sharedRoutes.some((route) =>
     pathname.startsWith(route)
@@ -54,13 +54,33 @@ export async function middleware(req: NextRequest) {
 
   // 🔐 Redirect unauthenticated users trying to access protected routes
   if (!isAuthenticated) {
-    if (pathname.startsWith("/provider")) {
-      return NextResponse.redirect(new URL("/provider/auth", req.url));
-    } else if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/admin/auth", req.url));
-    } else if (!isSharedRoute) {
-      return NextResponse.redirect(new URL("/auth", req.url));
+    let redirectUrl = "/auth";
+    if (pathname.startsWith("/provider")) redirectUrl = "/provider/auth";
+    else if (pathname.startsWith("/admin")) redirectUrl = "/admin/auth";
+
+    const res = NextResponse.redirect(new URL(redirectUrl, req.url));
+    res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.headers.set("Pragma", "no-cache");
+    res.headers.set("Expires", "0");
+    return res;
+  }
+
+  // 🧩 Shared route protection (chat between user and provider only)
+  if (isSharedRoute) {
+    if (!(userPayload || providerPayload)) {
+      // admin or unauthenticated should not access shared route
+      const res = NextResponse.redirect(new URL("/auth", req.url));
+      res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+      res.headers.set("Pragma", "no-cache");
+      res.headers.set("Expires", "0");
+      return res;
     }
+    // user/provider allowed → continue
+    const res = NextResponse.next();
+    res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.headers.set("Pragma", "no-cache");
+    res.headers.set("Expires", "0");
+    return res;
   }
 
   // 🔒 Role-based protection
@@ -72,7 +92,23 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/auth", req.url));
   }
 
-  // 🔁 Optional: prevent logged-in users from accessing others' routes
+  if (
+    pathname.startsWith("/") &&
+    !pathname.startsWith("/provider") &&
+    !pathname.startsWith("/admin") &&
+    !isSharedRoute &&
+    !userPayload
+  ) {
+    // Restrict provider/admin from accessing normal user pages
+    return NextResponse.redirect(
+      new URL(
+        providerPayload ? "/provider" : adminPayload ? "/admin" : "/auth",
+        req.url
+      )
+    );
+  }
+
+  // 🔁 Prevent logged-in users from accessing others' home routes
   if (userPayload && pathname.startsWith("/provider")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
@@ -85,7 +121,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin", req.url));
   }
 
-  return NextResponse.next();
+  // ✅ Default response with anti-cache headers
+  const res = NextResponse.next();
+  res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  res.headers.set("Pragma", "no-cache");
+  res.headers.set("Expires", "0");
+
+  return res;
 }
 
 export const config = {
