@@ -16,6 +16,8 @@ export interface Service {
   description: string;
   categoryName: string;
   basePrice: number;
+  averageRating: string;
+  totalReviews: number;
 }
 
 const ServiceListPage = () => {
@@ -25,10 +27,28 @@ const ServiceListPage = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.post("/api/service", { categoryName });
-      setServices(response.data);
+      // 1️⃣ Fetch services
+      const serviceResponse = await axios.post("/api/service", { categoryName });
+      const fetchedServices: Service[] = serviceResponse.data;
+
+      // 2️⃣ Fetch reviews from getRating API
+      const reviewResponse = await axios.post("/api/getRating", { categoryName });
+      const reviewData: { serviceId: string; averageRating: string; totalReviews: number }[] =
+        reviewResponse.data;
+
+      // 3️⃣ Merge review data into services
+      const mergedServices = fetchedServices.map((service) => {
+        const review = reviewData.find((r) => r.serviceId === service.id);
+        return {
+          ...service,
+          averageRating: review ? review.averageRating : "0.0",
+          totalReviews: review ? review.totalReviews : 0,
+        };
+      });
+
+      setServices(mergedServices);
     } catch (error) {
-      console.error("Error fetching services:", error);
+      console.error("Error fetching services or reviews:", error);
     } finally {
       setLoading(false);
     }

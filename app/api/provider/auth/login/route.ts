@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (provider.status === "BLOCKED") {
+      return NextResponse.json({ error: "Account is blocked by admin" }, { status: 403 });
+    }
+  
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, provider.password);
 
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
         email: provider.email,
         role: provider.role,
         specialization: provider.specialization,
+        status: provider.status,
       },
       process.env.JWT_SECRET!,
       { expiresIn: "24h" }

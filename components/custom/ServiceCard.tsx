@@ -11,31 +11,32 @@ const ServiceCard = ({ service }: { service: Service }) => {
     <>
       <style jsx>{`
         .font-montserrat {
-          font-family: 'Montserrat', sans-serif;
+          font-family: "Montserrat", sans-serif;
         }
-        
+
         .font-lato {
-          font-family: 'Lato', sans-serif;
+          font-family: "Lato", sans-serif;
         }
-        
+
         .font-poppins {
-          font-family: 'Poppins', sans-serif;
+          font-family: "Poppins", sans-serif;
         }
-        
+
         .card-hover:hover {
           transform: scale(1.03);
           box-shadow: 0 20px 40px rgba(255, 111, 97, 0.2);
         }
-        
+
         @keyframes slideRight {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateX(0);
           }
           50% {
             transform: translateX(4px);
           }
         }
-        
+
         .card-hover:hover .arrow-slide {
           animation: slideRight 0.6s ease-in-out infinite;
         }
@@ -59,7 +60,7 @@ const ServiceCard = ({ service }: { service: Service }) => {
             </span>
             <span className="flex items-center gap-1 bg-gradient-to-r from-[#FFF9C4] to-[#FFF59D] px-3 py-1.5 rounded-full text-xs md:text-sm font-poppins text-[#F57C00] font-medium">
               <Star className="w-4 h-4 text-[#FFCA28]" />
-              4.8 (120+)
+              {service.averageRating} ({service.totalReviews})
             </span>
           </div>
 
@@ -72,7 +73,9 @@ const ServiceCard = ({ service }: { service: Service }) => {
                 <p className="font-semibold text-[#212121] text-sm md:text-base font-poppins">
                   From ₹{service.basePrice}
                 </p>
-                <p className="text-xs md:text-sm text-[#66BB6A] font-lato">Best value</p>
+                <p className="text-xs md:text-sm text-[#66BB6A] font-lato">
+                  Best value
+                </p>
               </div>
             </div>
             <span className="flex items-center gap-1 text-[#26C6DA] font-poppins text-sm md:text-base font-medium group-hover:text-[#FF6F61] transition-colors">

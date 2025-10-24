@@ -12,24 +12,57 @@ const ProviderServicesPage = () => {
   const { providerId } = useParams();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProviderServices = async () => {
+    const fetchProviderServicesWithRatings = async () => {
+      if (!providerId) return;
+
       try {
-        const res = await axios.post("/api/provider-services", {
-          providerId,
+        setLoading(true);
+        setError(null);
+
+        // 1️⃣ Fetch provider services
+        const servicesRes = await axios.post("/api/provider-services", { 
+          providerId 
         });
-        setServices(res.data.services.map((item: any) => item.Service));
+        const providerServices = servicesRes.data.services.map((item: any) => item.Service);
+
+        if (providerServices.length === 0) {
+          setServices([]);
+          return;
+        }
+
+        // 2️⃣ Fetch provider-specific ratings
+        const ratingsRes = await axios.post("/api/getProviderServiceRatings", { 
+          providerId 
+        });
+        const ratingsData: { 
+          serviceId: string; 
+          averageRating: string; 
+          totalReviews: number 
+        }[] = ratingsRes.data;
+
+        // 3️⃣ Merge ratings into services
+        const servicesWithRatings = providerServices.map((service: any) => {
+          const review = ratingsData.find((r) => r.serviceId === service.id);
+          return {
+            ...service,
+            averageRating: review ? review.averageRating : "0.0",
+            totalReviews: review ? review.totalReviews : 0,
+          };
+        });
+
+        setServices(servicesWithRatings);
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error("Error fetching services with ratings:", error);
+        setError("Failed to load services. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    if (providerId) {
-      fetchProviderServices();
-    }
+    fetchProviderServicesWithRatings();
   }, [providerId]);
 
   return (
@@ -130,6 +163,14 @@ const ProviderServicesPage = () => {
             </p>
           </div>
 
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8 animate-fade-slide-up">
+              <p className="text-red-600 text-center font-lato">{error}</p>
+            </div>
+          )}
+
+          {/* Loading State */}
           {loading ? (
             <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (

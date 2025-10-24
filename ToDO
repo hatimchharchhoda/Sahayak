@@ -2,6 +2,4 @@ Pending service and booked service on provider dashboard\
 
 when the user is blocked if they have login also they should be logout from device
 
-chnge middleware where user is logged out then also they can open protected route with error and not directed to auth
-
 making the downloadable website for mobile user

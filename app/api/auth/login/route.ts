@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
         name: user.name,
         city: user.city,
         district: user.district,
+        status: user.status,
       },
       JWT_SECRET,
       { expiresIn: "7d" }
