@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyAuth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -30,6 +31,51 @@ export async function middleware(req: NextRequest) {
   const providerPayload = await verifyAuth(providerToken);
   const userPayload = await verifyAuth(userToken);
   const adminPayload = await verifyAuth(adminToken);
+
+  // Check if user/provider is blocked (if authenticated)
+  if (providerPayload) {
+    try {
+      const provider = await prisma.serviceProvider.findUnique({
+        where: { id: providerPayload.id },
+        select: { status: true },
+      });
+
+      if (provider?.status === "BLOCKED") {
+        // Clear cookie and redirect
+        const res = NextResponse.redirect(new URL("/provider/auth", req.url));
+        res.cookies.set("providerToken", "", {
+          httpOnly: true,
+          maxAge: 0,
+          path: "/",
+        });
+        return res;
+      }
+    } catch (error) {
+      console.error("Error checking provider status:", error);
+    }
+  }
+
+  if (userPayload) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userPayload.id },
+        select: { status: true },
+      });
+
+      if (user?.status === "BLOCKED") {
+        // Clear cookie and redirect
+        const res = NextResponse.redirect(new URL("/auth", req.url));
+        res.cookies.set("userToken", "", {
+          httpOnly: true,
+          maxAge: 0,
+          path: "/",
+        });
+        return res;
+      }
+    } catch (error) {
+      console.error("Error checking user status:", error);
+    }
+  }
 
   const isAuthenticated = providerPayload || userPayload || adminPayload;
 
@@ -68,7 +114,6 @@ export async function middleware(req: NextRequest) {
   // 🧩 Shared route protection (chat between user and provider only)
   if (isSharedRoute) {
     if (!(userPayload || providerPayload)) {
-      // admin or unauthenticated should not access shared route
       const res = NextResponse.redirect(new URL("/auth", req.url));
       res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
       res.headers.set("Pragma", "no-cache");

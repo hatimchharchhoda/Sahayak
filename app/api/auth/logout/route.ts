@@ -7,6 +7,13 @@ export async function GET() {
     { message: "Logged out successfully" },
     { status: 200 }
   );
-  response.cookies.set("userToken", "", { maxAge: 0, path: "/" });
+  // Clear the userToken cookie
+  response.cookies.set("userToken", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 0, // Expire immediately
+    path: "/",
+  });
+  // response.cookies.set("userToken", "", { maxAge: 0, path: "/" });
   return response;
 }
