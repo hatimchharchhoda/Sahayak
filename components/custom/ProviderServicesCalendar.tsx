@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
@@ -9,14 +10,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, Clock, IndianRupee, User } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, IndianRupee, User } from "lucide-react";
 
 const statusColors = {
-  PENDING: "#FBC02D", // amber
-  ACCEPTED: "#43A047", // bright green
-  COMPLETED_PAID: "#00C853", // gradient green → lime
-  COMPLETED_UNPAID: "#E53935", // coral red
-  CANCELLED: "#E53935", // coral red
+  PENDING: "#F59E0B", // amber
+  ACCEPTED: "#14B8A6", // teal
+  COMPLETED_PAID: "#10B981", // green
+  COMPLETED_UNPAID: "#EF4444", // red
+  CANCELLED: "#EF4444", // red
 };
 
 const statusDisplayNames = {
@@ -74,12 +75,12 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
         : {},
       eventDidMount: (info) => {
         info.el.style.cursor = "pointer";
-        info.el.style.borderRadius = "8px";
+        info.el.style.borderRadius = "6px";
         info.el.style.padding = "4px 6px";
         info.el.style.transition = "transform 0.2s, box-shadow 0.2s";
         info.el.addEventListener("mouseenter", () => {
           info.el.style.transform = "translateY(-2px)";
-          info.el.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+          info.el.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
         });
         info.el.addEventListener("mouseleave", () => {
           info.el.style.transform = "translateY(0)";
@@ -112,8 +113,8 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
         id: service.id,
         title: service.Service?.name || "Service",
         start: service.date,
-        backgroundColor: statusColors[statusKey] || "#9E9E9E",
-        borderColor: statusColors[statusKey] || "#9E9E9E",
+        backgroundColor: statusColors[statusKey] || "#9CA3AF",
+        borderColor: statusColors[statusKey] || "#9CA3AF",
         textColor: "#ffffff",
         extendedProps: { service, status: statusKey, basePrice: service.basePrice, description: service.Service?.description, userId: service.userId, isPaid: service.isPaid },
       };
@@ -127,89 +128,105 @@ const ProviderServicesCalendar = ({ services = [], onEventClick }) => {
   const closeEventDetails = () => setSelectedEvent(null);
 
   return (
-    <div className="space-y-6 font-sans" style={{ fontFamily: "Nunito Sans, sans-serif", background: "linear-gradient(#F1F8E9, #DCEDC8)", padding: "1rem" }}>
-      
-      {/* Calendar Card */}
-      <Card className="shadow-xl rounded-2xl hover:shadow-2xl transform transition-all duration-300 bg-white">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg font-poppins font-semibold text-[#212121]">
-            <CalendarIcon className="h-5 w-5 text-[#00C853]" /> Services Calendar
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4 sm:p-6">
-          <div className="w-full overflow-x-auto rounded-lg">
-            <div ref={calendarRef} className="w-full min-w-0" style={{ fontSize: isMobile ? "12px" : "14px" }} />
-          </div>
-          {isMobile && (
-            <div className="flex gap-2 mt-4 justify-center">
-              {["dayGridMonth", "timeGridWeek", "timeGridDay"].map((view, i) => (
-                <Button
-                  key={i}
-                  className="text-xs font-bold uppercase bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white hover:scale-105 transition-transform duration-200"
-                  onClick={() => calendar?.changeView(view)}
-                >
-                  {view === "dayGridMonth" ? "Month" : view === "timeGridWeek" ? "Week" : "Day"}
-                </Button>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap');
+      `}</style>
 
-      {/* Event Details */}
-      {selectedEvent && (
-        <Card className="shadow-xl rounded-2xl border-l-4 border-[#2979FF] transform transition-all duration-300 hover:-translate-y-1">
-          <CardHeader className="pb-3 flex justify-between items-center">
-            <CardTitle className="text-lg font-poppins font-semibold flex items-center gap-2 text-[#212121]">
-              <CalendarIcon className="h-5 w-5 text-[#00C853]" /> Service Details
+      <div className="space-y-6 font-poppins">
+        {/* Calendar Card */}
+        <Card className="shadow-md rounded-2xl hover:shadow-lg transition-all duration-300 bg-white border border-[#E5E7EB]">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg font-inter font-semibold text-[#111827]">
+              <CalendarIcon className="h-5 w-5 text-[#2563EB]" /> Services Calendar
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={closeEventDetails}>✕</Button>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
-              <h3 className="font-poppins font-semibold text-lg">{selectedEvent.title}</h3>
-              <p className="text-[#616161] text-sm mb-3">{selectedEvent.extendedProps.description || "No description available"}</p>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-[#616161]" /> <span className="text-sm">{new Date(selectedEvent.start).toLocaleString()}</span></div>
-                <div className="flex items-center gap-2"><IndianRupee className="h-4 w-4 text-[#616161]" /> <span className="text-sm font-medium">₹{selectedEvent.extendedProps.basePrice?.toFixed(2) || "N/A"}</span></div>
-                <div className="flex items-center gap-2"><User className="h-4 w-4 text-[#616161]" /> <span className="text-sm break-all">User ID: {selectedEvent.extendedProps.userId}</span></div>
-              </div>
+          <CardContent className="p-4 sm:p-6">
+            <div className="w-full overflow-x-auto rounded-lg">
+              <div ref={calendarRef} className="w-full min-w-0" style={{ fontSize: isMobile ? "12px" : "14px" }} />
             </div>
-            <div className="space-y-3">
+            {isMobile && (
+              <div className="flex gap-2 mt-4 justify-center">
+                {["dayGridMonth", "timeGridWeek", "timeGridDay"].map((view, i) => (
+                  <Button
+                    key={i}
+                    className="text-xs font-inter font-medium bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white hover:scale-[1.02] transition-transform duration-200"
+                    onClick={() => calendar?.changeView(view)}
+                  >
+                    {view === "dayGridMonth" ? "Month" : view === "timeGridWeek" ? "Week" : "Day"}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Event Details */}
+        {selectedEvent && (
+          <Card className="shadow-md rounded-2xl border-l-4 border-[#2563EB] transition-all duration-300 hover:shadow-lg">
+            <CardHeader className="pb-3 flex justify-between items-center">
+              <CardTitle className="text-lg font-inter font-semibold flex items-center gap-2 text-[#111827]">
+                <CalendarIcon className="h-5 w-5 text-[#2563EB]" /> Service Details
+              </CardTitle>
+              <Button variant="ghost" size="sm" onClick={closeEventDetails} className="hover:bg-[#F8FAFC]">✕</Button>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-[#616161]">Status</label>
-                <div className="mt-1">
-                  <Badge style={{ backgroundColor: selectedEvent.backgroundColor, color: "white" }} className="text-xs font-bold">{statusDisplayNames[selectedEvent.extendedProps.status]}</Badge>
+                <h3 className="font-inter font-semibold text-lg text-[#111827]">{selectedEvent.title}</h3>
+                <p className="text-[#374151] text-sm mb-3 font-poppins">{selectedEvent.extendedProps.description || "No description available"}</p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-[#374151]">
+                    <Clock className="h-4 w-4 text-[#9CA3AF]" />
+                    <span className="text-sm font-poppins">{new Date(selectedEvent.start).toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[#374151]">
+                    <IndianRupee className="h-4 w-4 text-[#9CA3AF]" />
+                    <span className="text-sm font-inter font-medium">₹{selectedEvent.extendedProps.basePrice?.toFixed(2) || "N/A"}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[#374151]">
+                    <User className="h-4 w-4 text-[#9CA3AF]" />
+                    <span className="text-sm font-poppins break-all">User ID: {selectedEvent.extendedProps.userId}</span>
+                  </div>
                 </div>
               </div>
-              <Button
-                onClick={() => window.location.href = `/provider/service/${selectedEvent.id}`}
-                className="w-full font-poppins font-bold uppercase bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white hover:scale-105 transition-transform duration-200"
-              >
-                View Full Details
-              </Button>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-inter font-medium text-[#374151]">Status</label>
+                  <div className="mt-1">
+                    <Badge style={{ backgroundColor: selectedEvent.backgroundColor, color: "white" }} className="text-xs font-inter font-medium px-2 py-1">
+                      {statusDisplayNames[selectedEvent.extendedProps.status]}
+                    </Badge>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => window.location.href = `/provider/service/${selectedEvent.id}`}
+                  className="w-full font-inter font-medium bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white hover:scale-[1.02] transition-transform duration-200 rounded-lg"
+                >
+                  View Full Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Status Legend */}
+        <Card className="shadow-md rounded-2xl bg-white border border-[#E5E7EB]">
+          <CardHeader>
+            <CardTitle className="text-sm font-inter font-semibold text-[#111827]">Status Legend</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-3">
+              {Object.entries(statusColors).map(([status, color]) => (
+                <div key={status} className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                  <span className="text-sm font-poppins text-[#374151]">{statusDisplayNames[status]}</span>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
-      )}
-
-      {/* Status Legend */}
-      <Card className="shadow-lg rounded-2xl bg-white">
-        <CardHeader>
-          <CardTitle className="text-sm font-poppins font-semibold text-[#212121]">Status Legend</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-3">
-            {Object.entries(statusColors).map(([status, color]) => (
-              <div key={status} className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                <span className="text-sm font-nunito text-[#616161]">{statusDisplayNames[status]}</span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };
 

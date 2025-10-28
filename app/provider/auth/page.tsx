@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
@@ -97,6 +98,7 @@ const ProviderAuthPage = () => {
         setSuccess("Account created successfully!");
         router.push("/provider");
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.data?.error) {
         setError(err.response.data.error);
@@ -112,6 +114,7 @@ const ProviderAuthPage = () => {
     try {
       const response = await axios.get("/api/categories");
       setCategories(response.data);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setError("Failed to load categories");
     }
@@ -147,53 +150,63 @@ const ProviderAuthPage = () => {
   }, [formData.district]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#80DEEA] flex justify-center items-center p-4 transition-all duration-500">
-      <div className="container mx-auto">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Motivational Cards Section */}
-          <div className="space-y-6 md:block hidden animate-slideInRight">
-            <h1 className="text-4xl font-poppins font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00C853] to-[#AEEA00]">
-              Join Our Professional Service Provider Network
-            </h1>
-            <p className="text-lg font-nunito text-[#212121]">
-              Become a part of the leading home services platform and grow your business
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] flex justify-center items-center p-4 transition-all duration-500">
+      {/* Import fonts globally */}
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
+        html, body { font-family: 'Poppins', sans-serif; }
+        h1,h2,h3,h4 { font-family: 'Inter', sans-serif; }
+        .font-nunito { font-family: 'Nunito Sans', sans-serif; }
+      `}</style>
 
-            <div className="grid gap-4">
+      <div className="container mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 items-center max-w-6xl mx-auto">
+          {/* Motivational Cards Section */}
+          <div className="space-y-6 md:block hidden animate-slideIn">
+            <div className="space-y-3">
+              <h1 className="text-4xl font-inter font-semibold text-[#111827] leading-tight">
+                Join Our Professional Network
+              </h1>
+              <p className="text-lg font-poppins text-[#374151]">
+                Become a part of the leading service platform and grow your business with trusted clients
+              </p>
+            </div>
+
+            <div className="grid gap-4 mt-8">
               {/* Earnings */}
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <Briefcase className="w-6 h-6 text-[#00C853]" />
+              <div className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="p-3 bg-gradient-to-br from-[#2563EB]/10 to-[#3B82F6]/5 rounded-xl">
+                  <Briefcase className="w-6 h-6 text-[#2563EB]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold font-poppins text-[#212121]">Increased Earnings</h3>
-                  <p className="text-sm font-nunito text-[#616161]">
+                  <h3 className="font-semibold font-inter text-[#111827]">Increased Earnings</h3>
+                  <p className="text-sm font-nunito text-[#374151]">
                     Get regular clients and boost your income
                   </p>
                 </div>
               </div>
 
               {/* Reputation */}
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <Star className="w-6 h-6 text-[#00C853]" />
+              <div className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="p-3 bg-gradient-to-br from-[#14B8A6]/10 to-[#14B8A6]/5 rounded-xl">
+                  <Star className="w-6 h-6 text-[#14B8A6]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold font-poppins text-[#212121]">Build Your Reputation</h3>
-                  <p className="text-sm font-nunito text-[#616161]">
+                  <h3 className="font-semibold font-inter text-[#111827]">Build Your Reputation</h3>
+                  <p className="text-sm font-nunito text-[#374151]">
                     Earn reviews and grow your professional profile
                   </p>
                 </div>
               </div>
 
               {/* Flexible Schedule */}
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <Clock className="w-6 h-6 text-[#00C853]" />
+              <div className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="p-3 bg-gradient-to-br from-[#10B981]/10 to-[#10B981]/5 rounded-xl">
+                  <Clock className="w-6 h-6 text-[#10B981]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold font-poppins text-[#212121]">Flexible Schedule</h3>
-                  <p className="text-sm font-nunito text-[#616161]">
+                  <h3 className="font-semibold font-inter text-[#111827]">Flexible Schedule</h3>
+                  <p className="text-sm font-nunito text-[#374151]">
                     Work on your own terms and timing
                   </p>
                 </div>
@@ -202,34 +215,36 @@ const ProviderAuthPage = () => {
           </div>
 
           {/* Auth Form Section */}
-          <div className="animate-slideInRight">
-            <div className="md:hidden mb-4">
-              <h1 className="text-2xl font-poppins font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00C853] to-[#AEEA00]">
-                Join Our Professional Service Provider Network
+          <div className="animate-slideIn">
+            <div className="md:hidden mb-6">
+              <h1 className="text-2xl font-inter font-semibold text-[#111827]">
+                Join Our Professional Network
               </h1>
-              <p className="text-base font-nunito text-[#212121]">
-                Become a part of the leading home services platform and grow your business
+              <p className="text-base font-poppins text-[#374151] mt-2">
+                Become a part of the leading service platform
               </p>
             </div>
 
-            <Card className="w-full max-w-md mx-auto rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
-              <CardHeader>
-                <CardTitle className="text-2xl text-center font-poppins font-semibold">
-                  {isLogin ? "Welcome Back, Professional!" : "Create Your Professional Account"}
+            <Card className="w-full max-w-md mx-auto rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 bg-white border border-gray-100">
+              <CardHeader className="space-y-2 pt-8 px-8 pb-4">
+                <CardTitle className="text-2xl text-center font-inter font-semibold text-[#111827]">
+                  {isLogin ? "Welcome Back!" : "Create Professional Account"}
                 </CardTitle>
-                <CardDescription className="text-center font-nunito text-[#616161]">
+                <CardDescription className="text-center font-poppins text-[#374151]">
                   {isLogin
                     ? "Access your service provider dashboard"
                     : "Start your journey with us today"}
                 </CardDescription>
               </CardHeader>
 
-              <CardContent>
+              <CardContent className="px-8 pb-8">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {!isLogin && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
+                        <Label htmlFor="name" className="font-inter font-medium text-sm text-[#111827]">
+                          Full Name
+                        </Label>
                         <Input
                           id="name"
                           name="name"
@@ -237,12 +252,14 @@ const ProviderAuthPage = () => {
                           onChange={handleInputChange}
                           required
                           placeholder="Your professional name"
-                          className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
+                          className="w-full bg-white border border-[#E5E7EB] rounded-lg px-4 py-2.5 focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all placeholder:text-[#9CA3AF]"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone" className="font-inter font-medium text-sm text-[#111827]">
+                          Phone Number
+                        </Label>
                         <Input
                           id="phone"
                           name="phone"
@@ -251,20 +268,22 @@ const ProviderAuthPage = () => {
                           onChange={handleInputChange}
                           required
                           placeholder="+91 98765 43210"
-                          className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
+                          className="w-full bg-white border border-[#E5E7EB] rounded-lg px-4 py-2.5 focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all placeholder:text-[#9CA3AF]"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="specialization">Specialization</Label>
+                        <Label htmlFor="specialization" className="font-inter font-medium text-sm text-[#111827]">
+                          Specialization
+                        </Label>
                         <Select
                           value={formData.specialization}
                           onValueChange={handleSpecializationChange}
                         >
-                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
+                          <SelectTrigger className="focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all border-[#E5E7EB] rounded-lg">
                             <SelectValue placeholder="Select your service category" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="rounded-lg shadow-lg border border-[#E5E7EB]">
                             {categories.map((category) => (
                               <SelectItem key={category.id} value={category.id}>
                                 {category.name}
@@ -274,53 +293,61 @@ const ProviderAuthPage = () => {
                         </Select>
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="district">District</Label>
-                        <Select
-                          value={formData.district}
-                          onValueChange={(value) =>
-                            setFormData((prev) => ({ ...prev, district: value }))
-                          }
-                        >
-                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
-                            <SelectValue placeholder="Select District" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {districts.map((d, i) => (
-                              <SelectItem key={i} value={d}>{d}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="city">City</Label>
-                        <Select
-                          value={formData.city}
-                          onValueChange={(value) =>
-                            setFormData((prev) => ({ ...prev, city: value }))
-                          }
-                        >
-                          <SelectTrigger className="focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all">
-                            <SelectValue placeholder="Select City" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {cities.length > 0
-                              ? cities.map((c, i) => (
-                                  <SelectItem key={i} value={c}>
-                                    {c}
-                                  </SelectItem>
-                                ))
-                              : <SelectItem value="null">Please select district first</SelectItem>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="district" className="font-inter font-medium text-sm text-[#111827]">
+                            District
+                          </Label>
+                          <Select
+                            value={formData.district}
+                            onValueChange={(value) =>
+                              setFormData((prev) => ({ ...prev, district: value }))
                             }
-                          </SelectContent>
-                        </Select>
+                          >
+                            <SelectTrigger className="focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all border-[#E5E7EB] rounded-lg">
+                              <SelectValue placeholder="Select District" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-lg shadow-lg border border-[#E5E7EB]">
+                              {districts.map((d, i) => (
+                                <SelectItem key={i} value={d}>{d}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="city" className="font-inter font-medium text-sm text-[#111827]">
+                            City
+                          </Label>
+                          <Select
+                            value={formData.city}
+                            onValueChange={(value) =>
+                              setFormData((prev) => ({ ...prev, city: value }))
+                            }
+                          >
+                            <SelectTrigger className="focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all border-[#E5E7EB] rounded-lg">
+                              <SelectValue placeholder="Select City" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-lg shadow-lg border border-[#E5E7EB]">
+                              {cities.length > 0
+                                ? cities.map((c, i) => (
+                                    <SelectItem key={i} value={c}>
+                                      {c}
+                                    </SelectItem>
+                                  ))
+                                : <SelectItem value="null">Please select district first</SelectItem>
+                              }
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </>
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="font-inter font-medium text-sm text-[#111827]">
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       name="email"
@@ -329,12 +356,14 @@ const ProviderAuthPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="you@example.com"
-                      className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
+                      className="w-full bg-white border border-[#E5E7EB] rounded-lg px-4 py-2.5 focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all placeholder:text-[#9CA3AF]"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="font-inter font-medium text-sm text-[#111827]">
+                      Password
+                    </Label>
                     <Input
                       id="password"
                       name="password"
@@ -343,40 +372,44 @@ const ProviderAuthPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="••••••••"
-                      className="w-full focus:border-[#00C853] focus:ring-1 focus:ring-[#AEEA00] transition-all"
+                      className="w-full bg-white border border-[#E5E7EB] rounded-lg px-4 py-2.5 focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 transition-all placeholder:text-[#9CA3AF]"
                     />
                   </div>
 
                   {error && (
-                    <div className="flex items-center gap-2 text-[#E53935] bg-red-50 p-3 rounded transition-all">
-                      <AlertCircle size={18} />
-                      <span>{error}</span>
+                    <div className="flex items-start gap-3 text-[#EF4444] bg-[#EF4444]/5 p-3 rounded-lg border border-[#EF4444]/10 animate-fadeIn">
+                      <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                      <span className="text-sm font-poppins">{error}</span>
                     </div>
                   )}
 
                   {success && (
-                    <div className="flex items-center gap-2 text-[#43A047] bg-green-50 p-3 rounded transition-all">
-                      <CheckCircle2 size={18} />
-                      <span>{success}</span>
+                    <div className="flex items-start gap-3 text-[#10B981] bg-[#10B981]/5 p-3 rounded-lg border border-[#10B981]/10 animate-fadeIn">
+                      <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
+                      <span className="text-sm font-poppins">{success}</span>
                     </div>
                   )}
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white font-poppins font-bold uppercase hover:scale-105 transform transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-inter font-medium rounded-lg py-2.5 hover:scale-[1.02] hover:shadow-lg transform transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-[#E5E7EB] disabled:from-[#E5E7EB] disabled:to-[#E5E7EB]"
                     disabled={loading}
                   >
-                    {loading ? "Please wait..." : isLogin ? "Sign In" : "Join as Service Provider"}
+                    {loading ? "Please wait..." : isLogin ? "SIGN IN" : "JOIN AS PROVIDER"}
                   </Button>
 
-                  <div className="text-center space-y-1">
-                    <div className="text-sm text-[#2979FF] hover:underline font-nunito">
+                  <div className="text-center space-y-2 pt-2">
+                    <div className="text-sm text-[#2563EB] hover:text-[#14B8A6] transition-colors font-poppins">
                       <Link href={"/auth"}>Join as User</Link>
                     </div>
                     <button
                       type="button"
-                      onClick={() => setIsLogin(!isLogin)}
-                      className="text-sm text-[#2979FF] hover:underline font-nunito"
+                      onClick={() => {
+                        setIsLogin(!isLogin);
+                        setError("");
+                        setSuccess("");
+                      }}
+                      className="text-sm text-[#374151] hover:text-[#2563EB] transition-colors font-poppins"
                     >
                       {isLogin
                         ? "Don't have an account? Join now"
@@ -389,6 +422,45 @@ const ProviderAuthPage = () => {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-slideIn {
+          animation: slideIn 0.6s ease-out;
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Focus rings for accessibility */
+        :focus {
+          outline: none;
+        }
+        :focus-visible {
+          outline: 3px solid rgba(20, 184, 166, 0.2);
+          outline-offset: 2px;
+        }
+      `}</style>
     </div>
   );
 };

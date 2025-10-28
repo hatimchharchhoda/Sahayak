@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
@@ -16,7 +17,6 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Loading from "@/components/custom/loading";
-import { Review } from "@/lib/types";
 
 export default function ProviderReviews() {
   const [reviews, setReviews] = useState([]);
@@ -60,13 +60,13 @@ export default function ProviderReviews() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return "text-[#43A047] bg-[#E8F5E9]"; // success
+        return "text-emerald-600 bg-emerald-50 border-emerald-200";
       case "PENDING":
-        return "text-[#FBC02D] bg-[#FFF8E1]"; // warning
+        return "text-amber-600 bg-amber-50 border-amber-200";
       case "CANCELLED":
-        return "text-[#E53935] bg-[#FFEBEE]"; // error
+        return "text-red-500 bg-red-50 border-red-200";
       default:
-        return "text-[#616161] bg-[#F5F5F5]"; // neutral
+        return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
 
@@ -75,72 +75,87 @@ export default function ProviderReviews() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F1F8E9] to-[#DCEDC8] py-12 px-4 sm:px-6 lg:px-8 font-[Nunito_Sans] text-[#212121]">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-[Poppins]">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <Card className="w-full shadow-2xl bg-white/90 backdrop-blur-md rounded-2xl">
+          <Card className="w-full shadow-lg bg-white backdrop-blur-sm rounded-2xl border border-gray-100">
             <CardContent className="p-8">
+              {/* Header */}
               <div className="mb-8">
-                <h1 className="text-3xl font-[Poppins] font-semibold text-[#212121]">
+                <h1 className="text-3xl font-[Inter] font-semibold text-gray-900">
                   My Reviews
                 </h1>
-                <p className="text-[#616161] mt-2">
+                <p className="text-gray-600 mt-2 font-[Nunito_Sans]">
                   View all reviews for your services
                 </p>
               </div>
 
               {reviews.length === 0 ? (
-                <Card className="text-center py-12 bg-white/80 shadow-md rounded-xl">
-                  <CardContent>
-                    <Star className="mx-auto h-12 w-12 text-[#9E9E9E] mb-4" />
-                    <h3 className="text-lg font-semibold text-[#212121] mb-2">
-                      No reviews yet
-                    </h3>
-                    <p className="text-[#616161]">
-                      Reviews will appear here once customers rate your services.
-                    </p>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="text-center py-16 bg-white shadow-md rounded-2xl border border-gray-100">
+                    <CardContent>
+                      <div className="bg-gradient-to-br from-blue-50 to-teal-50 w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center">
+                        <Star className="h-10 w-10 text-gray-400" />
+                      </div>
+                      <h3 className="text-xl font-[Inter] font-semibold text-gray-900 mb-2">
+                        No reviews yet
+                      </h3>
+                      <p className="text-gray-500 font-[Nunito_Sans]">
+                        Reviews will appear here once customers rate your services.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ) : (
                 <div className="space-y-6">
-                  {reviews.map((review) => (
+                  {reviews.map((review, index) => (
                     <motion.div
                       key={review.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
                       whileHover={{
-                        y: -4,
+                        y: -6,
                         scale: 1.01,
-                        boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                        transition: { duration: 0.2 }
                       }}
-                      transition={{ duration: 0.25 }}
                     >
-                      <Card className="rounded-xl shadow-md border border-[#AEEA00]/40 bg-white/95">
+                      <Card className="rounded-2xl shadow-md hover:shadow-xl border border-gray-100 bg-white transition-all duration-300">
                         <CardContent className="p-6">
                           {/* Header Section */}
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center space-x-3">
-                              <div className="bg-[#E0F7FA] p-2 rounded-full shadow-sm">
-                                <User className="h-5 w-5 text-[#00C853]" />
-                              </div>
+                          <div className="flex items-start justify-between mb-6">
+                            <div className="flex items-center space-x-4">
+                              <motion.div 
+                                className="bg-gradient-to-br from-blue-100 to-teal-100 p-3 rounded-xl shadow-sm"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <User className="h-6 w-6 text-blue-600" />
+                              </motion.div>
                               <div>
-                                <h3 className="font-semibold text-lg text-[#212121]">
+                                <h3 className="font-[Inter] font-semibold text-lg text-gray-900">
                                   {review.User.name}
                                 </h3>
-                                <div className="flex items-center mt-1">
+                                <div className="flex items-center mt-1.5">
                                   {Array.from({ length: 5 }).map((_, index) => (
                                     <Star
                                       key={index}
                                       className={`h-4 w-4 ${
                                         index < review.stars
-                                          ? "text-[#FBC02D] fill-current"
-                                          : "text-[#E0E0E0]"
+                                          ? "text-amber-500 fill-amber-500"
+                                          : "text-gray-300 fill-gray-300"
                                       }`}
                                     />
                                   ))}
-                                  <span className="ml-2 text-sm text-[#616161]">
+                                  <span className="ml-2 text-sm text-gray-500 font-[Nunito_Sans]">
                                     {review.stars} out of 5
                                   </span>
                                 </div>
@@ -149,37 +164,41 @@ export default function ProviderReviews() {
 
                             {/* Booking Status */}
                             <div
-                              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                              className={`px-4 py-1.5 rounded-full text-xs font-[Inter] font-medium border ${getStatusColor(
                                 review.Booking.status
-                              )}`}
+                              )} flex items-center gap-1.5`}
                             >
-                              <CheckCircle className="inline h-3 w-3 mr-1" />
+                              <CheckCircle className="h-3.5 w-3.5" />
                               {review.Booking.status}
                             </div>
                           </div>
 
                           {/* Service Info */}
-                          <div className="bg-[#F5F5F5] rounded-lg p-4 mb-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="flex items-center space-x-3">
-                                <Package className="h-5 w-5 text-[#00C853]" />
+                          <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-xl p-5 mb-5 border border-gray-100">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                              <div className="flex items-start space-x-3">
+                                <div className="bg-white p-2 rounded-lg shadow-sm">
+                                  <Package className="h-5 w-5 text-blue-600" />
+                                </div>
                                 <div>
-                                  <p className="text-sm font-medium text-[#212121]">
+                                  <p className="text-sm font-[Inter] font-medium text-gray-900">
                                     {review.Service.name}
                                   </p>
-                                  <p className="text-xs text-[#616161]">
+                                  <p className="text-xs text-gray-500 font-[Nunito_Sans] mt-0.5">
                                     {review.Service.description}
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-center space-x-3">
-                                <IndianRupee className="h-5 w-5 text-[#43A047]" />
+                              <div className="flex items-start space-x-3">
+                                <div className="bg-white p-2 rounded-lg shadow-sm">
+                                  <IndianRupee className="h-5 w-5 text-teal-600" />
+                                </div>
                                 <div>
-                                  <p className="text-sm font-medium text-[#212121]">
-                                    {review.Booking.basePrice}
+                                  <p className="text-sm font-[Inter] font-medium text-gray-900">
+                                    ₹{review.Booking.basePrice}
                                   </p>
-                                  <p className="text-xs text-[#616161]">
+                                  <p className="text-xs text-gray-500 font-[Nunito_Sans] mt-0.5">
                                     Service Price
                                   </p>
                                 </div>
@@ -188,38 +207,38 @@ export default function ProviderReviews() {
                           </div>
 
                           {/* Booking Details */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                            <div className="flex items-center space-x-2">
-                              <Calendar className="h-4 w-4 text-[#43A047]" />
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                            <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-gray-100">
+                              <Calendar className="h-5 w-5 text-blue-600" />
                               <div>
-                                <p className="text-xs text-[#9E9E9E]">
+                                <p className="text-xs text-gray-500 font-[Nunito_Sans]">
                                   Service Date
                                 </p>
-                                <p className="text-sm font-medium">
+                                <p className="text-sm font-[Inter] font-medium text-gray-900 mt-0.5">
                                   {formatDate(review.Booking.date)}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                              <CheckCircle className="h-4 w-4 text-[#43A047]" />
+                            <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-gray-100">
+                              <CheckCircle className="h-5 w-5 text-emerald-600" />
                               <div>
-                                <p className="text-xs text-[#9E9E9E]">
+                                <p className="text-xs text-gray-500 font-[Nunito_Sans]">
                                   Payment Status
                                 </p>
-                                <p className="text-sm font-medium">
+                                <p className="text-sm font-[Inter] font-medium text-gray-900 mt-0.5">
                                   {review.Booking.isPaid ? "Paid" : "Pending"}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                              <Package className="h-4 w-4 text-[#00C853]" />
+                            <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-gray-100">
+                              <Package className="h-5 w-5 text-teal-600" />
                               <div>
-                                <p className="text-xs text-[#9E9E9E]">
+                                <p className="text-xs text-gray-500 font-[Nunito_Sans]">
                                   Order ID
                                 </p>
-                                <p className="text-sm font-medium font-mono">
+                                <p className="text-sm font-[Inter] font-medium text-gray-900 font-mono mt-0.5">
                                   {review.Booking.orderId?.slice(-8) || "N/A"}
                                 </p>
                               </div>
@@ -228,18 +247,22 @@ export default function ProviderReviews() {
 
                           {/* Review Text */}
                           {review.review && (
-                            <div className="border-l-4 border-[#00C853] pl-4 py-2 bg-[#E8F5E9] rounded-r-lg">
-                              <p className="text-sm text-[#424242] italic">
-                                "{review.review}"
+                            <div className="border-l-4 border-blue-600 pl-5 py-3 bg-gradient-to-r from-blue-50 to-transparent rounded-r-xl">
+                              <p className="text-sm text-gray-700 font-[Poppins] italic">
+                                &quot;{review.review}&quot;
                               </p>
                             </div>
                           )}
 
                           {/* Payment Verified Date */}
                           {review.Booking.paymentVerifiedAt && (
-                            <div className="mt-4 text-xs text-[#616161]">
-                              Payment verified on{" "}
-                              {formatDate(review.Booking.paymentVerifiedAt)}
+                            <div className="mt-4 pt-4 border-t border-gray-100">
+                              <p className="text-xs text-gray-500 font-[Nunito_Sans]">
+                                Payment verified on{" "}
+                                <span className="font-medium text-gray-700">
+                                  {formatDate(review.Booking.paymentVerifiedAt)}
+                                </span>
+                              </p>
                             </div>
                           )}
                         </CardContent>

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
@@ -61,7 +62,9 @@ const ServiceListPage = () => {
   if (loading) {
     return (
       <>
-        <style jsx>{`
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
+          
           @keyframes shimmer {
             0% {
               background-position: -1000px 0;
@@ -73,24 +76,12 @@ const ServiceListPage = () => {
           
           .animate-shimmer {
             animation: shimmer 2s infinite;
-            background: linear-gradient(to right, #EDE7F6 0%, #F8BBD0 50%, #EDE7F6 100%);
+            background: linear-gradient(to right, #F8FAFC 0%, #E5E7EB 50%, #F8FAFC 100%);
             background-size: 1000px 100%;
-          }
-          
-          .font-montserrat {
-            font-family: 'Montserrat', sans-serif;
-          }
-          
-          .font-lato {
-            font-family: 'Lato', sans-serif;
-          }
-          
-          .font-poppins {
-            font-family: 'Poppins', sans-serif;
           }
         `}</style>
 
-        <div className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6]">
+        <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF]">
           <div className="container mx-auto max-w-7xl px-4 pt-16 md:pt-20 lg:pt-24">
             {/* Loading Header */}
             <div className="mb-6 md:mb-8 lg:mb-12">
@@ -101,7 +92,7 @@ const ServiceListPage = () => {
             {/* Loading Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
-                <Card key={index} className="rounded-2xl shadow-lg bg-white/90 backdrop-blur-sm border border-[#F8BBD0]/20">
+                <Card key={index} className="rounded-2xl shadow-md bg-white border border-[#E5E7EB]">
                   <CardHeader className="space-y-3 md:space-y-4 p-4 md:p-6">
                     <div className="h-5 md:h-6 lg:h-8 animate-shimmer rounded"></div>
                     <div className="h-3 md:h-4 animate-shimmer rounded w-1/2"></div>
@@ -120,46 +111,36 @@ const ServiceListPage = () => {
   if (!services.length) {
     return (
       <>
-        <style jsx>{`
-          .font-montserrat {
-            font-family: 'Montserrat', sans-serif;
-          }
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
           
-          .font-lato {
-            font-family: 'Lato', sans-serif;
-          }
-          
-          .font-poppins {
-            font-family: 'Poppins', sans-serif;
-          }
-          
-          .gradient-coral {
-            background: linear-gradient(135deg, #FF6F61 0%, #FF8A65 100%);
+          .gradient-blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
           }
         `}</style>
 
-        <div className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6] flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] flex items-center justify-center px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="max-w-sm md:max-w-md lg:max-w-lg mx-auto shadow-2xl rounded-2xl bg-white/90 backdrop-blur-sm border border-[#F8BBD0]/30">
+            <Card className="max-w-sm md:max-w-md lg:max-w-lg mx-auto shadow-lg rounded-2xl bg-white border border-[#E5E7EB]">
               <CardHeader className="text-center p-6 md:p-8 lg:p-10 space-y-4">
-                <div className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full gradient-coral flex items-center justify-center shadow-lg mb-4">
+                <div className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-xl gradient-blue flex items-center justify-center shadow-sm mb-4">
                   <Search className="w-10 h-10 md:w-12 md:h-12 text-white" />
                 </div>
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold font-montserrat text-[#212121] mb-2 md:mb-4">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold font-inter text-[#111827] mb-2 md:mb-4">
                   No Services Found
                 </h2>
-                <CardDescription className="text-sm md:text-base lg:text-lg text-[#424242] leading-relaxed font-lato">
+                <CardDescription className="text-sm md:text-base lg:text-lg text-[#374151] leading-relaxed font-poppins">
                   There are currently no services available in this category.
                   Please try browsing other categories or check back later.
                 </CardDescription>
                 <Link
                   href="/services"
-                  className="inline-block mt-4 md:mt-6 px-4 md:px-6 py-2 md:py-3 rounded-full font-poppins font-semibold
-                             gradient-coral text-white text-sm md:text-base hover:scale-105 transition-all duration-300 shadow-lg uppercase tracking-wide"
+                  className="inline-block mt-4 md:mt-6 px-4 md:px-6 py-2 md:py-3 rounded-lg font-inter font-medium
+                             gradient-blue text-white text-sm md:text-base hover:scale-[1.02] transition-all duration-300 shadow-sm uppercase tracking-wide"
                 >
                   Browse All Services
                 </Link>
@@ -173,28 +154,18 @@ const ServiceListPage = () => {
 
   return (
     <>
-      <style jsx>{`
-        .font-montserrat {
-          font-family: 'Montserrat', sans-serif;
-        }
-        
-        .font-lato {
-          font-family: 'Lato', sans-serif;
-        }
-        
-        .font-poppins {
-          font-family: 'Poppins', sans-serif;
-        }
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
         
         .gradient-text {
-          background: linear-gradient(135deg, #FF6F61 0%, #FF8A65 100%);
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF]">
         <div className="container mx-auto max-w-7xl px-4 pt-16 md:pt-20 lg:pt-24 pb-8 md:pb-12 lg:pb-16">
           {/* Page Header */}
           <motion.div
@@ -203,24 +174,24 @@ const ServiceListPage = () => {
             transition={{ duration: 0.5 }}
             className="mb-6 md:mb-8 lg:mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md rounded-full shadow-md mb-4 border border-[#F8BBD0]/30">
-              <Package className="w-4 h-4 text-[#FF6F61]" />
-              <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">Available Services</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-4 border border-[#E5E7EB]">
+              <Package className="w-4 h-4 text-[#2563EB]" />
+              <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">Available Services</span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold font-montserrat gradient-text mb-2 md:mb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold font-inter gradient-text mb-2 md:mb-4">
               Browse Services
             </h1>
             {categoryName && (
-              <p className="text-sm md:text-base lg:text-lg text-[#424242] capitalize font-lato">
+              <p className="text-sm md:text-base lg:text-lg text-[#374151] capitalize font-poppins">
                 Category:{" "}
-                <span className="font-semibold text-[#212121]">
+                <span className="font-semibold text-[#111827]">
                   {decodeURIComponent(categoryName as string)}
                 </span>
               </p>
             )}
-            <div className="inline-flex items-center gap-2 text-xs md:text-sm text-[#9E9E9E] mt-2 md:mt-3 px-3 py-1 bg-white/50 rounded-full font-lato">
-              <span className="font-medium text-[#FF6F61]">{services.length}</span>
+            <div className="inline-flex items-center gap-2 text-xs md:text-sm text-[#9CA3AF] mt-2 md:mt-3 px-3 py-1 bg-white rounded-full border border-[#E5E7EB] font-poppins">
+              <span className="font-medium text-[#2563EB]">{services.length}</span>
               service{services.length !== 1 ? "s" : ""} found
             </div>
           </motion.div>
@@ -253,7 +224,7 @@ const ServiceListPage = () => {
           >
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-sm md:text-base text-[#FF6F61] hover:text-[#FF8A65] font-medium transition-colors duration-300 font-poppins px-4 py-2 rounded-full hover:bg-white/50"
+              className="inline-flex items-center gap-2 text-sm md:text-base text-[#2563EB] hover:text-[#14B8A6] font-medium transition-colors duration-300 font-poppins px-4 py-2 rounded-lg hover:bg-white/80"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to All Services

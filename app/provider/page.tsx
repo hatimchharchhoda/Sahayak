@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
@@ -39,8 +41,7 @@ function ProviderDashboard() {
   const router = useRouter();
   const [unreadCount, setUnreadCount] = useState(0);
   const [allServices, setAllServices] = useState<[]>([]);
-  const [availableServicesLoading, setAvailableServicesLoading] =
-    useState(false);
+  const [availableServicesLoading, setAvailableServicesLoading] = useState(false);
   const [allServicesLoading, setAllServicesLoading] = useState(false);
 
   // Separate services
@@ -55,8 +56,7 @@ function ProviderDashboard() {
   );
 
   const completedServices = useMemo(
-    () =>
-      allServices?.filter((service) => service.status === "COMPLETED") || [],
+    () => allServices?.filter((service) => service.status === "COMPLETED") || [],
     [allServices]
   );
 
@@ -154,217 +154,223 @@ function ProviderDashboard() {
   if (isLoading) return <Loading />;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6 }}
-      className="min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#80DEEA] py-12 px-4 sm:px-6 lg:px-8"
-    >
-      <div className="max-w-7xl mx-auto">
-        <Card className="w-full shadow-xl rounded-2xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300">
-          <CardContent className="p-6">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-poppins font-semibold mb-2 bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-transparent bg-clip-text">
-                  Welcome, {user?.name}!
-                </h1>
-                <p className="text-lg font-nunito text-[#212121]">
-                  Role: <span className="font-semibold">{user?.role}</span> |
-                  Specialization:{" "}
-                  <span className="font-semibold">{user?.specialization}</span>
-                </p>
-              </div>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
+      `}</style>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
-                <Button
-                  onClick={() => router.push("/chat/unread")}
-                  className="relative bg-gradient-to-r from-teal-400 to-lime-400 text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Chat
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                      {unreadCount}
-                    </span>
-                  )}
-                </Button>
-                {[
-                  {
-                    icon: <User className="mr-2 h-4 w-4" />,
-                    label: "Profile",
-                    path: `/provider/profile/${user?.id}`,
-                  },
-                  {
-                    icon: <Ticket className="mr-2 h-4 w-4" />,
-                    label: "Raise Ticket",
-                    path: `/provider/raise-ticket`,
-                  },
-                  {
-                    icon: <Star className="mr-2 h-4 w-4" />,
-                    label: "Reviews",
-                    path: `/provider/reviews/${user?.id}`,
-                  },
-                ].map((btn) => (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] py-12 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-7xl mx-auto">
+          <Card className="w-full shadow-md rounded-2xl bg-white border border-[#E5E7EB] hover:shadow-lg transition-shadow duration-300">
+            <CardContent className="p-6">
+              {/* Header */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-inter font-semibold mb-2 text-[#111827]">
+                    Welcome, {user?.name}!
+                  </h1>
+                  <p className="text-base font-poppins text-[#374151]">
+                    Role: <span className="font-semibold text-[#111827]">{user?.role}</span> |
+                    Specialization:{" "}
+                    <span className="font-semibold text-[#111827]">{user?.specialization}</span>
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
                   <Button
-                    key={btn.label}
-                    onClick={() => router.push(btn.path)}
-                    className="bg-gradient-to-r from-[#00C853] to-[#AEEA00] text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
+                    onClick={() => router.push("/chat/unread")}
+                    className="relative bg-gradient-to-r from-[#14B8A6] to-[#0D9488] text-white font-inter font-medium px-4 py-2 rounded-lg hover:scale-[1.02] transition-transform duration-300"
                   >
-                    {btn.icon} {btn.label}
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Chat
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#EF4444] rounded-full">
+                        {unreadCount}
+                      </span>
+                    )}
                   </Button>
-                ))}
-                <Button
-                  onClick={handleLogout}
-                  className="bg-gradient-to-r from-red-500 to-pink-500 text-white font-poppins font-bold uppercase px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300"
-                >
-                  <LogOut className="mr-2 h-4 w-4" /> Logout
-                </Button>
+                  {[
+                    {
+                      icon: <User className="mr-2 h-4 w-4" />,
+                      label: "Profile",
+                      path: `/provider/profile/${user?.id}`,
+                    },
+                    {
+                      icon: <Ticket className="mr-2 h-4 w-4" />,
+                      label: "Raise Ticket",
+                      path: `/provider/raise-ticket`,
+                    },
+                    {
+                      icon: <Star className="mr-2 h-4 w-4" />,
+                      label: "Reviews",
+                      path: `/provider/reviews/${user?.id}`,
+                    },
+                  ].map((btn) => (
+                    <Button
+                      key={btn.label}
+                      onClick={() => router.push(btn.path)}
+                      className="bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-inter font-medium px-4 py-2 rounded-lg hover:scale-[1.02] transition-transform duration-300"
+                    >
+                      {btn.icon} {btn.label}
+                    </Button>
+                  ))}
+                  <Button
+                    onClick={handleLogout}
+                    className="bg-[#EF4444] hover:bg-[#DC2626] text-white font-inter font-medium px-4 py-2 rounded-lg hover:scale-[1.02] transition-transform duration-300"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <StatCard
-                icon={<Clock className="h-8 w-8 text-[#FBC02D]" />}
-                title="Available Services"
-                value={availableServices.length.toString()}
-                color="bg-[#FFFDE7]"
-                loading={availableServicesLoading}
-              />
-              <StatCard
-                icon={<Calendar className="h-8 w-8 text-[#2979FF]" />}
-                title="Accepted Services"
-                value={acceptedServices.length.toString()}
-                color="bg-[#E3F2FD]"
-                loading={allServicesLoading}
-              />
-              <StatCard
-                icon={<CheckCircle className="h-8 w-8 text-[#43A047]" />}
-                title="Completed Services"
-                value={completedServices?.length?.toString() || "0"}
-                color="bg-[#E8F5E9]"
-                loading={allServicesLoading}
-              />
-              <StatCard
-                icon={<IndianRupee className="h-8 w-8 text-[#43A047]" />}
-                title="Total Earnings"
-                value={`₹${completedServices
-                  ?.filter((service: any) => service.isPaid)
-                  .reduce(
-                    (sum: number, service: any) =>
-                      sum + (service.basePrice || 0),
-                    0
-                  )
-                  .toFixed(2)}`}
-                color="bg-[#E8F5E9]"
-                loading={allServicesLoading}
-              />
-            </div>
-
-            {/* Income Chart */}
-            {allServicesLoading ? (
-              <div className="mb-8">
-                <Skeleton className="h-64 w-full bg-gradient-to-r from-[#00C853] to-[#AEEA00] shimmer" />
-              </div>
-            ) : (
-              <div className="mb-8">
-                <IncomeAnalysisChart
-                  completedServices={completedServices}
-                  providerName={user?.name}
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <StatCard
+                  icon={<Clock className="h-8 w-8 text-[#F59E0B]" />}
+                  title="Available Services"
+                  value={availableServices.length.toString()}
+                  color="bg-[#FEF3C7]"
+                  loading={availableServicesLoading}
+                />
+                <StatCard
+                  icon={<Calendar className="h-8 w-8 text-[#2563EB]" />}
+                  title="Accepted Services"
+                  value={acceptedServices.length.toString()}
+                  color="bg-[#DBEAFE]"
+                  loading={allServicesLoading}
+                />
+                <StatCard
+                  icon={<CheckCircle className="h-8 w-8 text-[#10B981]" />}
+                  title="Completed Services"
+                  value={completedServices?.length?.toString() || "0"}
+                  color="bg-[#D1FAE5]"
+                  loading={allServicesLoading}
+                />
+                <StatCard
+                  icon={<IndianRupee className="h-8 w-8 text-[#10B981]" />}
+                  title="Total Earnings"
+                  value={`₹${completedServices
+                    ?.filter((service: any) => service.isPaid)
+                    .reduce(
+                      (sum: number, service: any) =>
+                        sum + (service.basePrice || 0),
+                      0
+                    )
+                    .toFixed(2)}`}
+                  color="bg-[#D1FAE5]"
+                  loading={allServicesLoading}
                 />
               </div>
-            )}
 
-            {/* Tabs for Calendar and List View */}
-            <Tabs defaultValue="calendar" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6 border-b-2 border-green-500">
-                <TabsTrigger
-                  value="calendar"
-                  className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]"
-                >
-                  <CalendarDays className="h-4 w-4" />
-                  Calendar View
-                </TabsTrigger>
-                <TabsTrigger
-                  value="list"
-                  className="flex items-center gap-2 font-semibold text-[#212121] hover:text-[#00C853] data-[state=active]:text-[#00C853]"
-                >
-                  <List className="h-4 w-4" />
-                  List View
-                </TabsTrigger>
-              </TabsList>
-
-              {/* Calendar View */}
-              <TabsContent value="calendar">
-                {availableServicesLoading || allServicesLoading ? (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <Loader2 className="h-10 w-10 text-[#00C853] animate-spin mb-4" />
-                    <p className="text-[#616161] font-medium">
-                      Loading calendar...
-                    </p>
-                  </div>
-                ) : (
-                  <ProviderServicesCalendar
-                    services={allServices}
-                    onEventClick={handleCalendarEventClick}
-                  />
-                )}
-              </TabsContent>
-
-              {/* List View */}
-              <TabsContent value="list">
-                <div className="space-y-8">
-                  <BookedServicesList
-                    services={availableServices}
-                    title="Available Services"
-                    emptyMessage="No available services at the moment."
-                  />
-                  <BookedServicesList
-                    services={acceptedServices}
-                    title="Accepted Services"
-                    emptyMessage="No accepted services at the moment."
-                  />
-                  <BookedServicesList
-                    services={completedServices}
-                    title="Completed Services"
-                    emptyMessage="No completed services yet."
+              {/* Income Chart */}
+              {allServicesLoading ? (
+                <div className="mb-8">
+                  <Skeleton className="h-64 w-full bg-[#F8FAFC] rounded-lg" />
+                </div>
+              ) : (
+                <div className="mb-8">
+                  <IncomeAnalysisChart
+                    completedServices={completedServices}
+                    providerName={user?.name}
                   />
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </div>
-    </motion.div>
+              )}
+
+              {/* Tabs for Calendar and List View */}
+              <Tabs defaultValue="calendar" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-6 bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg p-1">
+                  <TabsTrigger
+                    value="calendar"
+                    className="flex items-center gap-2 font-inter font-medium text-[#374151] hover:text-[#2563EB] data-[state=active]:bg-white data-[state=active]:text-[#2563EB] data-[state=active]:shadow-sm rounded-md transition-all"
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    Calendar View
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="list"
+                    className="flex items-center gap-2 font-inter font-medium text-[#374151] hover:text-[#2563EB] data-[state=active]:bg-white data-[state=active]:text-[#2563EB] data-[state=active]:shadow-sm rounded-md transition-all"
+                  >
+                    <List className="h-4 w-4" />
+                    List View
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Calendar View */}
+                <TabsContent value="calendar">
+                  {availableServicesLoading || allServicesLoading ? (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <Loader2 className="h-10 w-10 text-[#2563EB] animate-spin mb-4" />
+                      <p className="text-[#374151] font-poppins font-medium">
+                        Loading calendar...
+                      </p>
+                    </div>
+                  ) : (
+                    <ProviderServicesCalendar
+                      services={allServices}
+                      onEventClick={handleCalendarEventClick}
+                    />
+                  )}
+                </TabsContent>
+
+                {/* List View */}
+                <TabsContent value="list">
+                  <div className="space-y-8">
+                    <BookedServicesList
+                      services={availableServices}
+                      title="Available Services"
+                      emptyMessage="No available services at the moment."
+                    />
+                    <BookedServicesList
+                      services={acceptedServices}
+                      title="Accepted Services"
+                      emptyMessage="No accepted services at the moment."
+                    />
+                    <BookedServicesList
+                      services={completedServices}
+                      title="Completed Services"
+                      emptyMessage="No completed services yet."
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+      </motion.div>
+    </>
   );
 }
 
 function StatCard({ icon, title, value, color, loading = false }) {
   return (
     <Card
-      className={`rounded-xl ${
-        loading ? "bg-gray-100 border-none" : `${color} border-none`
-      } hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1`}
+      className={`rounded-xl border border-[#E5E7EB] ${
+        loading ? "bg-[#F8FAFC]" : color
+      } hover:shadow-md transition-all duration-300 hover:-translate-y-1`}
     >
       <CardContent className="flex items-center p-6">
         {loading ? (
           <>
-            <Skeleton className="h-12 w-12 rounded-full mr-4" />
+            <Skeleton className="h-12 w-12 rounded-lg mr-4 bg-[#E5E7EB]" />
             <div>
-              <Skeleton className="h-4 w-24 mb-2" />
-              <Skeleton className="h-6 w-16" />
+              <Skeleton className="h-4 w-24 mb-2 bg-[#E5E7EB]" />
+              <Skeleton className="h-6 w-16 bg-[#E5E7EB]" />
             </div>
           </>
         ) : (
           <>
             <div className="mr-4">{icon}</div>
             <div>
-              <h2 className="text-lg font-poppins font-semibold text-[#212121]">
+              <h2 className="text-sm font-inter font-medium text-[#374151]">
                 {title}
               </h2>
-              <p className="text-2xl font-poppins font-bold text-[#212121]">
+              <p className="text-2xl font-inter font-semibold text-[#111827]">
                 {value}
               </p>
             </div>

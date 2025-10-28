@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import {
   AlertCircle,
@@ -24,14 +25,15 @@ import Payment from "./Payment";
 const getStatusColor = (status: any) => {
   switch (status) {
     case "COMPLETED":
+      return "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20";
     case "ACCEPTED":
-      return "bg-green-100 text-[#66BB6A]";
+      return "bg-[#14B8A6]/10 text-[#14B8A6] border-[#14B8A6]/20";
     case "PENDING":
-      return "bg-amber-100 text-[#FFCA28]";
+      return "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20";
     case "CANCELLED":
-      return "bg-rose-100 text-[#E57373]";
+      return "bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20";
     default:
-      return "bg-gray-100 text-gray-600";
+      return "bg-gray-100 text-gray-600 border-gray-200";
   }
 };
 
@@ -39,11 +41,11 @@ const getStatusIcon = (status: any) => {
   switch (status) {
     case "COMPLETED":
     case "ACCEPTED":
-      return <CheckCircle className="h-5 w-5 text-[#66BB6A]" />;
+      return <CheckCircle className="h-4 w-4" />;
     case "CANCELLED":
-      return <XCircle className="h-5 w-5 text-[#E57373]" />;
+      return <XCircle className="h-4 w-4" />;
     default:
-      return <AlertCircle className="h-5 w-5 text-[#FFCA28]" />;
+      return <AlertCircle className="h-4 w-4" />;
   }
 };
 
@@ -122,19 +124,23 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
 
   return (
     <>
-      <div className="bg-gradient-to-tr from-[#EDE7F6] to-[#F8BBD0] rounded-3xl shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl p-6">
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
+      `}</style>
+
+      <div className="bg-white rounded-2xl shadow-md border border-[#E5E7EB] transform transition-all hover:shadow-lg hover:scale-[1.02] p-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg sm:text-xl font-montserrat font-semibold text-[#212121] truncate">
+            <h3 className="text-lg sm:text-xl font-inter font-semibold text-[#111827] truncate">
               {booking.Service?.name}
             </h3>
-            <p className="text-sm sm:text-base font-lato text-[#424242] mt-1 line-clamp-2">
+            <p className="text-sm sm:text-base font-poppins text-[#374151] mt-1 line-clamp-2">
               {booking.Service?.description}
             </p>
           </div>
           <div
-            className={`px-3 py-1 rounded-full flex items-center space-x-2 font-poppins font-medium text-xs sm:text-sm ${getStatusColor(
+            className={`px-3 py-1.5 rounded-lg flex items-center space-x-2 font-poppins font-medium text-xs sm:text-sm border ${getStatusColor(
               booking.status
             )}`}
           >
@@ -145,26 +151,26 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
 
         {/* Date & Price */}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="flex items-center space-x-2 text-[#424242]">
-            <Calendar className="h-5 w-5 text-[#26C6DA]" />
-            <span className="font-lato text-sm sm:text-base">{date}</span>
+          <div className="flex items-center space-x-2 text-[#374151] bg-[#F8FAFC] px-3 py-2 rounded-lg">
+            <Calendar className="h-5 w-5 text-[#14B8A6]" />
+            <span className="font-poppins text-sm sm:text-base">{date}</span>
           </div>
-          <div className="flex items-center space-x-2 text-[#424242]">
-            <IndianRupee className="h-5 w-5 text-[#FF6F61]" />
-            <span className="font-lato text-sm sm:text-base">₹{booking.basePrice}</span>
+          <div className="flex items-center space-x-2 text-[#374151] bg-[#F8FAFC] px-3 py-2 rounded-lg">
+            <IndianRupee className="h-5 w-5 text-[#2563EB]" />
+            <span className="font-poppins text-sm sm:text-base">₹{booking.basePrice}</span>
           </div>
         </div>
 
         {/* Provider Info */}
         {booking.ServiceProvider && (
-          <div className="mt-5 border-t border-[#FF6F61]/30 pt-4">
+          <div className="mt-5 border-t border-[#E5E7EB] pt-4">
             <div className="flex justify-between items-center mb-3">
-              <h4 className="text-sm font-montserrat font-semibold text-[#212121]">
+              <h4 className="text-sm font-inter font-semibold text-[#111827]">
                 Service Provider
               </h4>
               {booking.status !== "PENDING" && !booking.isPaid && (
                 <Link href={`/chat/${booking.ServiceProvider.id}`}>
-                  <Button className="bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 text-white px-4 py-2 rounded-xl shadow-md flex items-center space-x-2 transition-transform">
+                  <Button className="bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:scale-105 text-white px-4 py-2 rounded-lg shadow-sm flex items-center space-x-2 transition-transform text-xs sm:text-sm font-inter">
                     <MessageCircle className="h-4 w-4" />
                     <span>Chat</span>
                   </Button>
@@ -173,34 +179,34 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-              <div className="flex items-center space-x-2 min-w-0">
-                <User className="h-4 w-4 text-[#9E9E9E]" />
-                <span className="text-sm truncate">{booking.ServiceProvider.name}</span>
+              <div className="flex items-center space-x-2 min-w-0 text-[#374151]">
+                <User className="h-4 w-4 text-[#9CA3AF]" />
+                <span className="text-sm truncate font-poppins">{booking.ServiceProvider.name}</span>
               </div>
-              <div className="flex items-center space-x-2 min-w-0">
-                <Phone className="h-4 w-4 text-[#9E9E9E]" />
-                <span className="text-sm truncate">{booking.ServiceProvider.phone}</span>
+              <div className="flex items-center space-x-2 min-w-0 text-[#374151]">
+                <Phone className="h-4 w-4 text-[#9CA3AF]" />
+                <span className="text-sm truncate font-poppins">{booking.ServiceProvider.phone}</span>
               </div>
-              <div className="flex items-center space-x-2 min-w-0">
-                <Mail className="h-4 w-4 text-[#9E9E9E]" />
-                <span className="text-sm truncate">{booking.ServiceProvider.email}</span>
+              <div className="flex items-center space-x-2 min-w-0 text-[#374151]">
+                <Mail className="h-4 w-4 text-[#9CA3AF]" />
+                <span className="text-sm truncate font-poppins">{booking.ServiceProvider.email}</span>
               </div>
-              <div className="flex items-center space-x-2 min-w-0">
-                <Hash className="h-4 w-4 text-[#9E9E9E]" />
-                <span className="text-sm truncate">ID: {booking.ServiceProvider.id}</span>
+              <div className="flex items-center space-x-2 min-w-0 text-[#374151]">
+                <Hash className="h-4 w-4 text-[#9CA3AF]" />
+                <span className="text-sm truncate font-poppins">ID: {booking.ServiceProvider.id}</span>
               </div>
             </div>
           </div>
         )}
 
         {/* Actions */}
-        <div className="mt-5 border-t border-[#FF6F61]/30 pt-4 flex flex-col space-y-3">
+        <div className="mt-5 border-t border-[#E5E7EB] pt-4 flex flex-col space-y-3">
           {canCancel && (
             <Button
               variant="destructive"
               onClick={() => setIsConfirmOpen(true)}
               disabled={isCancelling}
-              className="w-full bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 shadow-lg text-white font-poppins uppercase rounded-xl px-4 py-2 flex items-center justify-center space-x-2 transition-transform"
+              className="w-full bg-[#EF4444] hover:bg-[#DC2626] hover:scale-[1.02] text-white font-inter font-medium uppercase rounded-lg px-4 py-2.5 flex items-center justify-center space-x-2 transition-all text-sm tracking-wide"
             >
               {isCancelling ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -214,7 +220,7 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
           {canReview && !hasReviewed && (
             <Button
               onClick={() => setIsReviewOpen(true)}
-              className="w-full bg-gradient-to-r from-[#26C6DA] to-[#00ACC1] hover:scale-105 shadow-md text-white font-poppins uppercase rounded-xl px-4 py-2 flex items-center justify-center space-x-2 transition-transform"
+              className="w-full bg-gradient-to-r from-[#14B8A6] to-[#0D9488] hover:scale-[1.02] text-white font-inter font-medium uppercase rounded-lg px-4 py-2.5 flex items-center justify-center space-x-2 transition-all text-sm tracking-wide"
             >
               <Star className="h-4 w-4" />
               <span>Write a Review</span>
@@ -224,7 +230,7 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
           {hasReviewed && (
             <Button
               onClick={() => setIsReviewOpen(true)}
-              className="w-full bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 shadow-md text-white font-poppins uppercase rounded-xl px-4 py-2 flex items-center justify-center space-x-2 transition-transform"
+              className="w-full bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:scale-[1.02] text-white font-inter font-medium uppercase rounded-lg px-4 py-2.5 flex items-center justify-center space-x-2 transition-all text-sm tracking-wide"
             >
               <Edit className="h-4 w-4" />
               <span>Edit Review</span>
@@ -232,7 +238,7 @@ const ServiceBookingCard = ({ booking, onCancelSuccess, onReviewSuccess }: any) 
           )}
 
           {booking.isPaid && (
-            <div className="text-center text-sm text-[#66BB6A] flex items-center justify-center mb-2">
+            <div className="text-center text-sm text-[#10B981] flex items-center justify-center font-poppins">
               <CheckCircle className="h-4 w-4 mr-1" />
               <span>Payment Successful</span>
             </div>

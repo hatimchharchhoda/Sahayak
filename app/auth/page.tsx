@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import {
   UserCheck,
   Shield,
@@ -118,21 +118,19 @@ const AuthPage = () => {
   }, [selectedDistrict]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#FFF1F6]">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-[#F8F9FA] via-[#FAFBFC] to-[#FFFFFF]">
       {/* Import fonts globally for this page */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@300;400;700&family=Poppins:wght@500;600&family=Nunito+Sans:wght@300;400&display=swap');
-        html, body { font-family: 'Lato', sans-serif; }
-        h1,h2,h3,h4 { font-family: 'Montserrat', sans-serif; }
-        .font-poppins { font-family: 'Poppins', sans-serif; }
-        .font-nunito { font-family: 'Nunito Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap');
+        html, body { font-family: 'Poppins', sans-serif; }
+        h1,h2,h3,h4 { font-family: 'Inter', sans-serif; }
       `}</style>
 
       {/* Decorative blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -left-20 -top-10 w-72 h-72 bg-[#FF6F61] opacity-10 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute right-0 top-24 w-96 h-96 bg-[#26C6DA] opacity-8 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute left-1/4 bottom-0 w-80 h-80 bg-[#FF8A65] opacity-6 rounded-full blur-3xl"></div>
+        <div className="absolute -left-20 -top-10 w-72 h-72 bg-[#2979FF] opacity-[0.04] rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute right-0 top-24 w-96 h-96 bg-[#26A69A] opacity-[0.06] rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute left-1/4 bottom-0 w-80 h-80 bg-[#2979FF] opacity-[0.03] rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 py-10 z-10">
@@ -145,56 +143,56 @@ const AuthPage = () => {
             className="space-y-8 hidden md:block"
           >
             <div>
-              <h1 className="text-4xl font-semibold text-[#212121] font-nunito">
-                {isLogin ? "Welcome Back!" : "Join Our Community"}
+              <h1 className="text-4xl font-bold text-[#212121] font-inter">
+                {isLogin ? "Welcome Back!" : "Join Sahayak"}
               </h1>
-              <p className="text-lg text-[#424242] font-lato mt-2 max-w-lg">
+              <p className="text-lg text-[#616161] font-poppins mt-2 max-w-lg">
                 {isLogin
-                  ? "Sign in to access your personalized lifestyle dashboard and manage bookings with ease."
-                  : "Create your account to explore premium lifestyle services near you — trusted professionals at your doorstep."}
+                  ? "Sign in to access your personalized dashboard and manage your services with ease."
+                  : "Create your account to explore premium services near you — trusted professionals at your doorstep."}
               </p>
             </div>
 
             <div className="grid gap-6">
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 220 }}
-                className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/80 backdrop-blur-sm"
+                whileHover={{ scale: 1.02, y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex items-center gap-4 p-5 rounded-xl shadow-sm hover:shadow-md transition-all bg-white border border-gray-100"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-[#FFAB91] to-[#F8BBD0]">
-                  <UserCheck className="w-6 h-6 text-[#FF6F61]" />
+                <div className="p-3 rounded-lg bg-gradient-to-br from-[#2979FF]/10 to-[#2979FF]/5">
+                  <UserCheck className="w-6 h-6 text-[#2979FF]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#212121] font-nunito">Easy Booking</h3>
-                  <p className="text-[#757575] font-lato">Book services in a few taps.</p>
+                  <h3 className="font-semibold text-[#212121] font-poppins">Easy Booking</h3>
+                  <p className="text-[#616161] font-poppins text-sm">Book services in a few taps.</p>
                 </div>
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 220 }}
-                className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/80 backdrop-blur-sm"
+                whileHover={{ scale: 1.02, y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex items-center gap-4 p-5 rounded-xl shadow-sm hover:shadow-md transition-all bg-white border border-gray-100"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-[#81C784] to-[#E0F7FA]">
-                  <Shield className="w-6 h-6 text-[#26C6DA]" />
+                <div className="p-3 rounded-lg bg-gradient-to-br from-[#26A69A]/10 to-[#26A69A]/5">
+                  <Shield className="w-6 h-6 text-[#26A69A]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#212121] font-nunito">Secure Platform</h3>
-                  <p className="text-[#757575] font-lato">Your data is protected and private.</p>
+                  <h3 className="font-semibold text-[#212121] font-poppins">Secure Platform</h3>
+                  <p className="text-[#616161] font-poppins text-sm">Your data is protected and private.</p>
                 </div>
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 220 }}
-                className="flex items-center gap-4 p-5 rounded-2xl shadow-md bg-white/80 backdrop-blur-sm"
+                whileHover={{ scale: 1.02, y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex items-center gap-4 p-5 rounded-xl shadow-sm hover:shadow-md transition-all bg-white border border-gray-100"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-[#FFD54F] to-[#FFAB91]">
-                  <Lock className="w-6 h-6 text-[#E57373]" />
+                <div className="p-3 rounded-lg bg-gradient-to-br from-[#43A047]/10 to-[#43A047]/5">
+                  <Lock className="w-6 h-6 text-[#43A047]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#212121] font-nunito">Verified Providers</h3>
-                  <p className="text-[#757575] font-lato">Trusted professionals at your doorstep.</p>
+                  <h3 className="font-semibold text-[#212121] font-poppins">Verified Providers</h3>
+                  <p className="text-[#616161] font-poppins text-sm">Trusted professionals at your doorstep.</p>
                 </div>
               </motion.div>
             </div>
@@ -206,15 +204,15 @@ const AuthPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <Card className="w-full max-w-md mx-auto rounded-3xl shadow-2xl bg-white/70 backdrop-blur-md border border-white/30">
+            <Card className="w-full max-w-md mx-auto rounded-2xl shadow-lg bg-white border border-gray-100">
               <CardHeader className="pt-8 px-8 pb-2">
-                <CardTitle className="text-2xl text-center text-[#212121] font-montserrat">
+                <CardTitle className="text-2xl text-center text-[#212121] font-inter font-bold">
                   {isLogin ? "Sign In to Your Account" : "Create Your Account"}
                 </CardTitle>
-                <CardDescription className="text-center text-[#616161] mt-1 font-lato">
+                <CardDescription className="text-center text-[#616161] mt-1 font-poppins">
                   {isLogin
                     ? "Access your personalized dashboard"
-                    : "Join us to explore premium lifestyle services"}
+                    : "Join us to explore premium services"}
                 </CardDescription>
               </CardHeader>
 
@@ -223,7 +221,7 @@ const AuthPage = () => {
                   {!isLogin && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="font-poppins text-sm">
+                        <Label htmlFor="name" className="font-poppins font-medium text-sm text-[#212121]">
                           Full Name
                         </Label>
                         <Input
@@ -231,12 +229,12 @@ const AuthPage = () => {
                           name="name"
                           required
                           placeholder="John Doe"
-                          className="w-full bg-white border border-gray-100 rounded-2xl px-4 py-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition"
+                          className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="phone" className="font-poppins text-sm">
+                        <Label htmlFor="phone" className="font-poppins font-medium text-sm text-[#212121]">
                           Phone Number
                         </Label>
                         <Input
@@ -245,20 +243,20 @@ const AuthPage = () => {
                           type="tel"
                           required
                           placeholder="+91 9999999999"
-                          className="w-full bg-white border border-gray-100 rounded-2xl px-4 py-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition"
+                          className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all"
                         />
                       </div>
 
                       <div className="flex gap-4">
                         <div className="space-y-2 w-1/2">
-                          <Label htmlFor="district" className="font-poppins text-sm">
+                          <Label htmlFor="district" className="font-poppins font-medium text-sm text-[#212121]">
                             District
                           </Label>
                           <Select onValueChange={handleDistrictChange}>
-                            <SelectTrigger className="w-full rounded-2xl border border-gray-100 py-3 px-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition">
+                            <SelectTrigger className="w-full rounded-lg border border-gray-200 py-2.5 px-3 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all">
                               <SelectValue placeholder="Select District" />
                             </SelectTrigger>
-                            <SelectContent className="rounded-xl shadow-lg">
+                            <SelectContent className="rounded-lg shadow-lg">
                               {district?.length ? (
                                 district.map((d: string, index: number) => (
                                   <SelectItem value={d} key={index}>
@@ -273,14 +271,14 @@ const AuthPage = () => {
                         </div>
 
                         <div className="space-y-2 w-1/2">
-                          <Label htmlFor="city" className="font-poppins text-sm">
+                          <Label htmlFor="city" className="font-poppins font-medium text-sm text-[#212121]">
                             City
                           </Label>
                           <Select onValueChange={handleCityChange}>
-                            <SelectTrigger className="w-full rounded-2xl border border-gray-100 py-3 px-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition">
+                            <SelectTrigger className="w-full rounded-lg border border-gray-200 py-2.5 px-3 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all">
                               <SelectValue placeholder="Select City" />
                             </SelectTrigger>
-                            <SelectContent className="rounded-xl shadow-lg">
+                            <SelectContent className="rounded-lg shadow-lg">
                               {cities && cities.length > 0 ? (
                                 cities.map((c: string, index: number) => (
                                   <SelectItem value={c} key={index}>
@@ -296,7 +294,7 @@ const AuthPage = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="address" className="font-poppins text-sm">
+                        <Label htmlFor="address" className="font-poppins font-medium text-sm text-[#212121]">
                           Address
                         </Label>
                         <Input
@@ -304,14 +302,14 @@ const AuthPage = () => {
                           name="address"
                           required
                           placeholder="123 Main St, City, State"
-                          className="w-full bg-white border border-gray-100 rounded-2xl px-4 py-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition"
+                          className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all"
                         />
                       </div>
                     </>
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="font-poppins text-sm">
+                    <Label htmlFor="email" className="font-poppins font-medium text-sm text-[#212121]">
                       Email
                     </Label>
                     <Input
@@ -320,12 +318,12 @@ const AuthPage = () => {
                       type="email"
                       required
                       placeholder="you@example.com"
-                      className="w-full bg-white border border-gray-100 rounded-2xl px-4 py-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="font-poppins text-sm">
+                    <Label htmlFor="password" className="font-poppins font-medium text-sm text-[#212121]">
                       Password
                     </Label>
                     <Input
@@ -334,33 +332,41 @@ const AuthPage = () => {
                       type="password"
                       required
                       placeholder="••••••••"
-                      className="w-full bg-white border border-gray-100 rounded-2xl px-4 py-3 focus:border-[#26C6DA] focus:ring-2 focus:ring-[#26C6DA]/20 transition"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:border-[#2979FF] focus:ring-2 focus:ring-[#2979FF]/20 transition-all"
                     />
                   </div>
 
                   {error && (
-                    <div className="flex items-start gap-3 text-[#E57373] bg-[#FFF0F0] p-3 rounded-lg">
-                      <AlertCircle size={18} className="shrink-0" />
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-start gap-3 text-[#E53935] bg-[#E53935]/5 p-3 rounded-lg border border-[#E53935]/10"
+                    >
+                      <AlertCircle size={18} className="shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium">Error</p>
-                        <p className="text-sm text-[#E57373]">{error}</p>
+                        <p className="text-sm">{error}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
 
                   {success && (
-                    <div className="flex items-start gap-3 text-[#66BB6A] bg-[#F0FFF4] p-3 rounded-lg">
-                      <CheckCircle2 size={18} className="shrink-0" />
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-start gap-3 text-[#43A047] bg-[#43A047]/5 p-3 rounded-lg border border-[#43A047]/10"
+                    >
+                      <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium">Success</p>
-                        <p className="text-sm text-[#2E7D32]">{success}</p>
+                        <p className="text-sm">{success}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
 
                   <Button
                     type="submit"
-                    className="w-full rounded-full font-poppins bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 transform py-3 shadow-xl transition-all disabled:opacity-60"
+                    className="w-full rounded-lg font-poppins font-medium bg-[#2979FF] hover:bg-gradient-to-r hover:from-[#2979FF] hover:to-[#1E5DD8] hover:scale-[1.02] transform py-2.5 shadow-sm hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed text-white"
                     disabled={loading}
                   >
                     {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
@@ -369,7 +375,7 @@ const AuthPage = () => {
                   <div className="mt-2 text-center">
                     <Link
                       href="/provider/auth"
-                      className="text-sm font-poppins text-[#26C6DA] hover:underline"
+                      className="text-sm font-poppins font-medium text-[#2979FF] hover:text-[#26A69A] transition-colors"
                     >
                       Join as Provider
                     </Link>
@@ -383,7 +389,7 @@ const AuthPage = () => {
                         setError("");
                         setSuccess("");
                       }}
-                      className="text-sm font-poppins text-[#26C6DA] hover:text-[#FF6F61] transition-colors"
+                      className="text-sm font-poppins text-[#616161] hover:text-[#2979FF] transition-colors"
                     >
                       {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
                     </button>
@@ -404,8 +410,8 @@ const AuthPage = () => {
           ></path>
           <defs>
             <linearGradient id="gradAuthWave" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0" stopColor="#FF6F61" stopOpacity="0.12" />
-              <stop offset="1" stopColor="#FF8A65" stopOpacity="0.08" />
+              <stop offset="0" stopColor="#2979FF" stopOpacity="0.04" />
+              <stop offset="1" stopColor="#26A69A" stopOpacity="0.06" />
             </linearGradient>
           </defs>
         </svg>
@@ -433,12 +439,12 @@ const AuthPage = () => {
           }
         }
 
-        /* small accessibility helper to keep focus rings visible */
+        /* Focus rings for accessibility */
         :focus {
           outline: none;
         }
         :focus-visible {
-          outline: 3px solid rgba(38,198,218,0.18);
+          outline: 3px solid rgba(41,121,255,0.2);
           outline-offset: 2px;
         }
       `}</style>

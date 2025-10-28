@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -9,10 +10,10 @@ import { NextResponse } from "next/server";
 export const POST = async (req) => {
   try {
     const { categoryName } = await req.json();
-
+    const decodedCategoryName = decodeURIComponent(categoryName);
     // ✅ Find the category
     const category = await prisma.serviceCategory.findFirst({
-      where: { name: categoryName },
+      where: { name: decodedCategoryName },
     });
 
     if (!category) {

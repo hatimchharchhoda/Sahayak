@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import React from "react";
 import { motion } from "framer-motion";
@@ -25,33 +26,33 @@ const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
         
         .animate-shimmer {
           animation: shimmer 2s infinite;
-          background: linear-gradient(to right, #EDE7F6 0%, #F8BBD0 50%, #EDE7F6 100%);
+          background: linear-gradient(to right, #F8FAFC 0%, #E5E7EB 50%, #F8FAFC 100%);
           background-size: 1000px 100%;
         }
         
         .card-hover:hover {
-          transform: scale(1.03);
-          box-shadow: 0 20px 40px rgba(255, 111, 97, 0.2);
+          transform: scale(1.02) translateY(-2px);
+          box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
         }
         
-        .font-montserrat {
-          font-family: 'Montserrat', sans-serif;
-        }
-        
-        .font-lato {
-          font-family: 'Lato', sans-serif;
+        .font-inter {
+          font-family: 'Inter', sans-serif;
         }
         
         .font-poppins {
           font-family: 'Poppins', sans-serif;
         }
+        
+        .font-nunito {
+          font-family: 'Nunito Sans', sans-serif;
+        }
       `}</style>
 
-      <section className="py-12 md:py-16 lg:py-20 px-4 bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6] relative">
-        {/* Decorative Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-[#FF6F61] blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-[#26C6DA] blur-3xl"></div>
+      <section className="py-12 md:py-16 lg:py-20 px-4 bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] relative">
+        {/* Decorative Background Pattern - Very Subtle */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-[#2563EB] blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-[#14B8A6] blur-3xl"></div>
         </div>
 
         <div className="container mx-auto max-w-6xl relative z-10">
@@ -62,15 +63,15 @@ const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
             transition={{ duration: 0.5 }}
             className="text-center mb-8 md:mb-12 lg:mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md rounded-full shadow-md mb-4 border border-[#F8BBD0]/30">
-              <Sparkles className="w-4 h-4 text-[#FF6F61]" />
-              <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">Popular Services</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-4 border border-[#E5E7EB]">
+              <Sparkles className="w-4 h-4 text-[#2563EB]" />
+              <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">Popular Services</span>
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-montserrat font-semibold text-[#212121] mb-2 md:mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-inter font-semibold text-[#111827] mb-2 md:mb-4">
               Our Services
             </h2>
-            <p className="text-base md:text-lg text-[#424242] font-lato max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-[#374151] font-poppins max-w-2xl mx-auto">
               Explore verified professionals for your home, lifestyle, and wellness needs.
             </p>
           </motion.div>
@@ -81,7 +82,7 @@ const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
-                  className="bg-white/90 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg border border-[#F8BBD0]/20"
+                  className="bg-white p-4 md:p-6 rounded-2xl shadow-md border border-[#E5E7EB]"
                 >
                   <div className="w-full h-32 md:h-40 lg:h-48 animate-shimmer rounded-xl mb-3 md:mb-4"></div>
                   <div className="h-4 md:h-5 lg:h-6 animate-shimmer rounded mb-2 md:mb-3"></div>
@@ -101,7 +102,7 @@ const OurServices: React.FC<OurServicesProps> = ({ categories, loading }) => {
                 >
                   <ServicesCard
                     category={category}
-                    className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-4 md:p-6 card-hover transition-all duration-300 border border-[#F8BBD0]/20"
+                    className="bg-white rounded-2xl shadow-md p-4 md:p-6 card-hover transition-all duration-300 border border-[#E5E7EB]"
                   />
                 </motion.div>
               ))}

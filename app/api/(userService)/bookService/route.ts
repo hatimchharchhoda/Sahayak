@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import { NextRequest, NextResponse } from "next/server";
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Decode token
     const payload = await verifyAuth(userToken);
-    if (!payload || !payload.userId || !payload.city) {
+    if (!payload || !payload.id || !payload.city) {
       return NextResponse.json(
         { error: "Invalid authentication token" },
         { status: 401 }
@@ -87,7 +88,7 @@ export async function POST(req: NextRequest) {
       // Book directly
       const booking = await prisma.booking.create({
         data: {
-          userId: payload.userId,
+          userId: payload.id,
           providerId: provider.id,
           serviceId: service.id,
           serviceCategoryId: service.categoryId,
@@ -112,7 +113,7 @@ export async function POST(req: NextRequest) {
       console.log(fullBooking);
 
       // Fetch user & provider emails
-      const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+      const user = await prisma.user.findUnique({ where: { id: payload.id } });
       const serviceDetails = await prisma.service.findUnique({ where: { id: service.id } });
 
       // Send confirmation email to customer
@@ -234,7 +235,7 @@ export async function POST(req: NextRequest) {
     // 9. Create booking
     const booking = await prisma.booking.create({
       data: {
-        userId: payload.userId,
+        userId: payload.id,
         providerId: assignedProvider.id,
         serviceId: service.id,
         serviceCategoryId: service.categoryId,
@@ -277,6 +278,7 @@ export async function POST(req: NextRequest) {
         averageStars: assignedProvider.averageStars,
       },
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Booking creation failed:", error);
     return NextResponse.json(

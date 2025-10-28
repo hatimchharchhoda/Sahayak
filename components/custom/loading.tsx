@@ -1,5 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Loader2 } from "lucide-react";
 
 export default function Loading() {
   return (

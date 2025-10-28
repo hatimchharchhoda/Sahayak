@@ -12,7 +12,7 @@ import {
   X,
   Sparkles,
   HelpCircle,
-  Image as ImageIcon,
+  ImageIcon,
 } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -72,6 +72,7 @@ const Page = () => {
         removeImage();
         setSubmitStatus("idle");
       }, 3000);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setSubmitStatus("error");
     } finally {
@@ -80,13 +81,13 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#FCE4EC] py-16 px-4 sm:px-6 lg:px-8 font-lato relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-20 left-10 w-48 h-48 bg-[#FF6F61] opacity-10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-10 w-56 h-56 bg-[#26C6DA] opacity-10 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-[#FFCA28] opacity-10 rounded-full blur-3xl"></div>
+    <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] py-16 px-4 sm:px-6 lg:px-8 font-poppins">
+      {/* Import fonts globally */}
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
+      `}</style>
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: -30 }}
@@ -96,16 +97,16 @@ const Page = () => {
         >
           {/* Badge */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg mb-6"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-full shadow-sm mb-6 border border-[#E5E7EB]"
           >
-            <HelpCircle className="w-5 h-5 text-[#FF6F61]" />
-            <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">
+            <HelpCircle className="w-5 h-5 text-[#2563EB]" />
+            <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">
               Support Center
             </span>
-            <Sparkles className="w-5 h-5 text-[#26C6DA]" />
+            <Sparkles className="w-5 h-5 text-[#14B8A6]" />
           </motion.div>
 
           {/* Icon */}
@@ -113,8 +114,8 @@ const Page = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#FF6F61] to-[#FF8A65] rounded-3xl shadow-2xl mb-6 ring-4 ring-[#FF6F61]/10"
+            whileHover={{ scale: 1.05 }}
+            className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-2xl shadow-md mb-6"
           >
             <FileText className="w-12 h-12 text-white" />
           </motion.div>
@@ -124,7 +125,7 @@ const Page = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-4xl md:text-5xl font-montserrat font-bold text-[#212121] mb-4"
+            className="text-4xl md:text-5xl font-inter font-semibold text-[#111827] mb-4"
           >
             Create a Support Ticket
           </motion.h1>
@@ -132,7 +133,7 @@ const Page = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-lg text-[#9E9E9E] max-w-2xl mx-auto font-nunito"
+            className="text-lg text-[#9CA3AF] max-w-2xl mx-auto font-nunito"
           >
             Need help? Submit a support ticket and our friendly team will assist you quickly.
           </motion.p>
@@ -144,14 +145,14 @@ const Page = () => {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-            className="mb-6 p-5 bg-gradient-to-r from-[#66BB6A]/10 to-[#81C784]/10 border-2 border-[#66BB6A] rounded-2xl flex items-center space-x-3 backdrop-blur-sm shadow-lg"
+            className="mb-6 p-5 bg-[#10B981]/5 border border-[#10B981] rounded-lg flex items-center space-x-3"
           >
-            <div className="h-10 w-10 rounded-xl bg-[#66BB6A] flex items-center justify-center shadow-md">
+            <div className="h-10 w-10 rounded-lg bg-[#10B981] flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-white" />
             </div>
-            <p className="text-[#212121] font-lato font-medium flex-1">
-              <span className="font-poppins font-bold block">Success!</span>
-              Ticket submitted successfully. We'll get back to you soon.
+            <p className="text-[#111827] font-poppins flex-1">
+              <span className="font-inter font-semibold block">Success!</span>
+              <span className="text-sm text-[#374151]">Ticket submitted successfully. We&apos;ll get back to you soon.</span>
             </p>
           </motion.div>
         )}
@@ -161,14 +162,14 @@ const Page = () => {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-            className="mb-6 p-5 bg-gradient-to-r from-[#E57373]/10 to-[#EF5350]/10 border-2 border-[#E57373] rounded-2xl flex items-center space-x-3 backdrop-blur-sm shadow-lg"
+            className="mb-6 p-5 bg-[#EF4444]/5 border border-[#EF4444] rounded-lg flex items-center space-x-3"
           >
-            <div className="h-10 w-10 rounded-xl bg-[#E57373] flex items-center justify-center shadow-md">
+            <div className="h-10 w-10 rounded-lg bg-[#EF4444] flex items-center justify-center">
               <AlertCircle className="w-6 h-6 text-white" />
             </div>
-            <p className="text-[#212121] font-lato font-medium flex-1">
-              <span className="font-poppins font-bold block">Error!</span>
-              Failed to submit ticket. Please try again.
+            <p className="text-[#111827] font-poppins flex-1">
+              <span className="font-inter font-semibold block">Error!</span>
+              <span className="text-sm text-[#374151]">Failed to submit ticket. Please try again.</span>
             </p>
           </motion.div>
         )}
@@ -179,14 +180,14 @@ const Page = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           onSubmit={handleSubmit}
-          className="bg-white rounded-3xl shadow-2xl border-2 border-transparent hover:border-[#FF6F61]/20 overflow-hidden transition-all duration-500 hover:shadow-[0_25px_60px_rgba(255,111,97,0.15)]"
+          className="bg-white rounded-2xl shadow-md border border-[#E5E7EB] overflow-hidden transition-all duration-500 hover:shadow-lg"
         >
           {/* Form Header */}
-          <div className="bg-gradient-to-r from-[#EDE7F6] to-[#F8BBD0] p-8 text-center border-b-2 border-[#F8BBD0]/30">
-            <h2 className="text-2xl font-montserrat font-semibold text-[#212121] mb-2">
+          <div className="bg-gradient-to-br from-[#F8FAFC] to-[#FFFFFF] p-8 text-center border-b border-[#E5E7EB]">
+            <h2 className="text-2xl font-inter font-semibold text-[#111827] mb-2">
               Ticket Details
             </h2>
-            <p className="text-sm text-[#9E9E9E] font-nunito">
+            <p className="text-sm text-[#9CA3AF] font-nunito">
               Provide as much detail as possible to help us assist you better.
             </p>
           </div>
@@ -200,12 +201,12 @@ const Page = () => {
               transition={{ delay: 0.4, duration: 0.5 }}
               className="space-y-2"
             >
-              <label className="flex items-center text-sm font-poppins font-semibold text-[#212121] uppercase tracking-wide">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#FF6F61]/10 to-[#FF8A65]/10 flex items-center justify-center mr-2">
-                  <MessageSquare className="w-4 h-4 text-[#FF6F61]" />
+              <label className="flex items-center text-sm font-inter font-medium text-[#111827]">
+                <div className="h-8 w-8 rounded-lg bg-[#2563EB]/10 flex items-center justify-center mr-2">
+                  <MessageSquare className="w-4 h-4 text-[#2563EB]" />
                 </div>
                 Subject 
-                <span className="text-[#E57373] ml-1">*</span>
+                <span className="text-[#EF4444] ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -214,7 +215,7 @@ const Page = () => {
                 required
                 onChange={handleChange}
                 placeholder="Brief description of your issue"
-                className="w-full px-5 py-4 border-2 border-gray-100 focus:border-[#26C6DA] rounded-2xl placeholder-[#9E9E9E] text-[#424242] transition-all duration-300 bg-white focus:bg-gradient-to-r focus:from-[#EDE7F6]/10 focus:to-[#F8BBD0]/10 outline-none focus:ring-2 focus:ring-[#26C6DA]/20 font-lato shadow-sm hover:shadow-md hover:border-gray-200"
+                className="w-full px-4 py-3 border border-[#E5E7EB] focus:border-[#14B8A6] rounded-lg placeholder-[#9CA3AF] text-[#374151] transition-all duration-300 bg-white outline-none focus:ring-2 focus:ring-[#14B8A6]/20 font-poppins"
               />
             </motion.div>
 
@@ -225,12 +226,12 @@ const Page = () => {
               transition={{ delay: 0.5, duration: 0.5 }}
               className="space-y-2"
             >
-              <label className="flex items-center text-sm font-poppins font-semibold text-[#212121] uppercase tracking-wide">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#26C6DA]/10 to-[#4DD0E1]/10 flex items-center justify-center mr-2">
-                  <Hash className="w-4 h-4 text-[#26C6DA]" />
+              <label className="flex items-center text-sm font-inter font-medium text-[#111827]">
+                <div className="h-8 w-8 rounded-lg bg-[#14B8A6]/10 flex items-center justify-center mr-2">
+                  <Hash className="w-4 h-4 text-[#14B8A6]" />
                 </div>
                 Service ID 
-                <span className="text-[#E57373] ml-1">*</span>
+                <span className="text-[#EF4444] ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -239,7 +240,7 @@ const Page = () => {
                 required
                 onChange={handleChange}
                 placeholder="Enter related service ID"
-                className="w-full px-5 py-4 border-2 border-gray-100 focus:border-[#26C6DA] rounded-2xl placeholder-[#9E9E9E] text-[#424242] transition-all duration-300 bg-white focus:bg-gradient-to-r focus:from-[#EDE7F6]/10 focus:to-[#F8BBD0]/10 outline-none focus:ring-2 focus:ring-[#26C6DA]/20 font-lato shadow-sm hover:shadow-md hover:border-gray-200"
+                className="w-full px-4 py-3 border border-[#E5E7EB] focus:border-[#14B8A6] rounded-lg placeholder-[#9CA3AF] text-[#374151] transition-all duration-300 bg-white outline-none focus:ring-2 focus:ring-[#14B8A6]/20 font-poppins"
               />
             </motion.div>
 
@@ -250,12 +251,12 @@ const Page = () => {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="space-y-2"
             >
-              <label className="flex items-center text-sm font-poppins font-semibold text-[#212121] uppercase tracking-wide">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#FF6F61]/10 to-[#FF8A65]/10 flex items-center justify-center mr-2">
-                  <FileText className="w-4 h-4 text-[#FF6F61]" />
+              <label className="flex items-center text-sm font-inter font-medium text-[#111827]">
+                <div className="h-8 w-8 rounded-lg bg-[#2563EB]/10 flex items-center justify-center mr-2">
+                  <FileText className="w-4 h-4 text-[#2563EB]" />
                 </div>
                 Message 
-                <span className="text-[#E57373] ml-1">*</span>
+                <span className="text-[#EF4444] ml-1">*</span>
               </label>
               <textarea
                 name="message"
@@ -264,7 +265,7 @@ const Page = () => {
                 rows={6}
                 onChange={handleChange}
                 placeholder="Describe your issue in detail..."
-                className="w-full px-5 py-4 border-2 border-gray-100 focus:border-[#26C6DA] rounded-2xl placeholder-[#9E9E9E] text-[#424242] transition-all duration-300 bg-white focus:bg-gradient-to-r focus:from-[#EDE7F6]/10 focus:to-[#F8BBD0]/10 resize-none outline-none focus:ring-2 focus:ring-[#26C6DA]/20 font-lato shadow-sm hover:shadow-md hover:border-gray-200"
+                className="w-full px-4 py-3 border border-[#E5E7EB] focus:border-[#14B8A6] rounded-lg placeholder-[#9CA3AF] text-[#374151] transition-all duration-300 bg-white resize-none outline-none focus:ring-2 focus:ring-[#14B8A6]/20 font-poppins"
               />
             </motion.div>
 
@@ -275,49 +276,46 @@ const Page = () => {
               transition={{ delay: 0.7, duration: 0.5 }}
               className="space-y-2"
             >
-              <label className="flex items-center text-sm font-poppins font-semibold text-[#212121] uppercase tracking-wide">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#26C6DA]/10 to-[#4DD0E1]/10 flex items-center justify-center mr-2">
-                  <ImageIcon className="w-4 h-4 text-[#26C6DA]" />
+              <label className="flex items-center text-sm font-inter font-medium text-[#111827]">
+                <div className="h-8 w-8 rounded-lg bg-[#14B8A6]/10 flex items-center justify-center mr-2">
+                  <ImageIcon className="w-4 h-4 text-[#14B8A6]" />
                 </div>
                 Upload Image 
-                <span className="text-[#9E9E9E] ml-2 text-xs font-nunito normal-case">(Optional)</span>
+                <span className="text-[#9CA3AF] ml-2 text-xs font-nunito normal-case">(Optional)</span>
               </label>
 
               {!image ? (
-                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#26C6DA]/40 rounded-2xl cursor-pointer hover:border-[#FF6F61] hover:bg-gradient-to-r hover:from-[#EDE7F6]/20 hover:to-[#F8BBD0]/20 transition-all duration-300 shadow-sm hover:shadow-lg group">
+                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#E5E7EB] rounded-lg cursor-pointer hover:border-[#14B8A6] hover:bg-[#F8FAFC] transition-all duration-300 group">
                   <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#26C6DA]/10 to-[#4DD0E1]/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                    <Upload className="w-7 h-7 text-[#26C6DA]" />
+                  <div className="h-14 w-14 rounded-lg bg-[#14B8A6]/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <Upload className="w-7 h-7 text-[#14B8A6]" />
                   </div>
-                  <p className="text-sm text-[#424242] font-lato">
-                    <span className="font-poppins font-semibold text-[#FF6F61]">Click to upload</span> or drag and drop
+                  <p className="text-sm text-[#374151] font-poppins">
+                    <span className="font-inter font-semibold text-[#2563EB]">Click to upload</span> or drag and drop
                   </p>
-                  <p className="text-xs text-[#9E9E9E] mt-1 font-nunito">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-[#9CA3AF] mt-1 font-nunito">PNG, JPG, GIF up to 10MB</p>
                 </label>
               ) : (
-                <div className="relative bg-gradient-to-r from-[#EDE7F6]/30 to-[#F8BBD0]/30 rounded-2xl p-5 border-2 border-[#26C6DA]/30 flex items-center justify-between shadow-md hover:shadow-lg transition-all duration-300">
+                <div className="relative bg-[#F8FAFC] rounded-lg p-5 border border-[#E5E7EB] flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     {previewUrl && (
-                      <div className="relative">
-                        <img 
-                          src={previewUrl} 
-                          alt="Preview" 
-                          className="w-20 h-20 object-cover rounded-xl border-2 border-white shadow-lg" 
-                        />
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent"></div>
-                      </div>
+                      <img 
+                        src={previewUrl} 
+                        alt="Preview" 
+                        className="w-20 h-20 object-cover rounded-lg border border-[#E5E7EB]" 
+                      />
                     )}
                     <div>
-                      <p className="text-sm font-poppins font-semibold text-[#212121] mb-1">{image.name}</p>
-                      <p className="text-xs text-[#9E9E9E] font-nunito">{(image.size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p className="text-sm font-poppins font-medium text-[#111827] mb-1">{image.name}</p>
+                      <p className="text-xs text-[#9CA3AF] font-nunito">{(image.size / 1024 / 1024).toFixed(2)} MB</p>
                     </div>
                   </div>
                   <button 
                     type="button" 
                     onClick={removeImage} 
-                    className="p-2 hover:bg-[#E57373]/20 rounded-xl transition-colors duration-300 group"
+                    className="p-2 hover:bg-[#EF4444]/10 rounded-lg transition-colors duration-300 group"
                   >
-                    <X className="w-5 h-5 text-[#E57373] group-hover:scale-110 transition-transform" />
+                    <X className="w-5 h-5 text-[#EF4444] group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
               )}
@@ -332,18 +330,17 @@ const Page = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] text-white font-poppins font-semibold py-5 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-[0_15px_35px_rgba(255,111,97,0.4)] uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+              className="w-full bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-inter font-medium py-4 px-8 rounded-lg transition-all duration-300 flex items-center justify-center space-x-3 shadow-sm hover:shadow-lg uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               {isSubmitting ? (
-                <div className="flex items-center space-x-2 relative z-10">
+                <div className="flex items-center space-x-2">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   <span>Submitting...</span>
                 </div>
               ) : (
                 <>
-                  <Send className="w-5 h-5 relative z-10" />
-                  <span className="relative z-10">Submit Ticket</span>
+                  <Send className="w-5 h-5" />
+                  <span>Submit Ticket</span>
                 </>
               )}
             </motion.button>
@@ -355,9 +352,9 @@ const Page = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9, duration: 0.6 }}
-          className="text-center mt-8 text-sm text-[#9E9E9E] font-nunito"
+          className="text-center mt-8 text-sm text-[#9CA3AF] font-nunito"
         >
-          Our support team typically responds within 24 hours ✨
+          Our support team typically responds within 24 hours
         </motion.p>
       </div>
     </div>

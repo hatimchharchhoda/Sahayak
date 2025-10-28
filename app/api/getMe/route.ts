@@ -16,12 +16,12 @@ export async function GET(req: NextRequest) {
     console.log({ userToken, providerToken });
     // Check user token
     if (userToken) {
-      decoded = jwt.verify(userToken, JWT_SECRET) as { userId: string };
+      decoded = jwt.verify(userToken, JWT_SECRET) as { id: string };
       console.log({ decoded });
 
       user = await prisma.user.findUnique({
         where: {
-          id: decoded.userId,
+          id: decoded.id,
         },
       });
       role = "user";

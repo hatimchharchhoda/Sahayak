@@ -5,10 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 export const POST = async (req: NextRequest) => {
   try {
     const { categoryName } = await req.json();
+    const decodedCategoryName = decodeURIComponent(categoryName);
     // Fetch services along with their category names
 
     const isCategoryExist = await prisma.serviceCategory.findFirst({
-      where: { name: categoryName },
+      where: {
+        name: {
+          equals: decodedCategoryName,
+          mode: "insensitive",
+        },
+      },
     });
 
     // const categoryId

@@ -8,6 +8,9 @@ interface TokenPayload {
   email?: string;
   name?: string;
   specialization?: string; // for providers
+  status?: string; // ✅ add this
+  city?: string;   // 🆕 add this
+  district?: string;    
 }
 
 export async function verifyAuth(token?: string): Promise<TokenPayload | null> {
@@ -18,11 +21,14 @@ export async function verifyAuth(token?: string): Promise<TokenPayload | null> {
     
     // ✅ Cast to TokenPayload safely
     const typedPayload: TokenPayload = {
-      id: payload.id as string,
+      id: (payload.userId as string) || (payload.id as string),
       role: payload.role as "USER" | "PROVIDER" | "ADMIN",
       email: payload.email as string | undefined,
       name: payload.name as string | undefined,
       specialization: payload.specialization as string | undefined,
+      city: payload.city as string | undefined,
+      district: payload.district as string | undefined,
+      status: payload.status as string | undefined,
     };
 
     return typedPayload;

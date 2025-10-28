@@ -1,10 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Search, Star, ArrowRight, X, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -74,7 +74,7 @@ const HomePage = () => {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@500;600&family=Nunito+Sans:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
         
         @keyframes fadeSlideUp {
           from {
@@ -87,24 +87,6 @@ const HomePage = () => {
           }
         }
         
-        @keyframes shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
-        }
-        
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-4px);
-          }
-        }
-        
         @keyframes float {
           0%, 100% {
             transform: translateY(0px);
@@ -114,59 +96,38 @@ const HomePage = () => {
           }
         }
         
+        @keyframes shimmer {
+          0% {
+            background-position: -1000px 0;
+          }
+          100% {
+            background-position: 1000px 0;
+          }
+        }
+        
         .animate-fade-slide-up {
           animation: fadeSlideUp 0.6s ease-out forwards;
-        }
-        
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-          background: linear-gradient(to right, #EDE7F6 0%, #F8BBD0 50%, #EDE7F6 100%);
-          background-size: 1000px 100%;
-        }
-        
-        .btn-bounce:hover {
-          animation: bounce 0.6s ease-in-out;
-        }
-        
-        .card-hover:hover {
-          transform: scale(1.03);
-          box-shadow: 0 20px 40px rgba(255, 111, 97, 0.2);
-        }
-        
-        .gradient-coral {
-          background: linear-gradient(135deg, #FF6F61 0%, #FF8A65 100%);
-        }
-        
-        .gradient-teal {
-          background: linear-gradient(135deg, #26C6DA 0%, #00ACC1 100%);
-        }
-        
-        .wave-divider {
-          position: absolute;
-          bottom: -1px;
-          left: 0;
-          width: 100%;
-          overflow: hidden;
-          line-height: 0;
-        }
-        
-        .wave-divider svg {
-          position: relative;
-          display: block;
-          width: calc(100% + 1.3px);
-          height: 60px;
         }
         
         .floating {
           animation: float 3s ease-in-out infinite;
         }
         
-        .font-montserrat {
-          font-family: 'Montserrat', sans-serif;
+        .card-hover:hover {
+          transform: scale(1.02) translateY(-2px);
+          box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
         }
         
-        .font-lato {
-          font-family: 'Lato', sans-serif;
+        .gradient-blue {
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+        
+        .gradient-teal {
+          background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+        }
+        
+        .font-inter {
+          font-family: 'Inter', sans-serif;
         }
         
         .font-poppins {
@@ -178,15 +139,15 @@ const HomePage = () => {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF]">
         {/* Hero Section */}
         <section className="pt-24 pb-16 px-4 md:pt-32 md:pb-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#EDE7F6]/30 via-[#F8BBD0]/30 to-[#EDE7F6]/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F8FAFC]/50 via-[#FFFFFF]/30 to-[#F8FAFC]/50"></div>
           
           {/* Decorative floating elements */}
-          <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-gradient-to-br from-[#F8BBD0]/40 to-[#EDE7F6]/40 blur-2xl floating"></div>
-          <div className="absolute bottom-20 right-10 w-32 h-32 rounded-full bg-gradient-to-br from-[#EDE7F6]/40 to-[#F8BBD0]/40 blur-3xl floating" style={{animationDelay: '1s'}}></div>
-          <div className="absolute top-1/3 right-1/4 w-16 h-16 rounded-full bg-gradient-to-br from-[#FF8A65]/30 to-[#F8BBD0]/30 blur-xl floating" style={{animationDelay: '0.5s'}}></div>
+          <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-[#3B82F6]/5 blur-2xl floating"></div>
+          <div className="absolute bottom-20 right-10 w-32 h-32 rounded-full bg-[#14B8A6]/5 blur-3xl floating" style={{animationDelay: '1s'}}></div>
+          <div className="absolute top-1/3 right-1/4 w-16 h-16 rounded-full bg-[#2563EB]/5 blur-xl floating" style={{animationDelay: '0.5s'}}></div>
 
           <div className="container mx-auto max-w-6xl relative z-10">
             <motion.div
@@ -195,21 +156,21 @@ const HomePage = () => {
               transition={{ duration: 0.5 }}
               className="text-center space-y-6 md:space-y-8 mb-12 md:mb-16"
             >
-              <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/70 backdrop-blur-md rounded-full shadow-md mb-4 border border-[#F8BBD0]/30">
-                <Sparkles className="w-4 h-4 text-[#FF6F61]" />
-                <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">Your Trusted Service Partner</span>
+              <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-4 border border-gray-100">
+                <Sparkles className="w-4 h-4 text-[#2563EB]" />
+                <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">Your Trusted Service Partner</span>
               </div>
 
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-montserrat font-semibold text-[#212121] leading-tight">
-                Lifestyle Services,
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-inter font-semibold text-[#111827] leading-tight">
+                Professional Services,
                 <br />
-                <span className="bg-gradient-to-r from-[#FF6F61] via-[#FF8A65] to-[#FF6F61] bg-clip-text text-transparent">
-                  Delivered with Care
+                <span className="bg-gradient-to-r from-[#3B82F6] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent">
+                  Delivered with Excellence
                 </span>
               </h1>
               
-              <p className="text-lg md:text-2xl text-[#424242] max-w-xl md:max-w-2xl mx-auto font-lato font-light">
-                Connect with professional service providers for all your lifestyle needs
+              <p className="text-lg md:text-xl text-[#374151] max-w-xl md:max-w-2xl mx-auto font-poppins">
+                Connect with verified service providers for all your needs — reliable, professional, and efficient
               </p>
 
               <div className="max-w-xl md:max-w-2xl mx-auto relative">
@@ -218,20 +179,20 @@ const HomePage = () => {
                   className="flex flex-col sm:flex-row gap-3"
                 >
                   <div className="relative flex-1">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9E9E9E] pointer-events-none">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none">
                       <Search className="w-5 h-5 md:w-6 md:h-6" />
                     </div>
                     <Input
                       value={searchQuery}
                       onChange={(e) => handleSearch(e.target.value)}
                       placeholder="Search for services (Cleaning, Plumbing...)"
-                      className="h-12 md:h-14 text-base md:text-lg rounded-full pl-14 pr-12 md:pr-14 placeholder-[#9E9E9E] focus:border-[#26C6DA] focus:ring-[#26C6DA] shadow-lg bg-white border-2 border-transparent font-lato transition-all duration-300"
+                      className="h-12 md:h-14 text-base md:text-lg rounded-lg pl-14 pr-12 md:pr-14 placeholder-[#9CA3AF] focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20 shadow-sm bg-white border border-[#E5E7EB] font-poppins transition-all duration-300"
                     />
                     {searchQuery && (
                       <button
                         type="button"
                         onClick={clearSearch}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9E9E9E] hover:text-[#424242] z-40 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#374151] z-40 transition-colors"
                       >
                         <X className="w-5 h-5 md:w-6 md:h-6" />
                       </button>
@@ -239,7 +200,7 @@ const HomePage = () => {
                   </div>
                   <Button
                     type="submit"
-                    className="h-12 md:h-14 px-6 md:px-8 rounded-full gradient-coral text-white hover:shadow-xl transition-all duration-300 btn-bounce font-poppins font-medium uppercase tracking-wide"
+                    className="h-12 md:h-14 px-6 md:px-8 rounded-lg gradient-blue text-white hover:shadow-lg hover:scale-[1.02] transition-all duration-300 font-inter font-medium uppercase tracking-wide"
                   >
                     <Search className="w-5 h-5 md:w-6 md:h-6" />
                   </Button>
@@ -252,23 +213,23 @@ const HomePage = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute w-full mt-2 bg-white rounded-2xl shadow-2xl border border-[#F8BBD0] overflow-hidden z-50"
+                      className="absolute w-full mt-2 bg-white rounded-lg shadow-lg border border-[#E5E7EB] overflow-hidden z-50"
                     >
                       <div className="max-h-48 md:max-h-64 overflow-y-auto">
                         {searchResults.map((result) => (
                           <Link
                             key={result.id}
                             href={`/services/${result.name}`}
-                            className="flex items-center px-4 py-3 hover:bg-gradient-to-r hover:from-[#EDE7F6] hover:to-[#F8BBD0] transition-all duration-200 border-b border-[#F8BBD0]/30 last:border-0"
+                            className="flex items-center px-4 py-3 hover:bg-[#F8FAFC] transition-all duration-200 border-b border-[#E5E7EB] last:border-0"
                           >
-                            <div className="w-10 h-10 rounded-full gradient-coral flex items-center justify-center mr-3 shadow-md">
+                            <div className="w-10 h-10 rounded-lg gradient-blue flex items-center justify-center mr-3 shadow-sm">
                               <Search className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <p className="font-poppins font-semibold text-[#212121] text-base">
+                              <p className="font-poppins font-medium text-[#111827] text-base">
                                 {result.name}
                               </p>
-                              <p className="text-sm text-[#9E9E9E] font-nunito">
+                              <p className="text-sm text-[#9CA3AF] font-nunito">
                                 {result.description}
                               </p>
                             </div>
@@ -280,13 +241,6 @@ const HomePage = () => {
                 </AnimatePresence>
               </div>
             </motion.div>
-          </div>
-
-          {/* Wave Divider */}
-          <div className="wave-divider">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#ffffff" opacity="0.5"></path>
-            </svg>
           </div>
         </section>
 
@@ -300,20 +254,20 @@ const HomePage = () => {
               className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12"
             >
               <div className="w-full md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#EDE7F6] to-[#F8BBD0] rounded-full mb-2">
-                  <Zap className="w-4 h-4 text-[#FF8A65]" />
-                  <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">Premium Services</span>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F8FAFC] to-[#FFFFFF] rounded-full border border-[#E5E7EB] mb-2">
+                  <Zap className="w-4 h-4 text-[#14B8A6]" />
+                  <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">Premium Services</span>
                 </div>
 
-                <h2 className="text-3xl md:text-4xl font-montserrat font-semibold text-[#212121]">
+                <h2 className="text-3xl md:text-4xl font-inter font-semibold text-[#111827]">
                   Discover Our Services
                 </h2>
-                <p className="text-base md:text-lg text-[#424242] leading-relaxed font-lato">
+                <p className="text-base md:text-lg text-[#374151] leading-relaxed font-poppins">
                   From home repairs to beauty services, we connect you with verified professionals for a seamless experience.
                 </p>
 
                 <Link href="/services">
-                  <Button className="mt-5 group gradient-coral text-white px-8 py-4 rounded-full font-poppins font-semibold transition-all duration-300 hover:shadow-xl btn-bounce uppercase tracking-wide">
+                  <Button className="mt-5 group gradient-blue text-white px-8 py-3 rounded-lg font-inter font-medium transition-all duration-300 hover:shadow-lg hover:scale-[1.02] uppercase tracking-wide">
                     Explore Services
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
@@ -321,10 +275,10 @@ const HomePage = () => {
               </div>
               <div className="hidden md:flex w-full md:w-1/2">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="relative w-full h-80 md:h-96 bg-gradient-to-br from-[#EDE7F6]/50 to-[#F8BBD0]/50 rounded-2xl overflow-hidden shadow-2xl border border-[#F8BBD0]/30"
+                  className="relative w-full h-80 md:h-96 bg-gradient-to-br from-[#F8FAFC] to-[#FFFFFF] rounded-2xl overflow-hidden shadow-md border border-[#E5E7EB]"
                 >
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="grid grid-cols-2 gap-4 p-4">
@@ -334,12 +288,12 @@ const HomePage = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                          className="bg-white/90 p-4 rounded-xl shadow-lg backdrop-blur-md card-hover transition-all duration-300 border border-[#F8BBD0]/20"
+                          className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md card-hover transition-all duration-300 border border-[#E5E7EB]"
                         >
-                          <div className="w-10 h-10 rounded-full gradient-coral flex items-center justify-center mb-2 shadow-md">
+                          <div className="w-10 h-10 rounded-lg gradient-blue flex items-center justify-center mb-2 shadow-sm">
                             <Star className="w-5 h-5 text-white" />
                           </div>
-                          <h3 className="text-sm font-poppins font-semibold text-[#212121]">
+                          <h3 className="text-sm font-poppins font-medium text-[#111827]">
                             {category.name}
                           </h3>
                         </motion.div>

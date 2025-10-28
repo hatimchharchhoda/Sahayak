@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useParams } from "next/navigation";
@@ -68,7 +69,7 @@ const ProviderServicesPage = () => {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@500;600&family=Nunito+Sans:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Nunito+Sans:wght@300;400&display=swap');
         
         @keyframes shimmer {
           0% {
@@ -76,15 +77,6 @@ const ProviderServicesPage = () => {
           }
           100% {
             background-position: 1000px 0;
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
           }
         }
         
@@ -101,84 +93,59 @@ const ProviderServicesPage = () => {
         
         .animate-shimmer {
           animation: shimmer 2s infinite;
-          background: linear-gradient(to right, #EDE7F6 0%, #F8BBD0 50%, #EDE7F6 100%);
+          background: linear-gradient(to right, #F8FAFC 0%, #E5E7EB 50%, #F8FAFC 100%);
           background-size: 1000px 100%;
-        }
-        
-        .floating {
-          animation: float 3s ease-in-out infinite;
         }
         
         .animate-fade-slide-up {
           animation: fadeSlideUp 0.6s ease-out forwards;
         }
-        
-        .card-hover:hover {
-          transform: scale(1.03);
-          box-shadow: 0 20px 40px rgba(255, 111, 97, 0.2);
-        }
-        
-        .font-montserrat {
-          font-family: 'Montserrat', sans-serif;
-        }
-        
-        .font-lato {
-          font-family: 'Lato', sans-serif;
-        }
-        
-        .font-poppins {
-          font-family: 'Poppins', sans-serif;
-        }
-        
-        .font-nunito {
-          font-family: 'Nunito Sans', sans-serif;
-        }
       `}</style>
 
-      <section className="min-h-screen bg-gradient-to-br from-[#EDE7F6] via-[#F8BBD0] to-[#EDE7F6] font-lato relative overflow-hidden">
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-20 w-64 h-64 rounded-full bg-[#FF6F61] blur-3xl floating"></div>
-          <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-[#26C6DA] blur-3xl floating" style={{animationDelay: '1s'}}></div>
+      <section className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FAFBFC] to-[#FFFFFF] font-poppins relative overflow-hidden">
+        {/* Decorative Background Elements - Very Subtle */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div className="absolute top-20 left-20 w-64 h-64 rounded-full bg-[#2563EB] blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-[#14B8A6] blur-3xl"></div>
         </div>
 
         <div className="container mx-auto max-w-6xl px-4 pt-24 pb-16 relative z-10">
           {/* Page Header */}
           <div className="text-center mb-12 animate-fade-slide-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md rounded-full shadow-md mb-4 border border-[#F8BBD0]/30">
-              <Sparkles className="w-4 h-4 text-[#FF6F61]" />
-              <span className="text-sm font-poppins font-medium text-[#212121] uppercase tracking-wide">Provider Services</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-4 border border-[#E5E7EB]">
+              <Sparkles className="w-4 h-4 text-[#2563EB]" />
+              <span className="text-sm font-inter font-medium text-[#111827] uppercase tracking-wide">Provider Services</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-montserrat font-semibold text-[#212121] mb-4">
+            <h1 className="text-4xl md:text-5xl font-inter font-semibold text-[#111827] mb-4">
               Services Offered by
               <br />
-              <span className="bg-gradient-to-r from-[#FF6F61] via-[#FF8A65] to-[#FF6F61] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#3B82F6] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent">
                 This Provider
               </span>
             </h1>
 
-            <p className="text-base md:text-lg text-[#424242] font-lato max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-[#374151] font-poppins max-w-2xl mx-auto">
               Browse available services and book directly with this professional
             </p>
           </div>
 
           {/* Error State */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8 animate-fade-slide-up">
-              <p className="text-red-600 text-center font-lato">{error}</p>
+            <div className="bg-[#EF4444]/5 border border-[#EF4444]/20 rounded-lg p-6 mb-8 animate-fade-slide-up">
+              <p className="text-[#EF4444] text-center font-poppins">{error}</p>
             </div>
           )}
 
           {/* Loading State */}
           {loading ? (
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-[#F8BBD0]/20 p-6"
+                  className="bg-white rounded-2xl shadow-md border border-[#E5E7EB] p-6"
                 >
-                  <div className="w-16 h-16 rounded-full animate-shimmer mb-4"></div>
+                  <div className="w-16 h-16 rounded-lg animate-shimmer mb-4"></div>
                   <div className="h-6 animate-shimmer rounded mb-2"></div>
                   <div className="h-4 animate-shimmer rounded w-3/4 mb-4"></div>
                   <div className="h-10 animate-shimmer rounded"></div>
@@ -186,31 +153,31 @@ const ProviderServicesPage = () => {
               ))}
             </div>
           ) : services.length === 0 ? (
-            <div className="flex flex-col items-center py-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-[#F8BBD0]/30 p-12 animate-fade-slide-up">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#EDE7F6] to-[#F8BBD0] flex items-center justify-center mb-6 shadow-lg">
-                <Package className="w-10 h-10 text-[#9E9E9E]" />
+            <div className="flex flex-col items-center py-12 bg-white rounded-2xl shadow-md border border-[#E5E7EB] p-12 animate-fade-slide-up">
+              <div className="w-20 h-20 rounded-xl bg-[#F8FAFC] border border-[#E5E7EB] flex items-center justify-center mb-6">
+                <Package className="w-10 h-10 text-[#9CA3AF]" />
               </div>
-              <h3 className="text-xl font-montserrat font-semibold text-[#212121] mb-2">
+              <h3 className="text-xl font-inter font-semibold text-[#111827] mb-2">
                 No Services Available
               </h3>
-              <p className="text-[#424242] text-base font-lato text-center max-w-md">
-                This provider hasn't added any services yet. Please check back later or explore other providers.
+              <p className="text-[#374151] text-base font-poppins text-center max-w-md">
+                This provider hasn&apos;t added any services yet. Please check back later or explore other providers.
               </p>
             </div>
           ) : (
             <>
               {/* Service Count Badge */}
               <div className="flex justify-center mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md border border-[#F8BBD0]/20">
-                  <span className="font-poppins font-medium text-[#FF6F61]">{services.length}</span>
-                  <span className="text-sm text-[#424242] font-lato">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-[#E5E7EB]">
+                  <span className="font-inter font-medium text-[#2563EB]">{services.length}</span>
+                  <span className="text-sm text-[#374151] font-poppins">
                     {services.length === 1 ? 'Service' : 'Services'} Available
                   </span>
                 </div>
               </div>
 
               {/* Services Grid */}
-              <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+              <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
                 {services.map((service, index) => (
                   <div
                     key={service.id}

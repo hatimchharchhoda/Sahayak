@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -51,7 +52,7 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
           contact: user?.contact || "9999999999",
         },
         theme: {
-          color: "#FF6F61", // coral accent for premium look
+          color: "#2563EB", // professional blue accent
         },
       };
 
@@ -66,37 +67,43 @@ const Payment = ({ amount, bookingId, user }: IPaymentProps) => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
-      <Button
-        disabled={loading}
-        onClick={handlePayment}
-        className={`w-full px-4 py-3 rounded-2xl flex items-center justify-center space-x-2 font-poppins font-medium uppercase text-white shadow-lg transition-all duration-300 ${
-          loading
-            ? "cursor-progress bg-gradient-to-r from-[#FF6F61]/70 to-[#FF8A65]/70"
-            : "bg-gradient-to-r from-[#FF6F61] to-[#FF8A65] hover:scale-105 hover:shadow-xl"
-        }`}
-      >
-        {loading ? (
-          <>
-            <Loader2 className="animate-spin h-5 w-5" />
-            <span>Processing...</span>
-          </>
-        ) : (
-          <>
-            <IndianRupee className="h-5 w-5" />
-            <span>Pay ₹{amount}</span>
-          </>
-        )}
-      </Button>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap');
+      `}</style>
 
-      {/* Razorpay SDK Script */}
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-    </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        <Button
+          disabled={loading}
+          onClick={handlePayment}
+          className={`w-full px-4 py-3 rounded-lg flex items-center justify-center space-x-2 font-inter font-medium uppercase text-white transition-all duration-300 tracking-wide ${
+            loading
+              ? "cursor-progress bg-gradient-to-r from-[#3B82F6]/70 to-[#2563EB]/70 opacity-70"
+              : "bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:scale-[1.02] hover:shadow-lg shadow-sm"
+          }`}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin h-5 w-5" />
+              <span>Processing...</span>
+            </>
+          ) : (
+            <>
+              <IndianRupee className="h-5 w-5" />
+              <span>Pay ₹{amount}</span>
+            </>
+          )}
+        </Button>
+
+        {/* Razorpay SDK Script */}
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+      </motion.div>
+    </>
   );
 };
 
